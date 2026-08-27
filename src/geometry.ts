@@ -86,3 +86,42 @@ export function getPortTile(
       return { x: x - 1, y: y + tileIndex };
   }
 }
+
+/**
+ * Return the tile immediately outside the machine on a given edge, at a
+ * specific position along that edge. The side and cellIndex are in the
+ * *rotated* frame — they describe the actual visible edge of the
+ * placed machine, not the unrotated port definition. Use this to find
+ * the cell a connection should start/end at for a given port cell.
+ */
+export function getAdjacentTile(
+  side: Side,
+  cellIndex: number,
+  machine: MachineInstance,
+): { x: number; y: number } {
+  const { width, height } = machine.type;
+  const { x, y } = machine;
+  switch (side) {
+    case 'north':
+      return { x: x + cellIndex, y: y - 1 };
+    case 'south':
+      return { x: x + cellIndex, y: y + height };
+    case 'east':
+      return { x: x + width, y: y + cellIndex };
+    case 'west':
+      return { x: x - 1, y: y + cellIndex };
+  }
+}
+
+/**
+ * Convenience: the cell just outside a single-tile `PortDef` on a
+ * placed machine. Equivalent to `getAdjacentTile(transformPort(port,
+ * machine).side, transformPort(port, machine).tileIndex, machine)`.
+ */
+export function getPortAdjacentTile(
+  port: PortDef,
+  machine: MachineInstance,
+): { x: number; y: number } {
+  const { side, tileIndex } = transformPort(port, machine);
+  return getAdjacentTile(side, tileIndex, machine);
+}

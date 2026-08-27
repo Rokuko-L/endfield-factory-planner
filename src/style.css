@@ -74,6 +74,12 @@ button:hover {
   border-color: var(--accent);
 }
 
+button.mode.active {
+  background: var(--accent);
+  color: #0b1220;
+  border-color: var(--accent);
+}
+
 #orientation-label {
   color: var(--accent);
   font-family: var(--mono);

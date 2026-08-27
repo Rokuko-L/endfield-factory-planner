@@ -62,12 +62,21 @@ Read **[Docs/overview.md](Docs/overview.md)** for the full tour. Highlights:
 
 ## Editor Controls
 
-- **Click** on the grid to place the selected machine at that cell
-  (the click becomes the top-left corner of its footprint).
-- **R** to rotate the next placement through 0° → 90° → 180° → 270°.
-- **Right-click** on a machine to remove it.
-- **Clear All** button to reset the layout.
+- **Place** mode (default):
+  - **Click** on the grid to place the selected machine at that cell
+    (the click becomes the top-left corner of its footprint).
+  - **R** to rotate the next placement through 0° → 90° → 180° → 270°.
+  - **Right-click** on a machine to remove it.
+- **Connect** mode (click the *Connect* button):
+  - **Click** an output port (or any cell along an output band) to
+    pick a source. **Click** an input port to attempt a connection.
+    A* finds a route and fills the path tiles.
+  - **Right-click** on a belt/pipe tile to remove the connection.
+  - **Esc** cancels an in-progress draft.
+- **Clear All** resets the layout (machines + connections).
+- **Clear Connections** removes only the connections.
 
 Port colors: red = item input (whole edge), green = item output (whole
 edge), blue = fluid input/output (single tile). Each is drawn as a
 subtle fill on the cell plus a colored stroke on its outer edge.
+Connections: orange = belt (item), blue = pipe (fluid).

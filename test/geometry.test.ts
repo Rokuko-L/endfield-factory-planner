@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { MINER, FURNACE } from '../src/data.ts';
-import { getPortTile, transformPort, rotateSide } from '../src/geometry.ts';
+import {
+  getAdjacentTile,
+  getPortAdjacentTile,
+  getPortTile,
+  rotateSide,
+  transformPort,
+} from '../src/geometry.ts';
 import type { MachineInstance, Orientation, PortDef } from '../src/types.ts';
 
 /** Test fixture: a single north-side port on a 5x5 machine. */
@@ -131,5 +137,55 @@ describe('Furnace ports stay on their rotated edges', () => {
     const waterPort = FURNACE.ports.find((p) => p.id === 'water_input')!;
     const tile = getPortTile(waterPort, furnace(90, 0, 0));
     expect(tile).toEqual({ x: 2, y: -1 });
+  });
+});
+
+describe('getAdjacentTile (rotated frame)', () => {
+  it('returns the cell just north of the machine for a north-side port', () => {
+    const tile = getAdjacentTile('north', 2, miner(0, 0, 0));
+    expect(tile).toEqual({ x: 2, y: -1 });
+  });
+
+  it('returns the cell just south of the machine for a south-side port', () => {
+    const tile = getAdjacentTile('south', 2, miner(0, 0, 0));
+    expect(tile).toEqual({ x: 2, y: 5 });
+  });
+
+  it('returns the cell just west of the machine for a west-side port', () => {
+    const tile = getAdjacentTile('west', 2, miner(0, 0, 0));
+    expect(tile).toEqual({ x: -1, y: 2 });
+  });
+
+  it('returns the cell just east of the machine for an east-side port', () => {
+    const tile = getAdjacentTile('east', 2, miner(0, 0, 0));
+    expect(tile).toEqual({ x: 5, y: 2 });
+  });
+
+  it('honors the machine origin offset', () => {
+    expect(getAdjacentTile('south', 1, miner(0, 10, 20))).toEqual({
+      x: 10 + 1,
+      y: 20 + 5,
+    });
+  });
+});
+
+describe('getPortAdjacentTile (single-tile port on a placed machine)', () => {
+  it('matches getPortTile for the Furnace water input at 0°', () => {
+    const waterPort = FURNACE.ports.find((p) => p.id === 'water_input')!;
+    expect(getPortAdjacentTile(waterPort, furnace(0, 0, 0))).toEqual(
+      getPortTile(waterPort, furnace(0, 0, 0)),
+    );
+    expect(getPortAdjacentTile(waterPort, furnace(0, 0, 0))).toEqual({
+      x: -1,
+      y: 2,
+    });
+  });
+
+  it('rotates the Furnace water input adjacent tile through 90°', () => {
+    const waterPort = FURNACE.ports.find((p) => p.id === 'water_input')!;
+    expect(getPortAdjacentTile(waterPort, furnace(90, 0, 0))).toEqual({
+      x: 2,
+      y: -1,
+    });
   });
 });

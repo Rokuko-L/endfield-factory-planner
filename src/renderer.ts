@@ -1,5 +1,5 @@
 import type { Grid } from './grid.ts';
-import type { MachineInstance, PortDef, Side } from './types.ts';
+import type { Connection, MachineInstance, PortDef, Side } from './types.ts';
 import { rotateSide, transformPort } from './geometry.ts';
 
 /**
@@ -14,10 +14,18 @@ const BAND_COLORS: Record<string, { stroke: string; fill: string }> = {
   'fluid-output': { stroke: '#6ea8ff', fill: 'rgba(110,168,255,0.20)' },
 };
 
+/** Connection fill + stroke by kind. */
+const CONNECTION_COLORS: Record<'item' | 'fluid', { stroke: string; fill: string }> = {
+  item: { stroke: '#f59e0b', fill: 'rgba(245,158,11,0.55)' },
+  fluid: { stroke: '#6ea8ff', fill: 'rgba(110,168,255,0.55)' },
+};
+
 const GRID_LINE = 'rgba(255,255,255,0.06)';
 const EMPTY_TILE = 'rgba(255,255,255,0.04)';
 const HOVER_TILE = 'rgba(110,168,255,0.12)';
 const INVALID_FLASH = 'rgba(248,113,113,0.25)';
+const DRAFT_SOURCE_FILL = 'rgba(245,158,11,0.85)';
+const DRAFT_SOURCE_STROKE = '#fde68a';
 
 /**
  * Draws the grid and all placed machines to a canvas backed by a
@@ -54,14 +62,21 @@ export class Renderer {
 
   /**
    * Redraw the entire scene.
+   * @param machines Placed machines.
+   * @param connections Routed connections.
    * @param previewFootprint Footprint rect to highlight as placement preview,
    *   or null. `valid` picks the color (green when placeable, red otherwise).
    * @param invalidFlash Top-left tile whose footprint failed placement, or null.
+   * @param draftSource Tile of the picked source port (in connection mode), or null.
+   * @param draftPath Path returned by A* during preview, or null.
    */
   draw(
     machines: MachineInstance[],
+    connections: Connection[],
     previewFootprint: { x: number; y: number; w: number; h: number; valid: boolean } | null,
     invalidFlash: { x: number; y: number; w: number; h: number } | null,
+    draftSource: { x: number; y: number } | null,
+    draftPath: { x: number; y: number }[] | null,
   ): void {
     const ctx = this.canvas.getContext('2d');
     if (!ctx) return;
@@ -69,7 +84,9 @@ export class Renderer {
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.drawTiles(ctx, previewFootprint, invalidFlash);
+    this.drawConnections(ctx, connections);
     for (const m of machines) this.drawMachine(ctx, m);
+    this.drawDraft(ctx, draftSource, draftPath);
   }
 
   private drawTiles(
@@ -281,5 +298,51 @@ export class Renderer {
         break;
     }
     ctx.stroke();
+  }
+
+  /**
+   * Paint a routed connection as a colored fill on every tile of the
+   * path. Draws after the grid and before machines so the machine
+   * footprint covers the connection's tiles near the machine edges.
+   */
+  private drawConnections(ctx: CanvasRenderingContext2D, connections: Connection[]): void {
+    const t = this.tilePx;
+    for (const c of connections) {
+      const palette = CONNECTION_COLORS[c.kind];
+      ctx.fillStyle = palette.fill;
+      ctx.strokeStyle = palette.stroke;
+      ctx.lineWidth = 2;
+      for (const tile of c.path) {
+        const px = tile.x * t;
+        const py = tile.y * t;
+        ctx.fillRect(px, py, t, t);
+        ctx.strokeRect(px + 1, py + 1, t - 2, t - 2);
+      }
+    }
+  }
+
+  /**
+   * Paint the in-progress connection draft: the picked source tile
+   * (highlighted) and the A*-returned path (a translucent preview).
+   */
+  private drawDraft(
+    ctx: CanvasRenderingContext2D,
+    source: { x: number; y: number } | null,
+    path: { x: number; y: number }[] | null,
+  ): void {
+    const t = this.tilePx;
+    if (source) {
+      ctx.fillStyle = DRAFT_SOURCE_FILL;
+      ctx.fillRect(source.x * t, source.y * t, t, t);
+      ctx.strokeStyle = DRAFT_SOURCE_STROKE;
+      ctx.lineWidth = 3;
+      ctx.strokeRect(source.x * t + 1, source.y * t + 1, t - 2, t - 2);
+    }
+    if (path && path.length > 0) {
+      ctx.fillStyle = 'rgba(253,230,138,0.45)';
+      for (const tile of path) {
+        ctx.fillRect(tile.x * t, tile.y * t, t, t);
+      }
+    }
   }
 }

@@ -16,6 +16,9 @@
         Orientation
         <strong id="orientation-label">0°</strong>
       </div>
+      <button id="mode-place" type="button" class="mode active">Place</button>
+      <button id="mode-connect" type="button" class="mode">Connect</button>
+      <button id="clear-connections" type="button">Clear Connections</button>
       <button id="clear-all" type="button">Clear All</button>
     </header>
 
@@ -26,8 +29,8 @@
       <aside class="panel">
         <p id="status" class="status">Ready. Pick a machine and click the grid.</p>
         <p id="metrics" class="metrics"></p>
-        <p class="hint">
-          Click: place · R: rotate · Right-click: remove
+        <p class="hint" id="hint">
+          Place: click · R: rotate · right-click: remove
         </p>
       </aside>
     </main>

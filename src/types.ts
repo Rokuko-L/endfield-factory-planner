@@ -77,7 +77,10 @@ export interface MachineInstance {
   orientation: Orientation;
 }
 
-/** A connection between two machines (reserved for a later phase). */
+/**
+ * A connection between two machine ports. Today a `Connection` represents
+ * a belt (item) or pipe (fluid) that occupies a routed path of grid tiles.
+ */
 export interface Connection {
   id: string;
   fromMachineId: string;
@@ -85,6 +88,11 @@ export interface Connection {
   toMachineId: string;
   toPortId: string;
   kind: ResourceKind;
+  /** Resource name carried, e.g. "Iron Ore". */
+  resource: string;
+  /** The routed path. Does not include the start/end cells that lie on
+   *  the two ports — only the tiles the belt/pipe itself occupies. */
+  path: { x: number; y: number }[];
 }
 
 /** The full state of a layout: placed machines + their connections. */

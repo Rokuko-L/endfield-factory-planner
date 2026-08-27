@@ -17,14 +17,15 @@ npm run test:watch
 npm run typecheck
 ```
 
-The full suite is currently **21 tests** across two files.
+The full suite is currently **38 tests** across three files.
 
 ## What's Covered
 
 | File | Focus |
 |---|---|
-| `test/grid.test.ts` | `Grid` class: empty construction, `isWithinBounds`, `canPlace` for in-bounds / right-edge overflow / bottom-edge overflow / overlap, footprint fill on `placeMachine`, throw on invalid place, full clear on `removeMachine`, out-of-bounds reads. |
-| `test/geometry.test.ts` | `rotateSide` for representative (side, orientation) pairs, `transformPort` and `getPortTile` for the Miner and Furnace at all four orientations, plus a non-zero origin offset. |
+| `test/grid.test.ts` | `Grid` class: empty construction, `isWithinBounds`, `isFree`, `canPlace` for in-bounds / right-edge overflow / bottom-edge overflow / overlap, footprint fill on `placeMachine`, throw on invalid place, full clear on `removeMachine`, out-of-bounds reads, and `placeConnectionTiles` / `removeConnection` / `getConnectionAt` for the connection layer. |
+| `test/geometry.test.ts` | `rotateSide` for representative (side, orientation) pairs, `transformPort` and `getPortTile` for the Miner and Furnace at all four orientations, plus `getAdjacentTile` for the four cardinal directions and a non-zero machine origin. |
+| `test/pathfinding.test.ts` | `findPath`: same-cell start/end, straight horizontal and vertical paths, occupied start/end, routing around a wall of machines, fully enclosed destination, connection tiles as obstacles, and optimal Manhattan length. |
 
 ## Conventions
 

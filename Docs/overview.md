@@ -13,36 +13,41 @@ optimization, routing, or backend — everything runs client-side.
 
 ```
 src/
-  types.ts       // Domain model: MachineInstance, MachineType, PortDef, Connection, Layout
-  data.ts        // Sample machine definitions + ALL_MACHINE_TYPES registry
-  grid.ts        // Tile-occupancy grid (Grid class: canPlace, placeMachine, remove)
-  geometry.ts    // Side rotation + port tile computation (transformPort, getPortTile)
-  renderer.ts    // Canvas drawing (grid, machines, ports, hover preview, invalid flash)
-  main.ts        // UI wiring, event handling, editor state
-  style.css      // Editor styling
-index.html       // Vite entry (toolbar, canvas, status panel)
-test/            // Vitest unit tests
+  types.ts        // Domain model: MachineInstance, MachineType, PortDef, EdgeBand, Connection, Layout
+  data.ts         // Sample machine definitions + ALL_MACHINE_TYPES registry
+  grid.ts         // Tile-occupancy grid (machines + connections): canPlace, placeMachine, removeMachine, placeConnectionTiles, removeConnection
+  geometry.ts     // Side rotation + port tile computation (transformPort, getAdjacentTile, getPortAdjacentTile)
+  pathfinding.ts  // A* on free cells (findPath, internal MinHeap)
+  renderer.ts     // Canvas drawing (grid, connections, machines, ports, hover, draft)
+  main.ts         // UI wiring, event handling, editor state (place + connect modes)
+  style.css       // Editor styling
+index.html        // Vite entry (toolbar, canvas, status panel)
+test/             // Vitest unit tests
   grid.test.ts
   geometry.test.ts
+  pathfinding.test.ts
 ```
 
 **Data flow:**
 
 ```
-Mouse/keyboard events ──> main.ts (state, validation)
+Mouse/keyboard events ──> main.ts (state, mode)
                          │
                          ├──> Grid.canPlace / placeMachine / removeMachine (src/grid.ts)
+                         ├──> findPath (src/pathfinding.ts) for connections
                          │
                          └──> Renderer.draw (src/renderer.ts)
                                  │
-                                 └──> geometry.getPortTile per port (src/geometry.ts)
+                                 └──> geometry.getAdjacentTile per port (src/geometry.ts)
 ```
 
-`main.ts` owns the editor state and the `Grid` instance. On every change
-(placement, removal, hover, orientation, Clear All) it redraws the
-`Renderer` with the latest machine list plus the optional hover preview
-and invalid-flash rect. The `Renderer` is a pure function of its inputs —
-it does not hold state.
+`main.ts` owns the editor state and the `Grid` instance. It runs in
+one of two modes: **place** (default — click to add machines) or
+**connect** (click output port → click input port → A* finds a
+path → fills connection tiles). On every change it redraws the
+`Renderer` with the latest machine list, connections, hover
+preview, and the in-progress connection draft. The `Renderer` is a
+pure function of its inputs — it does not hold state.
 
 ---
 
@@ -54,9 +59,10 @@ it does not hold state.
 | [core/types.md](core/types.md) | The domain model — what each type means and how they relate |
 | [core/data.md](core/data.md) | The machine catalog and how to extend it |
 | [core/grid.md](core/grid.md) | Tile occupancy, bounds, and the placement invariant |
-| [core/geometry.md](core/geometry.md) | Port rotation rules and how the tile-index mirrors |
+| [core/geometry.md](core/geometry.md) | Port rotation rules and the tile-index mirror |
+| [core/pathfinding.md](core/pathfinding.md) | A* on free cells, obstacle model, algorithm notes |
 | [core/renderer.md](core/renderer.md) | Canvas drawing conventions, colors, and DPI scaling |
-| [ui/interactions.md](ui/interactions.md) | `main.ts` state machine, event wiring, controls |
+| [ui/interactions.md](ui/interactions.md) | `main.ts` state machine, modes, event wiring, controls |
 | [reference/testing.md](reference/testing.md) | Vitest setup, what is covered, how to add tests |
 | [reference/extending.md](reference/extending.md) | How to add a new machine type (the canonical recipe) |
 

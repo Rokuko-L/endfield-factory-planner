@@ -68,6 +68,34 @@ Both are rotated with the machine through `rotateSide` /
 `transformPort`, so a 90° rotation moves a north band to the east
 edge correctly.
 
+## Connections
+
+A separate `drawConnections(ctx, connections)` paints every routed
+connection as a colored fill on each tile of its `path`. The path
+tiles are drawn between the grid background and the machine
+footprints, so the machines cover the connection's tiles where they
+overlap (this keeps the visual clean near machine edges).
+
+Connection colors by kind:
+
+| Kind | Stroke | Fill |
+|---|---|---|
+| `item` (belt) | `#f59e0b` | `rgba(245,158,11,0.55)` |
+| `fluid` (pipe) | `#6ea8ff` | `rgba(110,168,255,0.55)` |
+
+A `drawDraft` method paints the in-progress connection: a hard
+highlight on the source tile and a translucent yellow overlay on
+the A*-returned path during preview.
+
+## Draw Order
+
+The `draw` method paints in this order:
+
+1. Tiles (background + grid lines + hover preview + invalid flash).
+2. Connections.
+3. Machines (footprint, edge bands, single-tile ports, label).
+4. Draft (source highlight, preview path).
+
 ## What the Renderer Does Not Do
 
 - No event handling. `main.ts` owns `pointermove`, `click`,

@@ -1,15 +1,26 @@
 import type { MachineInstance, MachineType } from './types.ts';
 
 /**
- * Manages tile occupancy on a fixed-size grid. Each cell holds the id of the
- * machine occupying it, or null when empty. Indices are row-major:
- * cells[y][x].
+ * Manages tile occupancy on a fixed-size grid. The grid tracks two
+ * layers:
+ *
+ * 1. **Machine occupancy** — each cell holds the id of the machine
+ *    occupying it, or null when empty.
+ * 2. **Connection occupancy** — each cell holds the id of the connection
+ *    (belt/pipe) occupying it, or null when empty.
+ *
+ * A cell is *free* iff both layers are null. Both layers are
+ * row-major: `cells[y][x]`.
  */
 export class Grid {
-  private readonly cells: (string | null)[][];
+  private readonly machineCells: (string | null)[][];
+  private readonly connectionCells: (string | null)[][];
 
   constructor(public readonly width: number, public readonly height: number) {
-    this.cells = Array.from({ length: height }, () =>
+    this.machineCells = Array.from({ length: height }, () =>
+      Array<string | null>(width).fill(null),
+    );
+    this.connectionCells = Array.from({ length: height }, () =>
       Array<string | null>(width).fill(null),
     );
   }
@@ -19,34 +30,50 @@ export class Grid {
     return x >= 0 && y >= 0 && x < this.width && y < this.height;
   }
 
+  /** True if the tile is in bounds and has neither a machine nor a connection. */
+  isFree(x: number, y: number): boolean {
+    if (!this.isWithinBounds(x, y)) return false;
+    return this.machineCells[y]?.[x] == null && this.connectionCells[y]?.[x] == null;
+  }
+
   /** The id of the machine at a tile, or null if empty/out of bounds. */
   getOccupancyAt(x: number, y: number): string | null {
     if (!this.isWithinBounds(x, y)) return null;
-    return this.cells[y]?.[x] ?? null;
+    return this.machineCells[y]?.[x] ?? null;
   }
 
-  /** True if every tile of the footprint is in-bounds and unoccupied. */
+  /** The id of the connection at a tile, or null if empty/out of bounds. */
+  getConnectionAt(x: number, y: number): string | null {
+    if (!this.isWithinBounds(x, y)) return null;
+    return this.connectionCells[y]?.[x] ?? null;
+  }
+
+  /** True if every tile of the machine's footprint is in bounds and unoccupied by machines or connections. */
   canPlace(machine: MachineType, x: number, y: number): boolean {
     for (let dy = 0; dy < machine.height; dy++) {
       for (let dx = 0; dx < machine.width; dx++) {
-        if (!this.isWithinBounds(x + dx, y + dy)) return false;
-        if (this.getOccupancyAt(x + dx, y + dy) !== null) return false;
+        if (!this.isFree(x + dx, y + dy)) return false;
       }
     }
     return true;
   }
 
-  /** Fills the machine's footprint tiles with its id. Throws if invalid. */
+  /** True if the single tile is in bounds and free. */
+  canPlaceConnection(x: number, y: number): boolean {
+    return this.isFree(x, y);
+  }
+
+  /** Fills the machine's footprint tiles with its id. Throws on collision. */
   placeMachine(machine: MachineInstance): void {
     if (!this.canPlace(machine.type, machine.x, machine.y)) {
       throw new Error(
         `Cannot place '${machine.type.name}' at (${machine.x}, ${machine.y}): ` +
-          'footprint out of bounds or overlapping another machine.',
+          'footprint out of bounds or overlapping another machine or connection.',
       );
     }
     for (let dy = 0; dy < machine.type.height; dy++) {
       for (let dx = 0; dx < machine.type.width; dx++) {
-        this.cells[machine.y + dy]![machine.x + dx] = machine.id;
+        this.machineCells[machine.y + dy]![machine.x + dx] = machine.id;
       }
     }
   }
@@ -55,19 +82,58 @@ export class Grid {
   removeMachine(machineId: string): void {
     for (let y = 0; y < this.height; y++) {
       for (let x = 0; x < this.width; x++) {
-        if (this.cells[y]?.[x] === machineId) {
-          this.cells[y]![x] = null;
+        if (this.machineCells[y]?.[x] === machineId) {
+          this.machineCells[y]![x] = null;
         }
       }
     }
   }
 
-  /** All occupied tiles as [x, y] pairs. */
+  /**
+   * Mark the given tiles as occupied by the connection. Throws if any
+   * tile is not free.
+   */
+  placeConnectionTiles(connectionId: string, tiles: { x: number; y: number }[]): void {
+    for (const t of tiles) {
+      if (!this.canPlaceConnection(t.x, t.y)) {
+        throw new Error(
+          `Cannot place connection tile at (${t.x}, ${t.y}): cell is occupied.`,
+        );
+      }
+    }
+    for (const t of tiles) {
+      this.connectionCells[t.y]![t.x] = connectionId;
+    }
+  }
+
+  /** Clear every tile currently holding the given connection id. */
+  removeConnection(connectionId: string): void {
+    for (let y = 0; y < this.height; y++) {
+      for (let x = 0; x < this.width; x++) {
+        if (this.connectionCells[y]?.[x] === connectionId) {
+          this.connectionCells[y]![x] = null;
+        }
+      }
+    }
+  }
+
+  /** All occupied tiles as [x, y] pairs (machines only). */
   occupiedTiles(): { x: number; y: number }[] {
     const tiles: { x: number; y: number }[] = [];
     for (let y = 0; y < this.height; y++) {
       for (let x = 0; x < this.width; x++) {
-        if (this.cells[y]?.[x] !== null) tiles.push({ x, y });
+        if (this.machineCells[y]?.[x] !== null) tiles.push({ x, y });
+      }
+    }
+    return tiles;
+  }
+
+  /** All connection-occupied tiles as [x, y] pairs. */
+  connectionTiles(): { x: number; y: number }[] {
+    const tiles: { x: number; y: number }[] = [];
+    for (let y = 0; y < this.height; y++) {
+      for (let x = 0; x < this.width; x++) {
+        if (this.connectionCells[y]?.[x] !== null) tiles.push({ x, y });
       }
     }
     return tiles;
