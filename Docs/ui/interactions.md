@@ -87,11 +87,17 @@ results return `null` and the handlers become no-ops.
    highlights the source cell.
 3. **Second click**: `completeDraft(picked)` validates the picks
    (resource kind + name must match, source ≠ target machine) and
-   runs `findPath(grid, start, end)`. If the path exists, the
-   `Connection` is created and the path tiles are marked in the
-   grid via `grid.placeConnectionTiles`. The endpoints of the path
-   sit adjacent to the source and target machines and are not
-   occupied in the grid (so a future connection can re-use them).
+   runs `findPathMulti(grid, source.adjacentTiles,
+   target.adjacentTiles)`. The pathfinder is multi-source /
+   multi-target: it considers **all** adjacent tiles on the source
+   side and **all** on the target side, and picks the (start, end)
+   pair that yields the most compact path. This means the user
+   doesn't have to click the exact right port cell — the
+   pathfinder picks the optimal one automatically.
+
+   The chosen path is expanded tile-by-tile and the interior tiles
+   (excluding the start/end adjacent tiles, which sit beside the
+   machines) are marked in the grid via `grid.placeConnectionTiles`.
 4. **Mismatch or no path**: the draft is cleared, a red status
    message is shown, and redraw.
 5. **Empty click or Esc**: the draft is cleared silently.

@@ -1,11 +1,11 @@
 # Pathfinding (`src/pathfinding.ts`)
 
-A 4-direction A* that operates on the `Grid`'s free cells. Returns
-the inclusive list of tiles from `start` to `end`, or `null` if no
-path exists. Movement is orthogonal (no diagonals); the heuristic is
-Manhattan distance.
+The connection editor's pathfinder. Given a set of "adjacent tiles" on
+the source machine's port side and a set on the target machine's port
+side, it returns the most compact valid path between them. Returns
+`null` if no path exists.
 
-## `findPath(grid, start, end)`
+## API
 
 ```ts
 function findPath(
@@ -13,60 +13,81 @@ function findPath(
   start: { x: number; y: number },
   end: { x: number; y: number },
 ): { x: number; y: number }[] | null;
+
+function findPathMulti(
+  grid: Grid,
+  starts: { x: number; y: number }[],
+  ends: { x: number; y: number }[],
+): { x: number; y: number }[] | null;
+
+function expandPath(
+  path: { x: number; y: number }[],
+): { x: number; y: number }[];
 ```
 
-The pathfinder reads `grid.isFree(x, y)` to decide whether a neighbor
-is passable. Cells occupied by machines or other connections are
-treated as obstacles.
+`findPath` is a convenience wrapper around `findPathMulti` with
+single-element start/end sets.
 
-The returned path is inclusive: the first element is `start` and the
-last is `end`. If `start` and `end` are the same cell, the result is
-`[start]`.
+`findPathMulti` returns the **expanded** path: every tile from the
+chosen start cell to the chosen end cell, inclusive. The renderer
+fills each tile with the connection's color so the visual is a
+continuous belt/pipe.
 
-`null` is returned when:
+`expandPath` is exported for tests and for callers that need to
+expand a compact path (start, optional corner, end) into the
+tile-by-tile form.
 
-- `start` is not free (and is not the same cell as `end`),
-- `end` is not free (and is not the same cell as `start`),
-- the destination is fully enclosed and unreachable.
+## Strategy
 
-## Obstacle Model
+The pathfinder tries all `(start, end)` pairs (cartesian product of
+the source set and target set) and picks the lowest-cost path. For
+each pair, it tries in order:
 
-Anything `grid.isFree` reports as occupied is an obstacle. Today that
-includes machine tiles and connection tiles (belts and pipes). The
-pathfinder doesn't know about the difference — it just avoids
-non-free cells.
+1. **L-shape**: both possible L-corners (horizontal-first and
+   vertical-first) and any straight-line variant. The L is "compact"
+   (3 tiles: start, corner, end) or 2 tiles for a straight line.
+   L-shapes with 1 turn are preferred because they're the cleanest
+   visual.
+2. **A\* with smoothing**: full 4-direction A* with Manhattan
+   heuristic, plus a post-processor that drops colinear intermediates
+   and collapses short "jog" segments at the path's start and end.
 
-When the editor asks for a path between two ports, the start and end
-are the cells *adjacent* to the source and target machines (computed
-by `getAdjacentTile` / `getPortAdjacentTile`). Those adjacent cells
-must be free; if a port sits flush against another machine, the
-adjacent cell is occupied and the connection can't start there.
+The path with the lowest `pathCost` (moves + 0.5 × turns) wins. For
+typical Endfield port cells (≤5 per side), this is at most 25
+candidates per connection.
 
-## Implementation Notes
+## Why Multi-Source / Multi-Target
 
-The implementation is self-contained — no external dependencies.
+The user picks a *side* on each machine, not a specific cell. With
+multi-source/target routing, the pathfinder is free to use any
+adjacent cell on the source side and any on the target side. This
+fixes the "clicked the wrong cell, the belt comes out somewhere
+else" problem: the pathfinder picks the cell that produces the
+cleanest path, regardless of which cell the user actually clicked.
 
-- **Priority queue** — a small binary min-heap keyed by `f = g +
-  manhattan(end)`. The heap is in the same file as a private
-  `MinHeap<T>` class.
-- **Visited set** — a `Set<string>` of `"x,y"` keys. Cheap to
-  build/lookup.
-- **Best-g map** — a `Map<string, number>` of the best known `g`
-  per cell. Stops the algorithm from re-queueing a worse path to a
-  cell it has already reached more cheaply.
-- **4 neighbors** — `(+1, 0)`, `(-1, 0)`, `(0, +1)`, `(0, -1)`. No
-  diagonal movement.
+## Smoothing
 
-The heap pushes duplicate nodes for the same cell if a shorter path
-is found; the closed-set check in the main loop skips the duplicates.
+The raw A* path may include colinear intermediates. The smoother:
+
+1. **Colinear pass** — drop any middle tile that lies on the line
+   between its neighbors.
+2. **End-jog collapse** — for short 1-tile perpendicular segments
+   at the start or end of a long parallel run, try to absorb them
+   into the long run if the line is clear.
+3. **String-pulling** — for each pair of consecutive bends, check
+   if a straight line from one bend to the next is clear; if so,
+   drop the intermediate tiles.
+
+These are best-effort heuristics for cleaning up the A* result
+when no L is available. The L-shape path is already optimal.
 
 ## What the Pathfinder Does Not Do
 
-- No diagonal movement. Belts and pipes are 4-direction in this
-  model.
-- No weighted terrain — every move costs 1.
-- No path smoothing. The result is a tile-by-tile route.
-- No caching. Each call recomputes from scratch.
+- No diagonal movement.
+- No weighted terrain.
+- No path caching.
+- No path-smoothing that bypasses turns on staircases (string-pulling
+  only handles colinear bypasses).
 
 ## Tests
 
@@ -74,10 +95,12 @@ is found; the closed-set check in the main loop skips the duplicates.
 
 - Same-cell start and end.
 - Straight horizontal and vertical paths.
-- Occupied start or end → `null`.
-- Routing around a wall of machines.
-- A fully enclosed destination → `null`.
+- L-shape routing when both L-variants are valid.
+- Occupied start/end → null.
+- Routing around a wall.
+- Fully enclosed destination → null.
 - Connection tiles as obstacles.
-- Optimal (Manhattan) length on an empty grid.
+- Multi-source / multi-target pair selection.
+- Path expansion from compact to tile-by-tile form.
 
 Related: [grid.md](grid.md) · [geometry.md](geometry.md) · [interactions.md](../ui/interactions.md)

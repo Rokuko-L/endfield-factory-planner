@@ -1,7 +1,7 @@
 import { ALL_MACHINE_TYPES } from './data.ts';
 import { Grid } from './grid.ts';
 import { Renderer } from './renderer.ts';
-import { findPath } from './pathfinding.ts';
+import { findPathMulti } from './pathfinding.ts';
 import type {
   Connection,
   MachineInstance,
@@ -36,11 +36,21 @@ const renderer = new Renderer(canvas, grid);
 interface PickedPort {
   machine: MachineInstance;
   side: Side; // rotated side
-  cellIndex: number; // index along that side in the rotated frame
+  /** The cell of the side closest to the user's click. Used for highlighting. */
+  cellIndex: number;
   kind: ResourceKind;
   resource: string;
-  /** A synthetic port id for the Connection record. */
+  /**
+   * Unique id for this specific port cell. Bands get `band:<side>:<i>`,
+   * single-tile ports get `port:<portDefId>`.
+   */
   portId: string;
+  /**
+   * Adjacent tiles for *every* cell along this side. The pathfinder
+   * treats this as a multi-source set so A* can pick the optimal
+   * start cell even when the user didn't click exactly on it.
+   */
+  adjacentTiles: { x: number; y: number }[];
 }
 
 /** The full state of the editor. */
@@ -228,8 +238,11 @@ interface PortCell {
   cellIndex: number;
   kind: ResourceKind;
   resource: string;
+  /** `band:<unrotatedSide>:<i>` for bands, `port:<portDefId>` for single-tile ports. */
   portId: string;
   cell: { x: number; y: number };
+  /** Adjacent tiles for *every* cell along this side. Multi-source set for A*. */
+  adjacentTiles: { x: number; y: number }[];
 }
 
 function allPortCells(): PortCell[] {
@@ -240,6 +253,10 @@ function allPortCells(): PortCell[] {
       const side = rotateSideStatic(unrotatedSide as Side, m.orientation);
       const count =
         side === 'north' || side === 'south' ? m.type.width : m.type.height;
+      const adjacentTiles: { x: number; y: number }[] = [];
+      for (let i = 0; i < count; i++) {
+        adjacentTiles.push(getAdjacentTile(side, i, m));
+      }
       for (let i = 0; i < count; i++) {
         out.push({
           machine: m,
@@ -247,8 +264,9 @@ function allPortCells(): PortCell[] {
           cellIndex: i,
           kind: band.resourceKind,
           resource: resourceForBand(m, unrotatedSide as Side, band.resourceKind),
-          portId: `band:${unrotatedSide}`,
-          cell: getAdjacentTile(side, i, m), // adjacent cell
+          portId: `band:${unrotatedSide}:${i}`,
+          cell: adjacentTiles[i]!,
+          adjacentTiles,
         });
       }
     }
@@ -262,6 +280,7 @@ function allPortCells(): PortCell[] {
         resource: port.resource,
         portId: `port:${port.id}`,
         cell: getAdjacentTile(side, tileIndex, m),
+        adjacentTiles: [getAdjacentTile(side, tileIndex, m)],
       });
     }
   }
@@ -352,33 +371,14 @@ function completeDraft(target: PortCell): void {
     redraw();
     return;
   }
-  if (source.portId.startsWith('port:') && target.portId.startsWith('port:')) {
-    // Single-tile ports only support a 1-cell pipe, so route from
-    // adjacent to adjacent directly. The adjacent tiles may or may not
-    // be free; if not, fail.
-    const start = state.draftAdjacent!;
-    const end = target.cell;
-    const path = findPath(grid, start, end);
-    if (!path) {
-      setStatus('No path found between the picked ports.', true);
-      state.draftSource = null;
-      state.draftAdjacent = null;
-      state.draftPath = null;
-      redraw();
-      return;
-    }
-    finalizeConnection(source, target, path);
-    return;
-  }
 
-  // Edge-band routing: path goes from the source's adjacent tile to
-  // the target's adjacent tile, but we *don't* occupy the two end
-  // tiles in the grid (the belts visually butt up against the
-  // machines). Trim the endpoints off the path before recording.
-  const start = state.draftAdjacent!;
-  const end = target.cell;
-  const path = findPath(grid, start, end);
-  if (!path) {
+  // Multi-source / multi-target A*: the pathfinder is free to use any
+  // adjacent tile on the source side and any adjacent tile on the
+  // target side. This solves the "clicked the wrong cell, the path
+  // comes out somewhere else" problem — the optimal port cell on
+  // each side is what A* actually uses.
+  const path = findPathMulti(grid, source.adjacentTiles, target.adjacentTiles);
+  if (!path || path.length === 0) {
     setStatus('No path found between the picked ports.', true);
     state.draftSource = null;
     state.draftAdjacent = null;
@@ -386,24 +386,60 @@ function completeDraft(target: PortCell): void {
     redraw();
     return;
   }
-  // Exclude the start and end tiles: those sit adjacent to the source
-  // and target machines and are visually "part of" the port zone.
-  const interior =
-    path.length > 2 ? path.slice(1, -1) : [];
-  finalizeConnection(source, target, interior);
+
+  // Figure out which port cells A* actually used. The first tile of
+  // the path lies on the source's adjacent side; the last tile lies
+  // on the target's adjacent side. Map them back to cellIndex so the
+  // connection's `fromPortId` / `toPortId` reflect the real entry/exit
+  // points, not the cells the user happened to click.
+  const fromTile = path[0]!;
+  const toTile = path[path.length - 1]!;
+  const fromCellIndex = source.adjacentTiles.findIndex(
+    (t) => t.x === fromTile.x && t.y === fromTile.y,
+  );
+  const toCellIndex = target.adjacentTiles.findIndex(
+    (t) => t.x === toTile.x && t.y === toTile.y,
+  );
+
+  // The path's first and last tiles sit adjacent to the source and
+  // target machines — they are not part of the connection itself.
+  // The "interior" of the path is what the connection occupies.
+  const interior = path.length > 2 ? path.slice(1, -1) : [];
+
+  finalizeConnection(
+    source,
+    fromCellIndex,
+    target,
+    toCellIndex,
+    interior,
+  );
 }
 
 function finalizeConnection(
   source: PickedPort,
+  fromCellIndex: number,
   target: PortCell,
+  toCellIndex: number,
   path: { x: number; y: number }[],
 ): void {
+  // Build port ids that point at the *actual* port cells A* used,
+  // not just the side. For bands this means `band:<side>:<i>`; for
+  // single-tile ports the original portId already encodes the cell.
+  const fromPortId =
+    fromCellIndex >= 0 && source.portId.startsWith('band:')
+      ? `band:${source.portId.slice('band:'.length)}:${fromCellIndex}`
+      : source.portId;
+  const toPortId =
+    toCellIndex >= 0 && target.portId.startsWith('band:')
+      ? `band:${target.portId.slice('band:'.length)}:${toCellIndex}`
+      : target.portId;
+
   const connection: Connection = {
     id: nextId('conn'),
     fromMachineId: source.machine.id,
-    fromPortId: source.portId,
+    fromPortId,
     toMachineId: target.machine.id,
-    toPortId: target.portId,
+    toPortId,
     kind: source.kind,
     resource: source.resource,
     path,
@@ -449,6 +485,7 @@ function handleConnectClick(tile: { x: number; y: number }): void {
       kind: picked.kind,
       resource: picked.resource,
       portId: picked.portId,
+      adjacentTiles: picked.adjacentTiles,
     };
     state.draftAdjacent = picked.cell;
     state.draftPath = null;
