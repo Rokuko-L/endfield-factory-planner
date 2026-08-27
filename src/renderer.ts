@@ -62,7 +62,6 @@ export class Renderer {
     const ctx = this.canvas.getContext('2d');
     if (!ctx) return;
 
-    const t = this.tilePx;
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.drawTiles(ctx, previewFootprint, invalidFlash);
@@ -121,7 +120,8 @@ export class Renderer {
 
   private drawMachine(ctx: CanvasRenderingContext2D, m: MachineInstance): void {
     const t = this.tilePx;
-    const { x, y, width, height } = m.type;
+    const { x, y } = m;
+    const { width, height } = m.type;
 
     // Footprint.
     ctx.fillStyle = '#39404f';

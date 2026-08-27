@@ -3,14 +3,6 @@ import type { MachineInstance, Orientation, PortDef, Side } from './types.ts';
 /** The four side directions in clockwise order, starting at north. */
 const SIDE_ORDER: readonly Side[] = ['north', 'east', 'south', 'west'];
 
-/** Steps (dx, dy) in grid space for each side direction. */
-const SIDE_DELTA: Readonly<Record<Side, { dx: number; dy: number }>> = {
-  north: { dx: 0, dy: -1 },
-  east: { dx: 1, dy: 0 },
-  south: { dx: 0, dy: 1 },
-  west: { dx: -1, dy: 0 },
-};
-
 /** How many quarter-turns a given orientation represents. */
 const ORIENTATION_QUARTERS: Record<Orientation, number> = {
   0: 0,
@@ -40,8 +32,7 @@ export function rotateSide(side: Side, orientation: Orientation): Side {
  */
 export function transformPort(
   port: PortDef,
-  machine: Pick<MachineInstance, 'orientation'> &
-    Pick<MachineInstance['type'], 'width' | 'height'>,
+  machine: MachineInstance,
 ): { side: Side; tileIndex: number } {
   const { orientation } = machine;
   const side = rotateSide(port.side, orientation);
@@ -54,7 +45,9 @@ export function transformPort(
   // north/south the index ran along the machine width; for east/west it
   // ran along the height. On a quarter turn that axis becomes the other one.
   const isHorizontalSource = port.side === 'north' || port.side === 'south';
-  const sideLength = isHorizontalSource ? machine.width : machine.height;
+  const sideLength = isHorizontalSource
+    ? machine.type.width
+    : machine.type.height;
 
   if (!mirrored) {
     return { side, tileIndex: port.tileIndex };
@@ -77,14 +70,19 @@ export function getPortTile(
   machine: MachineInstance,
 ): { x: number; y: number } {
   const { side, tileIndex } = transformPort(port, machine);
-  const { width, height, x, y } = machine;
-  const dx = SIDE_DELTA[side].dx;
-  const dy = SIDE_DELTA[side].dy;
+  const { width, height } = machine.type;
+  const { x, y } = machine;
 
   // For north/south sides the index runs along the width (x); for
   // east/west it runs along the height (y).
-  const horizontal = side === 'north' || side === 'south';
-  return horizontal
-    ? { x: x + tileIndex, y: y + (side === 'north' ? -1 : height) }
-    : { x: x + (side === 'east' ? width : -1), y: y + tileIndex };
+  switch (side) {
+    case 'north':
+      return { x: x + tileIndex, y: y - 1 };
+    case 'south':
+      return { x: x + tileIndex, y: y + height };
+    case 'east':
+      return { x: x + width, y: y + tileIndex };
+    case 'west':
+      return { x: x - 1, y: y + tileIndex };
+  }
 }
