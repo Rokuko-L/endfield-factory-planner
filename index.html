@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Endfield Factory Planner</title>
+  </head>
+  <body>
+    <header class="toolbar">
+      <h1>Endfield Factory Planner</h1>
+      <label class="field">
+        Machine
+        <select id="machine-select"></select>
+      </label>
+      <div class="field">
+        Orientation
+        <strong id="orientation-label">0°</strong>
+      </div>
+      <button id="clear-all" type="button">Clear All</button>
+    </header>
+
+    <main class="layout">
+      <div class="grid-wrap">
+        <canvas id="grid"></canvas>
+      </div>
+      <aside class="panel">
+        <p id="status" class="status">Ready. Pick a machine and click the grid.</p>
+        <p id="metrics" class="metrics"></p>
+        <p class="hint">
+          Click: place · R: rotate · Right-click: remove
+        </p>
+      </aside>
+    </main>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
