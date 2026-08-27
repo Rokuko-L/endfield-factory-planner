@@ -1,7 +1,7 @@
 # AGENTS.md
 
 Runbook for this repo's toolchain quirks and the working agreement
-for commits.
+for commits. The documentation itself lives in [Docs/](Docs/overview.md).
 
 ## Toolchain
 
@@ -55,16 +55,3 @@ When in doubt, push — a noisy history is better than losing work.
 - Branch: `main` (default)
 - Git identity (from `git config --global`): name `Rokuko`,
   email `dhafinrifki1245@gmail.com`
-
-## Editor Structure Cheat Sheet
-
-- Adding a new machine: edit `src/data.ts`, append to
-  `ALL_MACHINE_TYPES`. The editor picks it up via the dropdown
-  automatically.
-- Adding a new behavior: write core logic in a `src/*.ts` module
-  (one concern per file), wire it into `main.ts`, render via
-  `src/renderer.ts`. Don't put state in the renderer.
-- Adding a test: drop a `*.test.ts` into `test/`. The Vitest
-  config picks up anything under `test/`.
-- Strict TypeScript is on. New code must type-check clean
-  (`npm run typecheck`).
