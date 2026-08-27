@@ -51,7 +51,7 @@ When in doubt, push — a noisy history is better than losing work.
 
 ## Repo
 
-- Remote: `git@github.com:Rokuko-L/endfield-factory-planner.git`
+- Remote: `git@github.com:Rokuko-L/endminsworkshop.git`
 - Branch: `main` (default)
 - Git identity (from `git config --global`): name `Rokuko`,
   email `dhafinrifki1245@gmail.com`
