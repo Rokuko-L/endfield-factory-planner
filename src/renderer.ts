@@ -1,14 +1,18 @@
 import type { Grid } from './grid.ts';
-import type { MachineInstance } from './types.ts';
-import { getPortTile } from './geometry.ts';
+import type { MachineInstance, PortDef, Side } from './types.ts';
+import { rotateSide, transformPort } from './geometry.ts';
 
-/** Color used to draw each port type. */
-const PORT_COLORS: Record<string, string> = {
-  input: '#f87171', // red
-  output: '#4fd1a5', // green
+/**
+ * Color pairs for edge bands and single-tile ports. Each entry is a
+ * { stroke, fill } pair; the fill is a translucent tint of the stroke
+ * for the "subtle fill" look.
+ */
+const BAND_COLORS: Record<string, { stroke: string; fill: string }> = {
+  'item-input': { stroke: '#f87171', fill: 'rgba(248,113,113,0.20)' },
+  'item-output': { stroke: '#4fd1a5', fill: 'rgba(79,209,165,0.20)' },
+  'fluid-input': { stroke: '#6ea8ff', fill: 'rgba(110,168,255,0.20)' },
+  'fluid-output': { stroke: '#6ea8ff', fill: 'rgba(110,168,255,0.20)' },
 };
-/** Fluid ports render as blue regardless of input/output. */
-const FLUID_COLOR = '#6ea8ff';
 
 const GRID_LINE = 'rgba(255,255,255,0.06)';
 const EMPTY_TILE = 'rgba(255,255,255,0.04)';
@@ -130,25 +134,152 @@ export class Renderer {
     ctx.lineWidth = 2;
     ctx.strokeRect(x * t + 1, y * t + 1, width * t - 2, height * t - 2);
 
-    // Machine name label (centered, unrotated).
+    // Edge bands (full-edge port zones, rotated with the machine).
+    for (const [side, band] of Object.entries(m.type.edgeBands ?? {})) {
+      if (!band) continue;
+      this.drawEdgeBand(ctx, m, side as Side, band);
+    }
+
+    // Single-tile ports (e.g. fluid inputs in the center of an edge).
+    for (const port of m.type.ports) {
+      this.drawPortTile(ctx, m, port);
+    }
+
+    // Machine name label (centered, unrotated). Drawn last so it sits
+    // on top of any port fills.
     ctx.fillStyle = '#e6e8ee';
     ctx.font = '11px system-ui, sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(m.type.name, (x + width / 2) * t, (y + height / 2) * t);
+  }
 
-    // Ports.
-    for (const port of m.type.ports) {
-      const tile = getPortTile(port, m);
-      ctx.fillStyle =
-        port.kind === 'fluid' ? FLUID_COLOR : PORT_COLORS[port.type] ?? '#fff';
-      const inset = t * 0.25;
-      ctx.fillRect(
-        tile.x * t + inset,
-        tile.y * t + inset,
-        t - inset * 2,
-        t - inset * 2,
-      );
+  /**
+   * Paint a full-edge band: subtle fill on every cell along the side,
+   * plus a colored stroke on the outer edge of each cell.
+   */
+  private drawEdgeBand(
+    ctx: CanvasRenderingContext2D,
+    m: MachineInstance,
+    unrotatedSide: Side,
+    band: { type: 'input' | 'output'; resourceKind: 'item' | 'fluid' },
+  ): void {
+    const t = this.tilePx;
+    const side = rotateSide(unrotatedSide, m.orientation);
+    const palette = BAND_COLORS[`${band.resourceKind}-${band.type}`];
+    if (!palette) return;
+    const { width, height } = m.type;
+    const { x, y } = m;
+
+    // Subtle fill on each cell of the side.
+    ctx.fillStyle = palette.fill;
+    switch (side) {
+      case 'north':
+        ctx.fillRect(x * t, y * t, width * t, t);
+        break;
+      case 'south':
+        ctx.fillRect(x * t, (y + height - 1) * t, width * t, t);
+        break;
+      case 'west':
+        ctx.fillRect(x * t, y * t, t, height * t);
+        break;
+      case 'east':
+        ctx.fillRect((x + width - 1) * t, y * t, t, height * t);
+        break;
     }
+
+    // Colored stroke on the outer edge of each cell in the band.
+    ctx.strokeStyle = palette.stroke;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    for (let i = 0; i < (side === 'north' || side === 'south' ? width : height); i++) {
+      switch (side) {
+        case 'north':
+          ctx.moveTo((x + i) * t + 0.5, y * t + 1.5);
+          ctx.lineTo((x + i + 1) * t - 0.5, y * t + 1.5);
+          break;
+        case 'south':
+          ctx.moveTo((x + i) * t + 0.5, (y + height) * t - 1.5);
+          ctx.lineTo((x + i + 1) * t - 0.5, (y + height) * t - 1.5);
+          break;
+        case 'west':
+          ctx.moveTo(x * t + 1.5, (y + i) * t + 0.5);
+          ctx.lineTo(x * t + 1.5, (y + i + 1) * t - 0.5);
+          break;
+        case 'east':
+          ctx.moveTo((x + width) * t - 1.5, (y + i) * t + 0.5);
+          ctx.lineTo((x + width) * t - 1.5, (y + i + 1) * t - 0.5);
+          break;
+      }
+    }
+    ctx.stroke();
+  }
+
+  /**
+   * Paint a single-tile port marker. The marker is the cell on the
+   * inside of the machine footprint at the port's position, with a
+   * subtle fill and a colored stroke on its outer edge.
+   */
+  private drawPortTile(
+    ctx: CanvasRenderingContext2D,
+    m: MachineInstance,
+    port: PortDef,
+  ): void {
+    const t = this.tilePx;
+    const palette = BAND_COLORS[`${port.kind}-${port.type}`];
+    if (!palette) return;
+    const { side, tileIndex } = transformPort(port, m);
+    const { width, height } = m.type;
+    const { x, y } = m;
+
+    // Cell origin in canvas pixels.
+    let cx: number;
+    let cy: number;
+    switch (side) {
+      case 'north':
+        cx = x + tileIndex;
+        cy = y;
+        break;
+      case 'south':
+        cx = x + tileIndex;
+        cy = y + height - 1;
+        break;
+      case 'west':
+        cx = x;
+        cy = y + tileIndex;
+        break;
+      case 'east':
+        cx = x + width - 1;
+        cy = y + tileIndex;
+        break;
+    }
+
+    // Subtle fill.
+    ctx.fillStyle = palette.fill;
+    ctx.fillRect(cx * t, cy * t, t, t);
+
+    // Outer-edge stroke.
+    ctx.strokeStyle = palette.stroke;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    switch (side) {
+      case 'north':
+        ctx.moveTo(cx * t + 0.5, cy * t + 1.5);
+        ctx.lineTo((cx + 1) * t - 0.5, cy * t + 1.5);
+        break;
+      case 'south':
+        ctx.moveTo(cx * t + 0.5, (cy + 1) * t - 1.5);
+        ctx.lineTo((cx + 1) * t - 0.5, (cy + 1) * t - 1.5);
+        break;
+      case 'west':
+        ctx.moveTo(cx * t + 1.5, cy * t + 0.5);
+        ctx.lineTo(cx * t + 1.5, (cy + 1) * t - 0.5);
+        break;
+      case 'east':
+        ctx.moveTo((cx + 1) * t - 1.5, cy * t + 0.5);
+        ctx.lineTo((cx + 1) * t - 1.5, (cy + 1) * t - 0.5);
+        break;
+    }
+    ctx.stroke();
   }
 }

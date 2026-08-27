@@ -42,19 +42,31 @@ The draw order is:
 
 ## Port Color Code
 
-| Port | Color |
-|---|---|
-| `type: 'input'` | red (`#f87171`) |
-| `type: 'output'` | green (`#4fd1a5`) |
-| `kind: 'fluid'` (any type) | blue (`#6ea8ff`) |
+Both edge bands and single-tile ports use the same palette, keyed by
+`{ resourceKind, type }`:
 
-`kind === 'fluid'` wins over the input/output color, so a fluid input
-and a fluid output both render blue. The same `getPortTile` is used
-to compute the port location, so the rotation math is shared with the
-data layer.
+| Key | Stroke | Fill |
+|---|---|---|
+| `item-input` | red `#f87171` | `rgba(248,113,113,0.20)` |
+| `item-output` | green `#4fd1a5` | `rgba(79,209,165,0.20)` |
+| `fluid-input` | blue `#6ea8ff` | `rgba(110,168,255,0.20)` |
+| `fluid-output` | blue `#6ea8ff` | `rgba(110,168,255,0.20)` |
 
-The port square is inset by `0.25 * tilePx` from its tile so it sits
-visually inside the tile and adjacent ports don't merge.
+The fill is a translucent tint of the stroke for the "subtle fill"
+look. The stroke is the **outer edge** of the cell — for a south band,
+that's the bottom edge of each bottom-row cell.
+
+## Edge Bands vs Single-Tile Ports
+
+The renderer iterates `m.type.edgeBands` and `m.type.ports` separately
+and draws each. Bands fill and stroke every cell along the declared
+side. Single-tile ports (`PortDef` records) get the same stroke + fill
+treatment, but on the single cell whose position the port defines
+(via `transformPort`).
+
+Both are rotated with the machine through `rotateSide` /
+`transformPort`, so a 90° rotation moves a north band to the east
+edge correctly.
 
 ## What the Renderer Does Not Do
 
@@ -71,4 +83,5 @@ Redrawing the whole 50×50 grid + up to ~100 machines is fine on the
 canvas. If a future change adds thousands of ports or machines, switch
 to per-machine redraws or a dirty-rect strategy — but don't pre-optimize.
 
-Related: [geometry.md](geometry.md) · [interactions.md](../ui/interactions.md)
+Related: [geometry.md](geometry.md) · [interactions.md](../ui/interactions.md) · [types.md](types.md)
+

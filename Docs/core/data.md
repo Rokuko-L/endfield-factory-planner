@@ -7,14 +7,29 @@ machine.
 
 ## Built-in Types
 
-| Constant | Footprint | Ports |
-|---|---|---|
-| `MINER` | 5×5 | one `output` on `north`, tileIndex 2 — Iron Ore, 30/min |
-| `FURNACE` | 5×5 | `input` Iron Ore on `south`, tileIndex 2 (30/min); `output` Iron Plate on `north`, tileIndex 2 (15/min) |
+| Constant | Footprint | Edge bands | Single-tile ports |
+|---|---|---|---|
+| `MINER` | 5×5 | `north`: output, item | — |
+| `FURNACE` | 5×5 | `south`: input, item; `north`: output, item | `water_input` (west, tileIndex 2) |
 
 Both are exported as individual constants and rolled into
 `ALL_MACHINE_TYPES: MachineType[]` — that's the array the editor
 actually consumes.
+
+## Edge Bands vs Single-Tile Ports
+
+A `MachineType` carries two kinds of port data:
+
+- **`edgeBands`** — a per-side map of `{ type, resourceKind }`. The
+  renderer paints the entire edge of the machine in the band color.
+  Use this for whole-edge port zones (typical of item inputs/outputs).
+- **`ports`** — a list of `PortDef` records. Each renders as a
+  single-tile marker on the machine's edge. Use this for
+  single-connection fluid inputs, or any future per-tile port.
+
+The current data has the Furnace using both: a south band for the
+item input, a north band for the item output, and a single-tile
+fluid port for water on the west center.
 
 ## Why two ways to reference machines?
 
@@ -29,27 +44,22 @@ it to the array.
 The full recipe lives in [reference/extending.md](../reference/extending.md).
 In short:
 
-1. Add a new `const X: MachineType = { name, width, height, ports: [...] }`.
+1. Add a new `const X: MachineType = { name, width, height, ports: [...], edgeBands: {...} }`.
 2. Append it to `ALL_MACHINE_TYPES`.
 3. Run `npm test` to confirm the new port geometry still works at
    every orientation, then `npm run dev` to see it in the dropdown.
 
-## What Goes In `ports`?
+## Edge Band Convention
 
-A port must specify a `side` and a `tileIndex` *for the unrotated
-machine*. The editor will rotate them automatically when the machine
-is placed. A 5×5 machine with a single `north` port at `tileIndex: 2`
-produces:
+In 1-based user-friendly coordinates (machine origin at (1,1)):
 
-| Orientation | Resulting side | tileIndex | Tile |
-|---|---|---|---|
-| 0° | north | 2 | (x+2, y-1) |
-| 90° | east | 2 | (x+5, y+2) |
-| 180° | south | 2 (mirrored → 2) | (x+2, y+5) |
-| 270° | west | 2 (mirrored → 2) | (x-1, y+2) |
+- **South edge, all 5 cells (y=1, x=1..5)** — red, item input.
+- **North edge, all 5 cells (y=5, x=1..5)** — green, item output.
+- **West edge, only the center cell (x=1, y=3)** — blue, fluid input.
 
-For a 3×3 machine the half-turns would mirror: `tileIndex: 0` at 180°
-becomes `2` (= 3 - 1 - 0). See [geometry.md](geometry.md) for the rule.
+These match the typical Endfield machines (Furnace in particular).
+Custom machines can vary the band color, fill, and which side(s) get
+bands; the renderer just iterates whatever `edgeBands` declares.
 
 ## Rate Convention
 
@@ -57,4 +67,5 @@ becomes `2` (= 3 - 1 - 0). See [geometry.md](geometry.md) for the rule.
 declared in the JSDoc on `PortDef.rate` and is not enforced by the type
 system — it is a convention.
 
-Related: [types.md](types.md) · [extending.md](../reference/extending.md)
+Related: [types.md](types.md) · [extending.md](../reference/extending.md) · [renderer.md](renderer.md)
+

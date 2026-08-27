@@ -68,5 +68,6 @@ Read **[Docs/overview.md](Docs/overview.md)** for the full tour. Highlights:
 - **Right-click** on a machine to remove it.
 - **Clear All** button to reset the layout.
 
-Port colors: red = item input, green = item output, blue = fluid
-(input or output).
+Port colors: red = item input (whole edge), green = item output (whole
+edge), blue = fluid input/output (single tile). Each is drawn as a
+subtle fill on the cell plus a colored stroke on its outer edge.

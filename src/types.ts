@@ -36,6 +36,18 @@ export interface PortDef {
   rate: number;
 }
 
+/**
+ * An edge band describes a port zone that spans the *entire* edge of a
+ * machine. Used for the in-game style where, e.g., the south edge of a
+ * furnace is "the input side" rather than a single tile.
+ */
+export interface EdgeBand {
+  /** Whether this edge receives or emits. */
+  type: PortType;
+  /** The category of resource flowing across this edge. */
+  resourceKind: ResourceKind;
+}
+
 /** A machine footprint definition, without any placement info. */
 export interface MachineType {
   /** Display name, e.g. "Miner". */
@@ -44,7 +56,12 @@ export interface MachineType {
   width: number;
   /** Footprint height in tiles. */
   height: number;
+  /** Per-port data, kept for future per-tile routing. May be empty when
+   *  the visual is driven entirely by `edgeBands`. */
   ports: PortDef[];
+  /** Per-edge port bands. The renderer paints every cell along each
+   *  declared side. Optional; machines without bands render no ports. */
+  edgeBands?: Partial<Record<Side, EdgeBand>>;
 }
 
 /** A single machine placed in the layout. */

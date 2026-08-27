@@ -1,29 +1,23 @@
 import type { MachineType } from './types.ts';
 
 /**
- * Miner: extracts raw ore from a node. 5x5 footprint, outputs one item on
- * the north side at tile index 2.
+ * Miner: extracts raw ore from a node. 5x5 footprint with a full-edge
+ * item output on the north side.
  */
 export const MINER: MachineType = {
   name: 'Miner',
   width: 5,
   height: 5,
-  ports: [
-    {
-      id: 'iron_ore_output',
-      type: 'output',
-      side: 'north',
-      tileIndex: 2,
-      resource: 'Iron Ore',
-      kind: 'item',
-      rate: 30,
-    },
-  ],
+  ports: [],
+  edgeBands: {
+    north: { type: 'output', resourceKind: 'item' },
+  },
 };
 
 /**
- * Furnace: smelts ore into plate. Takes iron ore in on the south side and
- * outputs iron plate on the north side.
+ * Furnace: smelts ore into plate. Full-edge item input on the south
+ * side, full-edge item output on the north side, and a single fluid
+ * input tile on the west edge (center cell).
  */
 export const FURNACE: MachineType = {
   name: 'Furnace',
@@ -31,24 +25,19 @@ export const FURNACE: MachineType = {
   height: 5,
   ports: [
     {
-      id: 'iron_ore_input',
+      id: 'water_input',
       type: 'input',
-      side: 'south',
+      side: 'west',
       tileIndex: 2,
-      resource: 'Iron Ore',
-      kind: 'item',
-      rate: 30,
-    },
-    {
-      id: 'iron_plate_output',
-      type: 'output',
-      side: 'north',
-      tileIndex: 2,
-      resource: 'Iron Plate',
-      kind: 'item',
-      rate: 15,
+      resource: 'Water',
+      kind: 'fluid',
+      rate: 10,
     },
   ],
+  edgeBands: {
+    south: { type: 'input', resourceKind: 'item' },
+    north: { type: 'output', resourceKind: 'item' },
+  },
 };
 
 /** Every machine type known to the editor. */
