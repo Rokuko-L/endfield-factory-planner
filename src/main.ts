@@ -1,10 +1,13 @@
-import { ALL_MACHINE_TYPES } from './data.ts';
 import { Grid } from './grid.ts';
 import { Renderer } from './renderer.ts';
 import { findPathMulti } from './pathfinding.ts';
+import { matchRecipe, reconcileConnectionRecipes } from './recipes.ts';
+import { loadMachineTypes } from './machineStore.ts';
+import { openMachineEditor } from './machineEditor.ts';
 import type {
   Connection,
   MachineInstance,
+  MachineType,
   Orientation,
   ResourceKind,
   Side,
@@ -27,6 +30,9 @@ const clearConnectionsBtn = document.querySelector<HTMLButtonElement>(
 )!;
 const modePlaceBtn = document.querySelector<HTMLButtonElement>('#mode-place')!;
 const modeConnectBtn = document.querySelector<HTMLButtonElement>('#mode-connect')!;
+const defineMachinesBtn = document.querySelector<HTMLButtonElement>(
+  '#define-machines',
+)!;
 const canvas = document.querySelector<HTMLCanvasElement>('#grid')!;
 
 const grid = new Grid(GRID_SIZE, GRID_SIZE);
@@ -55,6 +61,7 @@ interface PickedPort {
 
 /** The full state of the editor. */
 const state = {
+  machineTypes: loadMachineTypes(),
   machines: [] as MachineInstance[],
   connections: [] as Connection[],
   selectedIndex: 0,
@@ -69,8 +76,8 @@ const state = {
 
 let idCounter = 0;
 
-function selectedType() {
-  return ALL_MACHINE_TYPES[state.selectedIndex]!;
+function selectedType(): MachineType {
+  return state.machineTypes[state.selectedIndex]!;
 }
 
 function nextId(prefix: string): string {
@@ -434,6 +441,7 @@ function finalizeConnection(
       ? `band:${target.portId.slice('band:'.length)}:${toCellIndex}`
       : target.portId;
 
+  const recipe = matchRecipe(target.machine, source.resource, source.kind);
   const connection: Connection = {
     id: nextId('conn'),
     fromMachineId: source.machine.id,
@@ -442,6 +450,7 @@ function finalizeConnection(
     toPortId,
     kind: source.kind,
     resource: source.resource,
+    matchedRecipeId: recipe ? recipe.id : null,
     path,
   };
   try {
@@ -527,13 +536,20 @@ function redraw(): void {
 }
 
 function populateSelector(): void {
-  for (const [i, t] of ALL_MACHINE_TYPES.entries()) {
+  select.innerHTML = "";
+  for (const [i, t] of state.machineTypes.entries()) {
     const option = document.createElement('option');
     option.value = String(i);
     option.textContent = `${t.name}  (${t.width}×${t.height})`;
     select.appendChild(option);
   }
-  select.value = String(state.selectedIndex);
+  if (state.machineTypes.length > 0) {
+    state.selectedIndex = Math.min(state.selectedIndex, state.machineTypes.length - 1);
+    select.value = String(state.selectedIndex);
+  } else {
+    state.selectedIndex = 0;
+    select.value = "0";
+  }
 }
 
 // ---- Event wiring ----
@@ -582,6 +598,21 @@ clearAllBtn.addEventListener('click', clearAll);
 clearConnectionsBtn.addEventListener('click', clearConnections);
 modePlaceBtn.addEventListener('click', () => setMode('place'));
 modeConnectBtn.addEventListener('click', () => setMode('connect'));
+defineMachinesBtn.addEventListener('click', async () => {
+  const result = await openMachineEditor();
+  if (result) {
+    state.machineTypes = result;
+    populateSelector();
+    // Recipes on the new definitions may now match connections that
+    // were previously passthrough. Run the reconciler to refresh.
+    state.connections = reconcileConnectionRecipes(
+      state.connections,
+      state.machines,
+    );
+    setStatus(`Loaded ${result.length} machine type${result.length === 1 ? "" : "s"}.`);
+    redraw();
+  }
+});
 
 window.addEventListener('keydown', (e) => {
   if (e.target instanceof HTMLSelectElement) return;

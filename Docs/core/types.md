@@ -14,9 +14,11 @@ from here. All coordinates are **grid tiles** with top-left origin
 | `ResourceKind` | `'item' \| 'fluid'` — categorical type of resource. |
 | `PortDef` | A single-tile port: id, type, side, tileIndex, resource, kind, rate. |
 | `EdgeBand` | A full-edge port zone: type + resourceKind for one side. |
-| `MachineType` | A footprint definition: name, width, height, ports, edgeBands. |
+| `RecipeSlot` | A single resource entry on a recipe input or output. |
+| `Recipe` | N inputs + M outputs + optional craft time. The auto-detect key. |
+| `MachineType` | A footprint definition: name, width, height, ports, edgeBands, recipes. |
 | `MachineInstance` | A placed machine: id, type, x, y, orientation. |
-| `Connection` | Reserved for a later phase. (id, from/to machine/port, kind.) |
+| `Connection` | A routed link between two machines: id, from/to, kind, resource, matchedRecipeId, path. |
 | `Layout` | The full editor state: `{ machines, connections }`. |
 
 ## Two Ways a Port Can Live on a Machine

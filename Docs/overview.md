@@ -65,6 +65,7 @@ pure function of its inputs — it does not hold state.
 | [ui/interactions.md](ui/interactions.md) | `main.ts` state machine, modes, event wiring, controls |
 | [reference/testing.md](reference/testing.md) | Vitest setup, what is covered, how to add tests |
 | [reference/extending.md](reference/extending.md) | How to add a new machine type (the canonical recipe) |
+| [reference/machine-editor.md](reference/machine-editor.md) | The dev-only machine editor modal |
 
 ---
 

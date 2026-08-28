@@ -3,7 +3,7 @@ import { Grid } from '../src/grid.ts';
 import { findPath, findPathMulti, smoothPath } from '../src/pathfinding.ts';
 import type { MachineInstance, MachineType } from '../src/types.ts';
 
-const tiny: MachineType = { name: 'T', width: 1, height: 1, ports: [] };
+const tiny: MachineType = { name: 'T', width: 1, height: 1, ports: [], recipes: [] };
 
 function inst(id: string, x: number, y: number): MachineInstance {
   return { id, type: tiny, x, y, orientation: 0 };

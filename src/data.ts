@@ -12,6 +12,7 @@ export const MINER: MachineType = {
   edgeBands: {
     north: { type: 'output', resourceKind: 'item' },
   },
+  recipes: [],
 };
 
 /**
@@ -38,6 +39,13 @@ export const FURNACE: MachineType = {
     south: { type: 'input', resourceKind: 'item' },
     north: { type: 'output', resourceKind: 'item' },
   },
+  recipes: [
+    {
+      id: 'iron_ore_to_iron_plate',
+      inputs: [{ resource: 'Iron Ore', kind: 'item', rate: 30 }],
+      outputs: [{ resource: 'Iron Plate', kind: 'item', rate: 15 }],
+    },
+  ],
 };
 
 /** Every machine type known to the editor. */

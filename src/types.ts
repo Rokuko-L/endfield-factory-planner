@@ -48,6 +48,30 @@ export interface EdgeBand {
   resourceKind: ResourceKind;
 }
 
+/** A recipe: a single transformation that takes N inputs and produces
+ *  M outputs. Recipes are matched by checking whether the connection's
+ *  source resource+kind appears in the inputs; the matched recipe's
+ *  outputs tell the rest of the editor what the destination produces.
+ *
+ *  Recipes are per-machine, not per-port-cell: any input port on the
+ *  machine that matches the source resource will trigger the recipe.
+ */
+export interface RecipeSlot {
+  resource: string;
+  kind: ResourceKind;
+  /** Per-minute for items, per-second for fluids. */
+  rate: number;
+}
+
+export interface Recipe {
+  /** Unique id within the machine, e.g. "ferrium_ore_to_ferrium". */
+  id: string;
+  inputs: RecipeSlot[];
+  outputs: RecipeSlot[];
+  /** Optional craft time in seconds. Informational. */
+  time?: number;
+}
+
 /** A machine footprint definition, without any placement info. */
 export interface MachineType {
   /** Display name, e.g. "Miner". */
@@ -62,6 +86,12 @@ export interface MachineType {
   /** Per-edge port bands. The renderer paints every cell along each
    *  declared side. Optional; machines without bands render no ports. */
   edgeBands?: Partial<Record<Side, EdgeBand>>;
+  /** Recipes the machine can perform. Empty array means "passthrough"
+   *  (e.g. a Transport Belt just moves items along without changing
+   *  them). The connection editor uses these to validate connections:
+   *  a connection from a source that matches one of these recipes'
+   *  inputs is "valid" and the recipe's outputs are produced. */
+  recipes: Recipe[];
 }
 
 /** A single machine placed in the layout. */
@@ -90,6 +120,11 @@ export interface Connection {
   kind: ResourceKind;
   /** Resource name carried, e.g. "Iron Ore". */
   resource: string;
+  /** If the destination machine has a recipe matching this connection's
+   *  resource+kind, the id of that recipe. Otherwise null (the
+   *  connection is "passthrough" — items flow but no transformation
+   *  is implied). */
+  matchedRecipeId: string | null;
   /** The routed path. Does not include the start/end cells that lie on
    *  the two ports — only the tiles the belt/pipe itself occupies. */
   path: { x: number; y: number }[];
