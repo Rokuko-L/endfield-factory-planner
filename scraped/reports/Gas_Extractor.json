@@ -1,0 +1,12 @@
+{
+  "slug": "Gas_Extractor",
+  "name": "Gas Extractor",
+  "type": "Resourcing",
+  "footprint": [
+    5,
+    5
+  ],
+  "powerUse": 0,
+  "description": "Extracts Inergen and other gases (e.g. Xiragen) from the natural flow of gas. Does not require power to operate. Rarity 2. Constructed from 20 Cuprium Parts (requires Wuling AIC Plan - Wuling AIC II - Gas Extraction).",
+  "recipes": []
+}

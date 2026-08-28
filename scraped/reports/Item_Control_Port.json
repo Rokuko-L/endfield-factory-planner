@@ -1,0 +1,12 @@
+{
+  "slug": "Item_Control_Port",
+  "name": "Item Control Port",
+  "type": "Logistics Units",
+  "footprint": [
+    1,
+    1
+  ],
+  "powerUse": 0,
+  "description": "An adjustable belt logistics unit that controls the type and quantity of items passed through the belt.",
+  "recipes": []
+}

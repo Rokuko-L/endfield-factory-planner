@@ -1,0 +1,266 @@
+{
+  "slug": "Packaging_Unit",
+  "name": "Packaging Unit",
+  "type": "Production II",
+  "footprint": [
+    5,
+    5
+  ],
+  "powerUse": 20,
+  "description": "A facility for packaging power components.",
+  "recipes": [
+    {
+      "id": "recipe_1",
+      "inputs": [
+        {
+          "resource": "Amethyst Part",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Aketine Powder",
+          "kind": "item",
+          "rate": 6
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Industrial Explosive",
+          "kind": "item",
+          "rate": 6
+        }
+      ],
+      "time": 10
+    },
+    {
+      "id": "recipe_2",
+      "inputs": [
+        {
+          "resource": "Amethyst Part",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Originium Powder",
+          "kind": "item",
+          "rate": 60
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "LC Valley Battery",
+          "kind": "item",
+          "rate": 6
+        }
+      ],
+      "time": 10
+    },
+    {
+      "id": "recipe_3",
+      "inputs": [
+        {
+          "resource": "Ferrium Part",
+          "kind": "item",
+          "rate": 60
+        },
+        {
+          "resource": "Originium Powder",
+          "kind": "item",
+          "rate": 90
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "SC Valley Battery",
+          "kind": "item",
+          "rate": 6
+        }
+      ],
+      "time": 10
+    },
+    {
+      "id": "recipe_4",
+      "inputs": [
+        {
+          "resource": "Steel Part",
+          "kind": "item",
+          "rate": 60
+        },
+        {
+          "resource": "Dense Originium Powder",
+          "kind": "item",
+          "rate": 90
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "HC Valley Battery",
+          "kind": "item",
+          "rate": 6
+        }
+      ],
+      "time": 10
+    },
+    {
+      "id": "recipe_5",
+      "inputs": [
+        {
+          "resource": "Ferrium Part",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Ferrium Bottle (Yazhen Solution)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Yazhen Syringe (C)",
+          "kind": "item",
+          "rate": 6
+        }
+      ],
+      "time": 10
+    },
+    {
+      "id": "recipe_6",
+      "inputs": [
+        {
+          "resource": "Cuprium Part",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Cuprium Bottle (Yazhen Solution)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Yazhen Syringe (A)",
+          "kind": "item",
+          "rate": 6
+        }
+      ],
+      "time": 10
+    },
+    {
+      "id": "recipe_7",
+      "inputs": [
+        {
+          "resource": "Ferrium Part",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Ferrium Bottle (Jincao Solution)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Jincao Drink",
+          "kind": "item",
+          "rate": 6
+        }
+      ],
+      "time": 10
+    },
+    {
+      "id": "recipe_8",
+      "inputs": [
+        {
+          "resource": "Cuprium Part",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Cuprium Bottle (Jincao Solution)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Jincao Tea",
+          "kind": "item",
+          "rate": 6
+        }
+      ],
+      "time": 10
+    },
+    {
+      "id": "recipe_9",
+      "inputs": [
+        {
+          "resource": "Xiranite",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Dense Originium Powder",
+          "kind": "item",
+          "rate": 90
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "LC Wuling Battery",
+          "kind": "item",
+          "rate": 6
+        }
+      ],
+      "time": 10
+    },
+    {
+      "id": "recipe_10",
+      "inputs": [
+        {
+          "resource": "Xircon",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Dense Originium Powder",
+          "kind": "item",
+          "rate": 120
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "SC Wuling Battery",
+          "kind": "item",
+          "rate": 6
+        }
+      ],
+      "time": 10
+    },
+    {
+      "id": "recipe_11",
+      "inputs": [
+        {
+          "resource": "Cuprium Canister",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Xiranite",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Separator Core",
+          "kind": "item",
+          "rate": 60
+        }
+      ],
+      "time": 2
+    }
+  ]
+}

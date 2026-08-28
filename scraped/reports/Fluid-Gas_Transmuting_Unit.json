@@ -1,0 +1,22 @@
+{
+  "slug": "Fluid-Gas_Transmuting_Unit",
+  "name": "Fluid-Gas Transmuting Unit",
+  "type": "Production II",
+  "footprint": [5, 5],
+  "powerUse": 50,
+  "description": "A facility for transmuting fluids into gases. Requires a minimum input of 6/min Liquid Xiranite to activate.",
+  "recipes": [
+    {"id": "recipe_1", "inputs": [{"resource": "Aquagen", "kind": "item", "rate": 30}], "outputs": [{"resource": "Clean Water", "kind": "fluid", "rate": 30}], "time": 2},
+    {"id": "recipe_2", "inputs": [{"resource": "Clean Water", "kind": "fluid", "rate": 30}], "outputs": [{"resource": "Aquagen", "kind": "item", "rate": 30}], "time": 2},
+    {"id": "recipe_3", "inputs": [{"resource": "Precipitation Acid", "kind": "fluid", "rate": 30}], "outputs": [{"resource": "Acridgen", "kind": "item", "rate": 30}], "time": 2},
+    {"id": "recipe_4", "inputs": [{"resource": "Acridgen", "kind": "item", "rate": 30}], "outputs": [{"resource": "Precipitation Acid", "kind": "fluid", "rate": 30}], "time": 2},
+    {"id": "recipe_5", "inputs": [{"resource": "Liquid Xiranite", "kind": "fluid", "rate": 30}], "outputs": [{"resource": "Xiragen", "kind": "item", "rate": 30}], "time": 2},
+    {"id": "recipe_6", "inputs": [{"resource": "Xiragen", "kind": "item", "rate": 30}], "outputs": [{"resource": "Liquid Xiranite", "kind": "fluid", "rate": 30}], "time": 2},
+    {"id": "recipe_7", "inputs": [{"resource": "Liquid Heavy Xiranite", "kind": "fluid", "rate": 12}], "outputs": [{"resource": "Heavy Xiragen", "kind": "item", "rate": 30}], "time": 10},
+    {"id": "recipe_8", "inputs": [{"resource": "Heavy Xiragen", "kind": "item", "rate": 30}], "outputs": [{"resource": "Liquid Heavy Xiranite", "kind": "fluid", "rate": 12}], "time": 10},
+    {"id": "recipe_9", "inputs": [{"resource": "Cuprium Solution", "kind": "fluid", "rate": 60}], "outputs": [{"resource": "Cuprium Gas", "kind": "item", "rate": 30}], "time": 2},
+    {"id": "recipe_10", "inputs": [{"resource": "Cuprium Gas", "kind": "item", "rate": 30}], "outputs": [{"resource": "Cuprium Solution", "kind": "fluid", "rate": 60}], "time": 2},
+    {"id": "recipe_11", "inputs": [{"resource": "Hetonite Gas", "kind": "item", "rate": 30}], "outputs": [{"resource": "Hetonite Solution", "kind": "fluid", "rate": 30}], "time": 2},
+    {"id": "recipe_12", "inputs": [{"resource": "Hetonite Solution", "kind": "fluid", "rate": 30}], "outputs": [{"resource": "Hetonite Gas", "kind": "item", "rate": 30}], "time": 2}
+  ]
+}

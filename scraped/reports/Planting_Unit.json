@@ -1,0 +1,131 @@
+{
+  "slug": "Planting_Unit",
+  "name": "Planting Unit",
+  "type": "Production I",
+  "footprint": [
+    5,
+    5
+  ],
+  "powerUse": 20,
+  "description": "A cultivating silo for growing various common plants and crops.",
+  "recipes": [
+    {
+      "id": "recipe_1",
+      "inputs": [
+        {
+          "resource": "Buckflower Seed",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Buckflower",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_2",
+      "inputs": [
+        {
+          "resource": "Citrome Seed",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Citrome",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_3",
+      "inputs": [
+        {
+          "resource": "Sandleaf Seed",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Sandleaf",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_4",
+      "inputs": [
+        {
+          "resource": "Aketine Seed",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Aketine",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_5_fluid_mode",
+      "inputs": [
+        {
+          "resource": "Jincao Seed",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Clean Water",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Jincao",
+          "kind": "item",
+          "rate": 60
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_6_fluid_mode",
+      "inputs": [
+        {
+          "resource": "Yazhen Seed",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Clean Water",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Yazhen",
+          "kind": "item",
+          "rate": 60
+        }
+      ],
+      "time": 2
+    }
+  ]
+}

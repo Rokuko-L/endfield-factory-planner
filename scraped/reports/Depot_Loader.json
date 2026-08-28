@@ -1,0 +1,12 @@
+{
+  "slug": "Depot_Loader",
+  "name": "Depot Loader",
+  "type": "Depot Access",
+  "footprint": [
+    5,
+    5
+  ],
+  "powerUse": 0,
+  "description": "A placeable loading point that delivers goods from the AIC Factory to a local depot. The Depot Loader must be placed right next to the Depot Bus.",
+  "recipes": []
+}

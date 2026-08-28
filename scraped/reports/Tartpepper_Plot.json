@@ -1,0 +1,12 @@
+{
+  "slug": "Tartpepper_Plot",
+  "name": "Tartpepper Plot",
+  "type": "Planting",
+  "footprint": [
+    5,
+    5
+  ],
+  "powerUse": 0,
+  "description": "Cultivation plot adjusted for growing Tartpeppers. Soil quality is far better than the average arable land in Valley IV. The wiki does not list a structured in-game recipe for operating the plot; the only Crafting table on the wiki is for building the plot itself (Tartpepper Seed + Carbon -> Tartpepper Plot). Rarity 3.",
+  "recipes": []
+}

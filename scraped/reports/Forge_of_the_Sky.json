@@ -1,0 +1,14 @@
+{
+  "slug": "Forge_of_the_Sky",
+  "name": "Forge of the Sky",
+  "type": "Production II",
+  "footprint": [5, 5],
+  "powerUse": 50,
+  "description": "A facility for making Xiranite-based products. Stable ENV section produces Xiranite and Heavy Xiranite; a separate section produces Bumper-Rich from Burdo-Muck + Liquid Xiranite.",
+  "recipes": [
+    {"id": "recipe_1", "inputs": [{"resource": "Carbon", "kind": "item", "rate": 30}, {"resource": "Clean Water", "kind": "fluid", "rate": 30}], "outputs": [{"resource": "Xiranite", "kind": "item", "rate": 30}], "time": 2},
+    {"id": "recipe_2", "inputs": [{"resource": "Stabilized Carbon", "kind": "item", "rate": 60}, {"resource": "Clean Water", "kind": "fluid", "rate": 30}], "outputs": [{"resource": "Xiranite", "kind": "item", "rate": 30}], "time": 2},
+    {"id": "recipe_3", "inputs": [{"resource": "Xiranite", "kind": "item", "rate": 60}, {"resource": "Xircon Effluent", "kind": "item", "rate": 30}], "outputs": [{"resource": "Heavy Xiranite", "kind": "item", "rate": 6}], "time": 10},
+    {"id": "recipe_4", "inputs": [{"resource": "Burdo-Muck", "kind": "item", "rate": 30}, {"resource": "Liquid Xiranite", "kind": "item", "rate": 30}], "outputs": [{"resource": "Bumper-Rich", "kind": "item", "rate": 30}], "time": 2}
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "slug": "Expanded_Crucible",
+  "name": "Expanded Crucible",
+  "type": "Production II",
+  "footprint": [5, 5],
+  "powerUse": 100,
+  "description": "A facility for running solid or liquid-state chemical reactions. Comes with additional input and output ports and can run multiple reactions simultaneously.",
+  "recipes": [
+    {"id": "recipe_1", "inputs": [{"resource": "Jincao Powder", "kind": "item", "rate": 30}, {"resource": "Clean Water", "kind": "fluid", "rate": 30}], "outputs": [{"resource": "Jincao Solution", "kind": "fluid", "rate": 30}], "time": 2},
+    {"id": "recipe_2", "inputs": [{"resource": "Yazhen Powder", "kind": "item", "rate": 30}, {"resource": "Clean Water", "kind": "fluid", "rate": 30}], "outputs": [{"resource": "Yazhen Solution", "kind": "fluid", "rate": 30}], "time": 2},
+    {"id": "recipe_3", "inputs": [{"resource": "Xiranite", "kind": "item", "rate": 30}, {"resource": "Clean Water", "kind": "fluid", "rate": 30}], "outputs": [{"resource": "Liquid Xiranite", "kind": "fluid", "rate": 30}], "time": 2},
+    {"id": "recipe_4", "inputs": [{"resource": "Heavy Xiranite", "kind": "item", "rate": 30}, {"resource": "Precipitation Acid", "kind": "fluid", "rate": 30}], "outputs": [{"resource": "Liquid Heavy Xiranite", "kind": "fluid", "rate": 30}], "time": 2},
+    {"id": "recipe_5", "inputs": [{"resource": "Cuprium Powder", "kind": "item", "rate": 30}, {"resource": "Precipitation Acid", "kind": "fluid", "rate": 30}], "outputs": [{"resource": "Cuprium Solution", "kind": "fluid", "rate": 30}], "time": 2},
+    {"id": "recipe_6", "inputs": [{"resource": "Liquid Xiranite", "kind": "fluid", "rate": 30}, {"resource": "Sewage", "kind": "fluid", "rate": 30}], "outputs": [{"resource": "Xircon Effluent", "kind": "fluid", "rate": 30}, {"resource": "Inert Xircon Effluent", "kind": "fluid", "rate": 30}], "time": 2},
+    {"id": "recipe_7", "inputs": [{"resource": "Xircon Effluent", "kind": "fluid", "rate": 60}, {"resource": "Ferrium Powder", "kind": "item", "rate": 30}], "outputs": [{"resource": "Xircon", "kind": "item", "rate": 30}, {"resource": "Sewage", "kind": "fluid", "rate": 30}], "time": 2},
+    {"id": "recipe_8", "inputs": [{"resource": "Hetonite Solution", "kind": "fluid", "rate": 60}, {"resource": "Ferrium Powder", "kind": "item", "rate": 30}], "outputs": [{"resource": "Hetonite", "kind": "item", "rate": 30}, {"resource": "Sewage", "kind": "fluid", "rate": 30}], "time": 2}
+  ]
+}

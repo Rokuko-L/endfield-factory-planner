@@ -1,0 +1,121 @@
+{
+  "slug": "Thermal_Bank",
+  "name": "Thermal Bank",
+  "type": "Power",
+  "footprint": [
+    5,
+    5
+  ],
+  "powerUse": 0,
+  "description": "Generates power from various fuel items.",
+  "recipes": [
+    {
+      "id": "recipe_1",
+      "inputs": [
+        {
+          "resource": "Originium Ore",
+          "kind": "item",
+          "rate": 7.5
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Power",
+          "kind": "item",
+          "rate": 50
+        }
+      ],
+      "time": 8
+    },
+    {
+      "id": "recipe_2",
+      "inputs": [
+        {
+          "resource": "LC Valley Battery",
+          "kind": "item",
+          "rate": 1.5
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Power",
+          "kind": "item",
+          "rate": 220
+        }
+      ],
+      "time": 40
+    },
+    {
+      "id": "recipe_3",
+      "inputs": [
+        {
+          "resource": "SC Valley Battery",
+          "kind": "item",
+          "rate": 1.5
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Power",
+          "kind": "item",
+          "rate": 420
+        }
+      ],
+      "time": 40
+    },
+    {
+      "id": "recipe_4",
+      "inputs": [
+        {
+          "resource": "HC Valley Battery",
+          "kind": "item",
+          "rate": 1.5
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Power",
+          "kind": "item",
+          "rate": 1100
+        }
+      ],
+      "time": 40
+    },
+    {
+      "id": "recipe_5",
+      "inputs": [
+        {
+          "resource": "LC Wuling Battery",
+          "kind": "item",
+          "rate": 1.5
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Power",
+          "kind": "item",
+          "rate": 1600
+        }
+      ],
+      "time": 40
+    },
+    {
+      "id": "recipe_6",
+      "inputs": [
+        {
+          "resource": "SC Wuling Battery",
+          "kind": "item",
+          "rate": 1.5
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Power",
+          "kind": "item",
+          "rate": 3200
+        }
+      ],
+      "time": 40
+    }
+  ]
+}

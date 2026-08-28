@@ -1,0 +1,12 @@
+{
+  "slug": "Buckflower_Plot",
+  "name": "Buckflower Plot",
+  "type": "Planting",
+  "footprint": [
+    5,
+    5
+  ],
+  "powerUse": 0,
+  "description": "Cultivation plot adjusted for growing Buckflowers, with a higher chance of Firebuckle. Soil quality is far better than the average arable land in Valley IV. The wiki does not list a structured in-game recipe for operating the plot; the only Crafting table on the wiki is for building the plot itself (Buckflower Seed + Carbon -> Buckflower Plot). Rarity 2.",
+  "recipes": []
+}

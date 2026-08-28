@@ -1,0 +1,12 @@
+{
+  "slug": "Fluid_Tank",
+  "name": "Fluid Tank",
+  "type": "Depot Access",
+  "footprint": [
+    5,
+    5
+  ],
+  "powerUse": 0,
+  "description": "A facility for storing fluids.",
+  "recipes": []
+}

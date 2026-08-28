@@ -1,0 +1,38 @@
+{
+  "slug": "Gas_Reactor_Globe",
+  "name": "Gas Reactor Globe",
+  "type": "Production II",
+  "footprint": [
+    5,
+    5
+  ],
+  "powerUse": 50,
+  "description": "Facility for performing gas-phase reactions. Requires an Acrid environment (set by a Gas Dispersing Unit) to operate its recipe. Rarity 4. Constructed from 40 Cuprium Parts (requires Specified Wuling AIC Plan Tech).",
+  "recipes": [
+    {
+      "id": "recipe_1",
+      "name": "Pyrrolite Gas (Acrid ENV)",
+      "environment": "Acrid",
+      "inputs": [
+        {
+          "resource": "Hetonite Gas",
+          "kind": "fluid",
+          "rate": 60
+        },
+        {
+          "resource": "Xiragen",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Pyrrolite Gas",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    }
+  ]
+}

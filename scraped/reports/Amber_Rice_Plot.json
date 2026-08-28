@@ -1,0 +1,12 @@
+{
+  "slug": "Amber_Rice_Plot",
+  "name": "Amber Rice Plot",
+  "type": "Planting",
+  "footprint": [
+    5,
+    5
+  ],
+  "powerUse": 0,
+  "description": "Cultivation plot adjusted for growing Amber Rice. Soil quality is far better than the average arable land in Wuling. The wiki does not list a structured in-game recipe for operating the plot; the only Crafting table on the wiki is for building the plot itself (Amber Rice Seed + Carbon -> Amber Rice Plot). Rarity 3.",
+  "recipes": []
+}

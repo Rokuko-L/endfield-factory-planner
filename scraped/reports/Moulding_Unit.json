@@ -1,0 +1,144 @@
+{
+  "slug": "Moulding_Unit",
+  "name": "Moulding Unit",
+  "type": "Production I",
+  "footprint": [
+    5,
+    5
+  ],
+  "powerUse": 10,
+  "description": "A facility that produces various containers via stamp moulding.",
+  "recipes": [
+    {
+      "id": "recipe_1",
+      "inputs": [
+        {
+          "resource": "Ferrium",
+          "kind": "item",
+          "rate": 60
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Ferrium Bottle",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_2",
+      "inputs": [
+        {
+          "resource": "Amethyst Fiber",
+          "kind": "item",
+          "rate": 60
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Amethyst Bottle",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_3",
+      "inputs": [
+        {
+          "resource": "Steel",
+          "kind": "item",
+          "rate": 60
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Steel Bottle",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_4",
+      "inputs": [
+        {
+          "resource": "Cryston Fiber",
+          "kind": "item",
+          "rate": 60
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cryston Bottle",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_5",
+      "inputs": [
+        {
+          "resource": "Cuprium",
+          "kind": "item",
+          "rate": 60
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cuprium Bottle",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_6",
+      "inputs": [
+        {
+          "resource": "Hetonite",
+          "kind": "item",
+          "rate": 60
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Hetonite Bottle",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_7_gas_mode",
+      "inputs": [
+        {
+          "resource": "Cuprium",
+          "kind": "item",
+          "rate": 60
+        },
+        {
+          "resource": "Inergen",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cuprium Canister",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    }
+  ]
+}

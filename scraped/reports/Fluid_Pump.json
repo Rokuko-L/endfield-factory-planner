@@ -1,0 +1,12 @@
+{
+  "slug": "Fluid_Pump",
+  "name": "Fluid Pump",
+  "type": "Resourcing",
+  "footprint": [
+    5,
+    5
+  ],
+  "powerUse": 10,
+  "description": "Pumps fluids such as Clean Water. Requires power.",
+  "recipes": []
+}

@@ -4,32 +4,14 @@
 
 import type { MachineType } from "./types.ts";
 
-/** Aketine Plot — 1 recipes */
+/** Aketine Plot — 0 recipes */
 export const AKETINE_PLOT: MachineType = {
   "name": "Aketine Plot",
   "width": 5,
   "height": 5,
   "ports": [],
   "edgeBands": {},
-  "recipes": [
-    {
-      "id": "recipe_1",
-      "inputs": [
-        {
-          "resource": "Wood",
-          "kind": "item",
-          "rate": 30
-        }
-      ],
-      "outputs": [
-        {
-          "resource": "Aketine Seed",
-          "kind": "item",
-          "rate": 30
-        }
-      ]
-    }
-  ]
+  "recipes": []
 };
 
 /** Amber Rice Plot — 0 recipes */
@@ -52,60 +34,24 @@ export const BELT_BRIDGE: MachineType = {
   "recipes": []
 };
 
-/** Buckflower Plot — 1 recipes */
+/** Buckflower Plot — 0 recipes */
 export const BUCKFLOWER_PLOT: MachineType = {
   "name": "Buckflower Plot",
   "width": 5,
   "height": 5,
   "ports": [],
   "edgeBands": {},
-  "recipes": [
-    {
-      "id": "recipe_1",
-      "inputs": [
-        {
-          "resource": "Wood",
-          "kind": "item",
-          "rate": 30
-        }
-      ],
-      "outputs": [
-        {
-          "resource": "Buckflower Seed",
-          "kind": "item",
-          "rate": 30
-        }
-      ]
-    }
-  ]
+  "recipes": []
 };
 
-/** Citrome Plot — 1 recipes */
+/** Citrome Plot — 0 recipes */
 export const CITROME_PLOT: MachineType = {
   "name": "Citrome Plot",
   "width": 5,
   "height": 5,
   "ports": [],
   "edgeBands": {},
-  "recipes": [
-    {
-      "id": "recipe_1",
-      "inputs": [
-        {
-          "resource": "Wood",
-          "kind": "item",
-          "rate": 30
-        }
-      ],
-      "outputs": [
-        {
-          "resource": "Citrome Seed",
-          "kind": "item",
-          "rate": 30
-        }
-      ]
-    }
-  ]
+  "recipes": []
 };
 
 /** Conduit Inlet — 0 recipes */
@@ -221,7 +167,7 @@ export const ELECTRIC_MINING_RIG: MachineType = {
   ]
 };
 
-/** Electric Mining Rig Mk II — 2 recipes */
+/** Electric Mining Rig Mk II — 1 recipes */
 export const ELECTRIC_MINING_RIG_MK_II: MachineType = {
   "name": "Electric Mining Rig Mk II",
   "width": 5,
@@ -231,17 +177,6 @@ export const ELECTRIC_MINING_RIG_MK_II: MachineType = {
   "recipes": [
     {
       "id": "recipe_1",
-      "inputs": [],
-      "outputs": [
-        {
-          "resource": "Cryston Ore",
-          "kind": "item",
-          "rate": 30
-        }
-      ]
-    },
-    {
-      "id": "recipe_2",
       "inputs": [],
       "outputs": [
         {
@@ -264,14 +199,214 @@ export const ELECTRIC_PYLON: MachineType = {
   "recipes": []
 };
 
-/** Expanded Crucible — 0 recipes */
+/** Expanded Crucible — 8 recipes */
 export const EXPANDED_CRUCIBLE: MachineType = {
   "name": "Expanded Crucible",
   "width": 5,
   "height": 5,
   "ports": [],
   "edgeBands": {},
-  "recipes": []
+  "recipes": [
+    {
+      "id": "recipe_1",
+      "inputs": [
+        {
+          "resource": "Jincao Powder",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Clean Water",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Jincao Solution",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_2",
+      "inputs": [
+        {
+          "resource": "Yazhen Powder",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Clean Water",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Yazhen Solution",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_3",
+      "inputs": [
+        {
+          "resource": "Xiranite",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Clean Water",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Liquid Xiranite",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_4",
+      "inputs": [
+        {
+          "resource": "Heavy Xiranite",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Precipitation Acid",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Liquid Heavy Xiranite",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_5",
+      "inputs": [
+        {
+          "resource": "Cuprium Powder",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Precipitation Acid",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cuprium Solution",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_6",
+      "inputs": [
+        {
+          "resource": "Liquid Xiranite",
+          "kind": "fluid",
+          "rate": 30
+        },
+        {
+          "resource": "Sewage",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Xircon Effluent",
+          "kind": "fluid",
+          "rate": 30
+        },
+        {
+          "resource": "Inert Xircon Effluent",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_7",
+      "inputs": [
+        {
+          "resource": "Xircon Effluent",
+          "kind": "fluid",
+          "rate": 60
+        },
+        {
+          "resource": "Ferrium Powder",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Xircon",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Sewage",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_8",
+      "inputs": [
+        {
+          "resource": "Hetonite Solution",
+          "kind": "fluid",
+          "rate": 60
+        },
+        {
+          "resource": "Ferrium Powder",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Hetonite",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Sewage",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    }
+  ]
 };
 
 /** Filling Unit — 78 recipes */
@@ -2216,14 +2351,231 @@ export const FITTING_UNIT: MachineType = {
   ]
 };
 
-/** Fluid-Gas Transmuting Unit — 0 recipes */
+/** Fluid-Gas Transmuting Unit — 12 recipes */
 export const FLUID_GAS_TRANSMUTING_UNIT: MachineType = {
   "name": "Fluid-Gas Transmuting Unit",
   "width": 5,
   "height": 5,
   "ports": [],
   "edgeBands": {},
-  "recipes": []
+  "recipes": [
+    {
+      "id": "recipe_1",
+      "inputs": [
+        {
+          "resource": "Aquagen",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Clean Water",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_2",
+      "inputs": [
+        {
+          "resource": "Clean Water",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Aquagen",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_3",
+      "inputs": [
+        {
+          "resource": "Precipitation Acid",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Acridgen",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_4",
+      "inputs": [
+        {
+          "resource": "Acridgen",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Precipitation Acid",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_5",
+      "inputs": [
+        {
+          "resource": "Liquid Xiranite",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Xiragen",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_6",
+      "inputs": [
+        {
+          "resource": "Xiragen",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Liquid Xiranite",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_7",
+      "inputs": [
+        {
+          "resource": "Liquid Heavy Xiranite",
+          "kind": "fluid",
+          "rate": 12
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Heavy Xiragen",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "time": 10
+    },
+    {
+      "id": "recipe_8",
+      "inputs": [
+        {
+          "resource": "Heavy Xiragen",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Liquid Heavy Xiranite",
+          "kind": "fluid",
+          "rate": 12
+        }
+      ],
+      "time": 10
+    },
+    {
+      "id": "recipe_9",
+      "inputs": [
+        {
+          "resource": "Cuprium Solution",
+          "kind": "fluid",
+          "rate": 60
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cuprium Gas",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_10",
+      "inputs": [
+        {
+          "resource": "Cuprium Gas",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cuprium Solution",
+          "kind": "fluid",
+          "rate": 60
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_11",
+      "inputs": [
+        {
+          "resource": "Hetonite Gas",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Hetonite Solution",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_12",
+      "inputs": [
+        {
+          "resource": "Hetonite Solution",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Hetonite Gas",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    }
+  ]
 };
 
 /** Fluid Pump — 0 recipes */
@@ -2268,69 +2620,93 @@ export const FORGE_OF_THE_SKY: MachineType = {
       "id": "recipe_1",
       "inputs": [
         {
-          "resource": "Amethyst Part",
+          "resource": "Carbon",
           "kind": "item",
-          "rate": 60
+          "rate": 30
+        },
+        {
+          "resource": "Clean Water",
+          "kind": "fluid",
+          "rate": 30
         }
       ],
       "outputs": [
         {
-          "resource": "Amethyst Plate",
+          "resource": "Xiranite",
           "kind": "item",
           "rate": 30
         }
-      ]
+      ],
+      "time": 2
     },
     {
       "id": "recipe_2",
       "inputs": [
         {
-          "resource": "Ferrium Part",
+          "resource": "Stabilized Carbon",
           "kind": "item",
           "rate": 60
+        },
+        {
+          "resource": "Clean Water",
+          "kind": "fluid",
+          "rate": 30
         }
       ],
       "outputs": [
         {
-          "resource": "Ferrium Plate",
+          "resource": "Xiranite",
           "kind": "item",
           "rate": 30
         }
-      ]
+      ],
+      "time": 2
     },
     {
       "id": "recipe_3",
       "inputs": [
         {
-          "resource": "Steel Part",
+          "resource": "Xiranite",
           "kind": "item",
           "rate": 60
+        },
+        {
+          "resource": "Xircon Effluent",
+          "kind": "item",
+          "rate": 30
         }
       ],
       "outputs": [
         {
-          "resource": "Steel Plate",
+          "resource": "Heavy Xiranite",
           "kind": "item",
-          "rate": 30
+          "rate": 6
         }
-      ]
+      ],
+      "time": 10
     },
     {
       "id": "recipe_4",
       "inputs": [
         {
-          "resource": "Cryston Part",
+          "resource": "Burdo-Muck",
           "kind": "item",
-          "rate": 60
+          "rate": 30
+        },
+        {
+          "resource": "Liquid Xiranite",
+          "kind": "item",
+          "rate": 30
         }
       ],
       "outputs": [
         {
-          "resource": "Cryston Plate",
+          "resource": "Bumper-Rich",
           "kind": "item",
           "rate": 30
         }
-      ]
+      ],
+      "time": 2
     }
   ]
 };
@@ -2355,14 +2731,38 @@ export const GAS_EXTRACTOR: MachineType = {
   "recipes": []
 };
 
-/** Gas Reactor Globe — 0 recipes */
+/** Gas Reactor Globe — 1 recipes */
 export const GAS_REACTOR_GLOBE: MachineType = {
   "name": "Gas Reactor Globe",
   "width": 5,
   "height": 5,
   "ports": [],
   "edgeBands": {},
-  "recipes": []
+  "recipes": [
+    {
+      "id": "recipe_1",
+      "inputs": [
+        {
+          "resource": "Hetonite Gas",
+          "kind": "fluid",
+          "rate": 60
+        },
+        {
+          "resource": "Xiragen",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Pyrrolite Gas",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    }
+  ]
 };
 
 /** Gas Tank — 0 recipes */
@@ -2387,120 +2787,162 @@ export const GEARING_UNIT: MachineType = {
       "id": "recipe_1",
       "inputs": [
         {
-          "resource": "Ferrium Part",
+          "resource": "Origocrust",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Amethyst Fiber",
           "kind": "item",
           "rate": 30
         }
       ],
       "outputs": [
         {
-          "resource": "Ferrium Gear",
+          "resource": "Amethyst Component",
           "kind": "item",
-          "rate": 30
+          "rate": 6
         }
-      ]
+      ],
+      "time": 10
     },
     {
       "id": "recipe_2",
       "inputs": [
         {
-          "resource": "Amethyst Part",
+          "resource": "Origocrust",
           "kind": "item",
-          "rate": 30
+          "rate": 60
+        },
+        {
+          "resource": "Ferrium",
+          "kind": "item",
+          "rate": 60
         }
       ],
       "outputs": [
         {
-          "resource": "Amethyst Gear",
+          "resource": "Ferrium Component",
           "kind": "item",
-          "rate": 30
+          "rate": 6
         }
-      ]
+      ],
+      "time": 10
     },
     {
       "id": "recipe_3",
       "inputs": [
         {
-          "resource": "Steel Part",
+          "resource": "Packed Origocrust",
           "kind": "item",
-          "rate": 30
+          "rate": 60
+        },
+        {
+          "resource": "Cryston Fiber",
+          "kind": "item",
+          "rate": 60
         }
       ],
       "outputs": [
         {
-          "resource": "Steel Gear",
+          "resource": "Cryston Component",
           "kind": "item",
-          "rate": 30
+          "rate": 6
         }
-      ]
+      ],
+      "time": 10
     },
     {
       "id": "recipe_4",
       "inputs": [
         {
-          "resource": "Cuprium Part",
+          "resource": "Hetonite Part",
           "kind": "item",
-          "rate": 30
+          "rate": 12
+        },
+        {
+          "resource": "Heavy Xiranite",
+          "kind": "item",
+          "rate": 12
         }
       ],
       "outputs": [
         {
-          "resource": "Cuprium Gear",
+          "resource": "Hetonite Component",
           "kind": "item",
-          "rate": 30
+          "rate": 6
         }
-      ]
+      ],
+      "time": 10
     },
     {
       "id": "recipe_5",
       "inputs": [
         {
-          "resource": "Cryston Part",
+          "resource": "Packed Origocrust",
           "kind": "item",
-          "rate": 30
+          "rate": 60
+        },
+        {
+          "resource": "Xiranite",
+          "kind": "item",
+          "rate": 60
         }
       ],
       "outputs": [
         {
-          "resource": "Cryston Gear",
+          "resource": "Xiranite Component",
           "kind": "item",
-          "rate": 30
+          "rate": 6
         }
-      ]
+      ],
+      "time": 10
     },
     {
       "id": "recipe_6",
       "inputs": [
         {
-          "resource": "Hetonite Part",
+          "resource": "Cuprium Part",
           "kind": "item",
-          "rate": 30
+          "rate": 60
+        },
+        {
+          "resource": "Xiranite",
+          "kind": "item",
+          "rate": 60
         }
       ],
       "outputs": [
         {
-          "resource": "Hetonite Gear",
+          "resource": "Cuprium Component",
           "kind": "item",
-          "rate": 30
+          "rate": 6
         }
-      ]
+      ],
+      "time": 10
     },
     {
       "id": "recipe_7",
       "inputs": [
         {
-          "resource": "Xiranite Part",
+          "resource": "Pyrrolite Part",
           "kind": "item",
-          "rate": 30
+          "rate": 6
+        },
+        {
+          "resource": "Heavy Xiranite",
+          "kind": "item",
+          "rate": 12
         }
       ],
       "outputs": [
         {
-          "resource": "Xiranite Gear",
+          "resource": "Pyrrolite Component",
           "kind": "item",
-          "rate": 30
+          "rate": 6
         }
-      ]
+      ],
+      "time": 10
     }
   ]
 };
@@ -2517,120 +2959,162 @@ export const GRINDING_UNIT: MachineType = {
       "id": "recipe_1",
       "inputs": [
         {
-          "resource": "Ferrium Part",
+          "resource": "Ferrium Powder",
+          "kind": "item",
+          "rate": 60
+        },
+        {
+          "resource": "Sandleaf Powder",
           "kind": "item",
           "rate": 30
         }
       ],
       "outputs": [
         {
-          "resource": "Ferrium Tube",
+          "resource": "Dense Ferrium Powder",
           "kind": "item",
           "rate": 30
         }
-      ]
+      ],
+      "time": 2
     },
     {
       "id": "recipe_2",
       "inputs": [
         {
-          "resource": "Amethyst Part",
+          "resource": "Amethyst Powder",
+          "kind": "item",
+          "rate": 60
+        },
+        {
+          "resource": "Sandleaf Powder",
           "kind": "item",
           "rate": 30
         }
       ],
       "outputs": [
         {
-          "resource": "Amethyst Tube",
+          "resource": "Cryston Powder",
           "kind": "item",
           "rate": 30
         }
-      ]
+      ],
+      "time": 2
     },
     {
       "id": "recipe_3",
       "inputs": [
         {
-          "resource": "Steel Part",
+          "resource": "Originium Powder",
+          "kind": "item",
+          "rate": 60
+        },
+        {
+          "resource": "Sandleaf Powder",
           "kind": "item",
           "rate": 30
         }
       ],
       "outputs": [
         {
-          "resource": "Steel Tube",
+          "resource": "Dense Originium Powder",
           "kind": "item",
           "rate": 30
         }
-      ]
+      ],
+      "time": 2
     },
     {
       "id": "recipe_4",
       "inputs": [
         {
-          "resource": "Cuprium Part",
+          "resource": "Carbon Powder",
+          "kind": "item",
+          "rate": 60
+        },
+        {
+          "resource": "Sandleaf Powder",
           "kind": "item",
           "rate": 30
         }
       ],
       "outputs": [
         {
-          "resource": "Cuprium Tube",
+          "resource": "Dense Carbon Powder",
           "kind": "item",
           "rate": 30
         }
-      ]
+      ],
+      "time": 2
     },
     {
       "id": "recipe_5",
       "inputs": [
         {
-          "resource": "Cryston Part",
+          "resource": "Origocrust Powder",
+          "kind": "item",
+          "rate": 60
+        },
+        {
+          "resource": "Sandleaf Powder",
           "kind": "item",
           "rate": 30
         }
       ],
       "outputs": [
         {
-          "resource": "Cryston Tube",
+          "resource": "Dense Origocrust Powder",
           "kind": "item",
           "rate": 30
         }
-      ]
+      ],
+      "time": 2
     },
     {
       "id": "recipe_6",
       "inputs": [
         {
-          "resource": "Hetonite Part",
+          "resource": "Buckflower Powder",
+          "kind": "item",
+          "rate": 60
+        },
+        {
+          "resource": "Sandleaf Powder",
           "kind": "item",
           "rate": 30
         }
       ],
       "outputs": [
         {
-          "resource": "Hetonite Tube",
+          "resource": "Ground Buckflower Powder",
           "kind": "item",
           "rate": 30
         }
-      ]
+      ],
+      "time": 2
     },
     {
       "id": "recipe_7",
       "inputs": [
         {
-          "resource": "Xiranite Part",
+          "resource": "Citrome Powder",
+          "kind": "item",
+          "rate": 60
+        },
+        {
+          "resource": "Sandleaf Powder",
           "kind": "item",
           "rate": 30
         }
       ],
       "outputs": [
         {
-          "resource": "Xiranite Tube",
+          "resource": "Ground Citrome Powder",
           "kind": "item",
           "rate": 30
         }
-      ]
+      ],
+      "time": 2
     }
   ]
 };
@@ -2667,32 +3151,14 @@ export const ITEM_CONTROL_PORT: MachineType = {
   "recipes": []
 };
 
-/** Jincao Plot — 1 recipes */
+/** Jincao Plot — 0 recipes */
 export const JINCAO_PLOT: MachineType = {
   "name": "Jincao Plot",
   "width": 5,
   "height": 5,
   "ports": [],
   "edgeBands": {},
-  "recipes": [
-    {
-      "id": "recipe_1",
-      "inputs": [
-        {
-          "resource": "Jincao Seed",
-          "kind": "item",
-          "rate": 30
-        }
-      ],
-      "outputs": [
-        {
-          "resource": "Jincao",
-          "kind": "item",
-          "rate": 30
-        }
-      ]
-    }
-  ]
+  "recipes": []
 };
 
 /** Moulding Unit — 7 recipes */
@@ -2707,14 +3173,14 @@ export const MOULDING_UNIT: MachineType = {
       "id": "recipe_1",
       "inputs": [
         {
-          "resource": "Ferrium Part",
+          "resource": "Ferrium",
           "kind": "item",
-          "rate": 30
+          "rate": 60
         }
       ],
       "outputs": [
         {
-          "resource": "Ferrium Plate",
+          "resource": "Ferrium Bottle",
           "kind": "item",
           "rate": 30
         }
@@ -2725,14 +3191,14 @@ export const MOULDING_UNIT: MachineType = {
       "id": "recipe_2",
       "inputs": [
         {
-          "resource": "Amethyst Part",
+          "resource": "Amethyst Fiber",
           "kind": "item",
-          "rate": 30
+          "rate": 60
         }
       ],
       "outputs": [
         {
-          "resource": "Amethyst Plate",
+          "resource": "Amethyst Bottle",
           "kind": "item",
           "rate": 30
         }
@@ -2743,14 +3209,14 @@ export const MOULDING_UNIT: MachineType = {
       "id": "recipe_3",
       "inputs": [
         {
-          "resource": "Steel Part",
+          "resource": "Steel",
           "kind": "item",
-          "rate": 30
+          "rate": 60
         }
       ],
       "outputs": [
         {
-          "resource": "Steel Plate",
+          "resource": "Steel Bottle",
           "kind": "item",
           "rate": 30
         }
@@ -2761,14 +3227,14 @@ export const MOULDING_UNIT: MachineType = {
       "id": "recipe_4",
       "inputs": [
         {
-          "resource": "Cuprium Part",
+          "resource": "Cryston Fiber",
           "kind": "item",
-          "rate": 30
+          "rate": 60
         }
       ],
       "outputs": [
         {
-          "resource": "Cuprium Plate",
+          "resource": "Cryston Bottle",
           "kind": "item",
           "rate": 30
         }
@@ -2779,14 +3245,14 @@ export const MOULDING_UNIT: MachineType = {
       "id": "recipe_5",
       "inputs": [
         {
-          "resource": "Cryston Part",
+          "resource": "Cuprium",
           "kind": "item",
-          "rate": 30
+          "rate": 60
         }
       ],
       "outputs": [
         {
-          "resource": "Cryston Plate",
+          "resource": "Cuprium Bottle",
           "kind": "item",
           "rate": 30
         }
@@ -2797,14 +3263,14 @@ export const MOULDING_UNIT: MachineType = {
       "id": "recipe_6",
       "inputs": [
         {
-          "resource": "Hetonite Part",
+          "resource": "Hetonite",
           "kind": "item",
-          "rate": 30
+          "rate": 60
         }
       ],
       "outputs": [
         {
-          "resource": "Hetonite Plate",
+          "resource": "Hetonite Bottle",
           "kind": "item",
           "rate": 30
         }
@@ -2812,17 +3278,22 @@ export const MOULDING_UNIT: MachineType = {
       "time": 2
     },
     {
-      "id": "recipe_7",
+      "id": "recipe_7_gas_mode",
       "inputs": [
         {
-          "resource": "Xiranite Part",
+          "resource": "Cuprium",
           "kind": "item",
+          "rate": 60
+        },
+        {
+          "resource": "Inergen",
+          "kind": "fluid",
           "rate": 30
         }
       ],
       "outputs": [
         {
-          "resource": "Xiranite Plate",
+          "resource": "Cuprium Canister",
           "kind": "item",
           "rate": 30
         }
@@ -3148,14 +3619,14 @@ export const PLANTING_UNIT: MachineType = {
       "id": "recipe_1",
       "inputs": [
         {
-          "resource": "Jincao Seed",
+          "resource": "Buckflower Seed",
           "kind": "item",
           "rate": 30
         }
       ],
       "outputs": [
         {
-          "resource": "Jincao",
+          "resource": "Buckflower",
           "kind": "item",
           "rate": 30
         }
@@ -3166,14 +3637,14 @@ export const PLANTING_UNIT: MachineType = {
       "id": "recipe_2",
       "inputs": [
         {
-          "resource": "Yazhen Seed",
+          "resource": "Citrome Seed",
           "kind": "item",
           "rate": 30
         }
       ],
       "outputs": [
         {
-          "resource": "Yazhen",
+          "resource": "Citrome",
           "kind": "item",
           "rate": 30
         }
@@ -3202,42 +3673,6 @@ export const PLANTING_UNIT: MachineType = {
       "id": "recipe_4",
       "inputs": [
         {
-          "resource": "Buckflower Seed",
-          "kind": "item",
-          "rate": 30
-        }
-      ],
-      "outputs": [
-        {
-          "resource": "Buckflower",
-          "kind": "item",
-          "rate": 30
-        }
-      ],
-      "time": 2
-    },
-    {
-      "id": "recipe_5",
-      "inputs": [
-        {
-          "resource": "Citrome Seed",
-          "kind": "item",
-          "rate": 30
-        }
-      ],
-      "outputs": [
-        {
-          "resource": "Citrome",
-          "kind": "item",
-          "rate": 30
-        }
-      ],
-      "time": 2
-    },
-    {
-      "id": "recipe_6",
-      "inputs": [
-        {
           "resource": "Aketine Seed",
           "kind": "item",
           "rate": 30
@@ -3248,6 +3683,52 @@ export const PLANTING_UNIT: MachineType = {
           "resource": "Aketine",
           "kind": "item",
           "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_5_fluid_mode",
+      "inputs": [
+        {
+          "resource": "Jincao Seed",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Clean Water",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Jincao",
+          "kind": "item",
+          "rate": 60
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_6_fluid_mode",
+      "inputs": [
+        {
+          "resource": "Yazhen Seed",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Clean Water",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Yazhen",
+          "kind": "item",
+          "rate": 60
         }
       ],
       "time": 2
@@ -3299,94 +3780,32 @@ export const PURIFICATION_UNIT: MachineType = {
       "id": "recipe_1",
       "inputs": [
         {
-          "resource": "Sewage",
+          "resource": "Inert Xircon Effluent",
           "kind": "fluid",
-          "rate": 30
+          "rate": 120
         }
       ],
       "outputs": [
+        {
+          "resource": "Xircon Effluent",
+          "kind": "fluid",
+          "rate": 30
+        },
         {
           "resource": "Clean Water",
           "kind": "fluid",
           "rate": 30
         }
-      ]
+      ],
+      "time": 2
     },
     {
       "id": "recipe_2",
       "inputs": [
         {
-          "resource": "Sewage",
-          "kind": "fluid",
-          "rate": 30
-        }
-      ],
-      "outputs": [
-        {
-          "resource": "Precipitation Acid",
-          "kind": "fluid",
-          "rate": 30
-        }
-      ]
-    },
-    {
-      "id": "recipe_3",
-      "inputs": [
-        {
-          "resource": "Sewage",
-          "kind": "fluid",
-          "rate": 30
-        }
-      ],
-      "outputs": [
-        {
-          "resource": "Jincao Solution",
-          "kind": "fluid",
-          "rate": 30
-        }
-      ]
-    },
-    {
-      "id": "recipe_4",
-      "inputs": [
-        {
-          "resource": "Sewage",
-          "kind": "fluid",
-          "rate": 30
-        }
-      ],
-      "outputs": [
-        {
-          "resource": "Yazhen Solution",
-          "kind": "fluid",
-          "rate": 30
-        }
-      ]
-    },
-    {
-      "id": "recipe_5",
-      "inputs": [
-        {
-          "resource": "Sewage",
-          "kind": "fluid",
-          "rate": 30
-        }
-      ],
-      "outputs": [
-        {
           "resource": "Cuprium Solution",
           "kind": "fluid",
-          "rate": 30
-        }
-      ]
-    },
-    {
-      "id": "recipe_6",
-      "inputs": [
-        {
-          "resource": "Sewage",
-          "kind": "fluid",
-          "rate": 30
+          "rate": 120
         }
       ],
       "outputs": [
@@ -3394,8 +3813,106 @@ export const PURIFICATION_UNIT: MachineType = {
           "resource": "Hetonite Solution",
           "kind": "fluid",
           "rate": 30
+        },
+        {
+          "resource": "Precipitation Acid",
+          "kind": "fluid",
+          "rate": 30
         }
-      ]
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_3",
+      "inputs": [
+        {
+          "resource": "Xiragen",
+          "kind": "item",
+          "rate": 60
+        },
+        {
+          "resource": "Separator Core",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Heavy Xiragen",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_4",
+      "inputs": [
+        {
+          "resource": "Cuprium Gas",
+          "kind": "item",
+          "rate": 60
+        },
+        {
+          "resource": "Separator Core",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Hetonite Gas",
+          "kind": "item",
+          "rate": 60
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_5",
+      "inputs": [
+        {
+          "resource": "Xiragen",
+          "kind": "item",
+          "rate": 60
+        },
+        {
+          "resource": "Separator Core",
+          "kind": "item",
+          "rate": 60
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Heavy Xiragen",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_6",
+      "inputs": [
+        {
+          "resource": "Cuprium Gas",
+          "kind": "item",
+          "rate": 60
+        },
+        {
+          "resource": "Separator Core",
+          "kind": "item",
+          "rate": 60
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Hetonite Gas",
+          "kind": "item",
+          "rate": 60
+        }
+      ],
+      "time": 2
     }
   ]
 };
@@ -3412,137 +3929,200 @@ export const REACTOR_CRUCIBLE: MachineType = {
       "id": "recipe_1",
       "inputs": [
         {
-          "resource": "Amethyst Part",
+          "resource": "Jincao Powder",
           "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Clean Water",
+          "kind": "fluid",
           "rate": 30
         }
       ],
       "outputs": [
         {
-          "resource": "Amethyst Part",
-          "kind": "item",
+          "resource": "Jincao Solution",
+          "kind": "fluid",
           "rate": 30
         }
-      ]
+      ],
+      "time": 2
     },
     {
       "id": "recipe_2",
       "inputs": [
         {
-          "resource": "Ferrium Part",
+          "resource": "Yazhen Powder",
           "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Clean Water",
+          "kind": "fluid",
           "rate": 30
         }
       ],
       "outputs": [
         {
-          "resource": "Ferrium Part",
-          "kind": "item",
+          "resource": "Yazhen Solution",
+          "kind": "fluid",
           "rate": 30
         }
-      ]
+      ],
+      "time": 2
     },
     {
       "id": "recipe_3",
       "inputs": [
         {
-          "resource": "Steel Part",
+          "resource": "Xiranite",
           "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Clean Water",
+          "kind": "fluid",
           "rate": 30
         }
       ],
       "outputs": [
         {
-          "resource": "Steel Part",
-          "kind": "item",
+          "resource": "Liquid Xiranite",
+          "kind": "fluid",
           "rate": 30
         }
-      ]
+      ],
+      "time": 2
     },
     {
       "id": "recipe_4",
       "inputs": [
         {
-          "resource": "Cuprium Part",
+          "resource": "Heavy Xiranite",
           "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Precipitation Acid",
+          "kind": "fluid",
           "rate": 30
         }
       ],
       "outputs": [
         {
-          "resource": "Cuprium Part",
-          "kind": "item",
+          "resource": "Liquid Heavy Xiranite",
+          "kind": "fluid",
           "rate": 30
         }
-      ]
+      ],
+      "time": 2
     },
     {
       "id": "recipe_5",
       "inputs": [
         {
-          "resource": "Cryston Part",
+          "resource": "Cuprium Powder",
           "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Precipitation Acid",
+          "kind": "fluid",
           "rate": 30
         }
       ],
       "outputs": [
         {
-          "resource": "Cryston Part",
-          "kind": "item",
+          "resource": "Cuprium Solution",
+          "kind": "fluid",
           "rate": 30
         }
-      ]
+      ],
+      "time": 2
     },
     {
       "id": "recipe_6",
       "inputs": [
         {
-          "resource": "Hetonite Part",
-          "kind": "item",
+          "resource": "Liquid Xiranite",
+          "kind": "fluid",
+          "rate": 30
+        },
+        {
+          "resource": "Sewage",
+          "kind": "fluid",
           "rate": 30
         }
       ],
       "outputs": [
         {
-          "resource": "Hetonite Part",
-          "kind": "item",
+          "resource": "Xircon Effluent",
+          "kind": "fluid",
+          "rate": 30
+        },
+        {
+          "resource": "Inert Xircon Effluent",
+          "kind": "fluid",
           "rate": 30
         }
-      ]
+      ],
+      "time": 2
     },
     {
       "id": "recipe_7",
       "inputs": [
         {
-          "resource": "Xiranite Part",
+          "resource": "Xircon Effluent",
+          "kind": "fluid",
+          "rate": 60
+        },
+        {
+          "resource": "Ferrium Powder",
           "kind": "item",
           "rate": 30
         }
       ],
       "outputs": [
         {
-          "resource": "Xiranite Part",
+          "resource": "Xircon",
           "kind": "item",
           "rate": 30
+        },
+        {
+          "resource": "Sewage",
+          "kind": "fluid",
+          "rate": 30
         }
-      ]
+      ],
+      "time": 2
     },
     {
       "id": "recipe_8",
       "inputs": [
         {
-          "resource": "Cryston Part",
+          "resource": "Hetonite Solution",
+          "kind": "fluid",
+          "rate": 60
+        },
+        {
+          "resource": "Ferrium Powder",
           "kind": "item",
           "rate": 30
         }
       ],
       "outputs": [
         {
-          "resource": "Cryston Part",
+          "resource": "Hetonite",
           "kind": "item",
           "rate": 30
+        },
+        {
+          "resource": "Sewage",
+          "kind": "fluid",
+          "rate": 30
         }
-      ]
+      ],
+      "time": 2
     }
   ]
 };
@@ -4066,32 +4646,14 @@ export const RELAY_TOWER: MachineType = {
   "recipes": []
 };
 
-/** Sandleaf Plot — 1 recipes */
+/** Sandleaf Plot — 0 recipes */
 export const SANDLEAF_PLOT: MachineType = {
   "name": "Sandleaf Plot",
   "width": 5,
   "height": 5,
   "ports": [],
   "edgeBands": {},
-  "recipes": [
-    {
-      "id": "recipe_1",
-      "inputs": [
-        {
-          "resource": "Sandleaf Seed",
-          "kind": "item",
-          "rate": 30
-        }
-      ],
-      "outputs": [
-        {
-          "resource": "Sandleaf",
-          "kind": "item",
-          "rate": 30
-        }
-      ]
-    }
-  ]
+  "recipes": []
 };
 
 /** Seed-Picking Unit — 10 recipes */
@@ -4106,123 +4668,40 @@ export const SEED_PICKING_UNIT: MachineType = {
       "id": "recipe_1",
       "inputs": [
         {
-          "resource": "Amethyst Fiber",
+          "resource": "Buckflower",
           "kind": "item",
           "rate": 30
         }
       ],
       "outputs": [
         {
-          "resource": "Amethyst Part",
+          "resource": "Buckflower Seed",
           "kind": "item",
-          "rate": 30
+          "rate": 60
         }
-      ]
+      ],
+      "time": 2
     },
     {
       "id": "recipe_2",
       "inputs": [
         {
-          "resource": "Ferrium",
+          "resource": "Citrome",
           "kind": "item",
           "rate": 30
         }
       ],
       "outputs": [
         {
-          "resource": "Ferrium Part",
+          "resource": "Citrome Seed",
           "kind": "item",
-          "rate": 30
+          "rate": 60
         }
-      ]
+      ],
+      "time": 2
     },
     {
       "id": "recipe_3",
-      "inputs": [
-        {
-          "resource": "Steel",
-          "kind": "item",
-          "rate": 30
-        }
-      ],
-      "outputs": [
-        {
-          "resource": "Steel Part",
-          "kind": "item",
-          "rate": 30
-        }
-      ]
-    },
-    {
-      "id": "recipe_4",
-      "inputs": [
-        {
-          "resource": "Cuprium",
-          "kind": "item",
-          "rate": 30
-        }
-      ],
-      "outputs": [
-        {
-          "resource": "Cuprium Part",
-          "kind": "item",
-          "rate": 30
-        }
-      ]
-    },
-    {
-      "id": "recipe_5",
-      "inputs": [
-        {
-          "resource": "Cryston Fiber",
-          "kind": "item",
-          "rate": 30
-        }
-      ],
-      "outputs": [
-        {
-          "resource": "Cryston Part",
-          "kind": "item",
-          "rate": 30
-        }
-      ]
-    },
-    {
-      "id": "recipe_6",
-      "inputs": [
-        {
-          "resource": "Hetonite",
-          "kind": "item",
-          "rate": 30
-        }
-      ],
-      "outputs": [
-        {
-          "resource": "Hetonite Part",
-          "kind": "item",
-          "rate": 30
-        }
-      ]
-    },
-    {
-      "id": "recipe_7",
-      "inputs": [
-        {
-          "resource": "Wood",
-          "kind": "item",
-          "rate": 30
-        }
-      ],
-      "outputs": [
-        {
-          "resource": "Ferrium Part",
-          "kind": "item",
-          "rate": 30
-        }
-      ]
-    },
-    {
-      "id": "recipe_8",
       "inputs": [
         {
           "resource": "Sandleaf",
@@ -4232,17 +4711,36 @@ export const SEED_PICKING_UNIT: MachineType = {
       ],
       "outputs": [
         {
-          "resource": "Wood",
+          "resource": "Sandleaf Seed",
+          "kind": "item",
+          "rate": 60
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_4",
+      "inputs": [
+        {
+          "resource": "Aketine",
           "kind": "item",
           "rate": 30
         }
-      ]
+      ],
+      "outputs": [
+        {
+          "resource": "Aketine Seed",
+          "kind": "item",
+          "rate": 60
+        }
+      ],
+      "time": 2
     },
     {
-      "id": "recipe_9",
+      "id": "recipe_5",
       "inputs": [
         {
-          "resource": "Wood",
+          "resource": "Jincao",
           "kind": "item",
           "rate": 30
         }
@@ -4253,36 +4751,1813 @@ export const SEED_PICKING_UNIT: MachineType = {
           "kind": "item",
           "rate": 30
         }
-      ]
+      ],
+      "time": 2
     },
     {
-      "id": "recipe_10",
+      "id": "recipe_6",
       "inputs": [
         {
-          "resource": "Wood",
+          "resource": "Yazhen",
           "kind": "item",
           "rate": 30
         }
       ],
       "outputs": [
         {
-          "resource": "Buckflower Seed",
+          "resource": "Yazhen Seed",
           "kind": "item",
           "rate": 30
         }
-      ]
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_7",
+      "inputs": [
+        {
+          "resource": "Reed Rye",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Reed Rye Seed",
+          "kind": "item",
+          "rate": 60
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_8",
+      "inputs": [
+        {
+          "resource": "Tartpepper",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Tartpepper Seed",
+          "kind": "item",
+          "rate": 60
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_9",
+      "inputs": [
+        {
+          "resource": "Redjade Ginseng",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Redjade Ginseng Seed",
+          "kind": "item",
+          "rate": 60
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_10",
+      "inputs": [
+        {
+          "resource": "Amber Rice",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Amber Rice Seed",
+          "kind": "item",
+          "rate": 60
+        }
+      ],
+      "time": 2
     }
   ]
 };
 
-/** Separating Unit — 0 recipes */
+/** Separating Unit — 74 recipes */
 export const SEPARATING_UNIT: MachineType = {
   "name": "Separating Unit",
   "width": 5,
   "height": 5,
   "ports": [],
   "edgeBands": {},
-  "recipes": []
+  "recipes": [
+    {
+      "id": "recipe_1",
+      "inputs": [
+        {
+          "resource": "Amethyst Bottle (Clean Water)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Amethyst Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Clean Water",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_2",
+      "inputs": [
+        {
+          "resource": "Amethyst Bottle (Precipitation Acid)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Amethyst Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Precipitation Acid",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_3",
+      "inputs": [
+        {
+          "resource": "Amethyst Bottle (Sewage)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Amethyst Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Sewage",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_4",
+      "inputs": [
+        {
+          "resource": "Amethyst Bottle (Jincao Solution)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Amethyst Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Jincao Solution",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_5",
+      "inputs": [
+        {
+          "resource": "Amethyst Bottle (Yazhen Solution)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Amethyst Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Yazhen Solution",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_6",
+      "inputs": [
+        {
+          "resource": "Amethyst Bottle (Liquid Xiranite)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Amethyst Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Liquid Xiranite",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_7",
+      "inputs": [
+        {
+          "resource": "Amethyst Bottle (Liquid Heavy Xiranite)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Amethyst Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Liquid Heavy Xiranite",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_8",
+      "inputs": [
+        {
+          "resource": "Amethyst Bottle (Xircon Effluent)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Amethyst Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Xircon Effluent",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_9",
+      "inputs": [
+        {
+          "resource": "Amethyst Bottle (Inert Xircon Effluent)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Amethyst Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Inert Xircon Effluent",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_10",
+      "inputs": [
+        {
+          "resource": "Amethyst Bottle (Cuprium Solution)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Amethyst Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Cuprium Solution",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_11",
+      "inputs": [
+        {
+          "resource": "Amethyst Bottle (Hetonite Solution)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Amethyst Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Hetonite Solution",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_12",
+      "inputs": [
+        {
+          "resource": "Cryston Bottle (Clean Water)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cryston Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Clean Water",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_13",
+      "inputs": [
+        {
+          "resource": "Cryston Bottle (Precipitation Acid)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cryston Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Precipitation Acid",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_14",
+      "inputs": [
+        {
+          "resource": "Cryston Bottle (Sewage)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cryston Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Sewage",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_15",
+      "inputs": [
+        {
+          "resource": "Cryston Bottle (Jincao Solution)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cryston Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Jincao Solution",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_16",
+      "inputs": [
+        {
+          "resource": "Cryston Bottle (Yazhen Solution)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cryston Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Yazhen Solution",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_17",
+      "inputs": [
+        {
+          "resource": "Cryston Bottle (Liquid Xiranite)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cryston Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Liquid Xiranite",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_18",
+      "inputs": [
+        {
+          "resource": "Cryston Bottle (Liquid Heavy Xiranite)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cryston Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Liquid Heavy Xiranite",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_19",
+      "inputs": [
+        {
+          "resource": "Cryston Bottle (Xircon Effluent)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cryston Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Xircon Effluent",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_20",
+      "inputs": [
+        {
+          "resource": "Cryston Bottle (Inert Xircon Effluent)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cryston Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Inert Xircon Effluent",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_21",
+      "inputs": [
+        {
+          "resource": "Cryston Bottle (Cuprium Solution)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cryston Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Cuprium Solution",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_22",
+      "inputs": [
+        {
+          "resource": "Cryston Bottle (Hetonite Solution)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cryston Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Hetonite Solution",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_23",
+      "inputs": [
+        {
+          "resource": "Ferrium Bottle (Clean Water)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Ferrium Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Clean Water",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_24",
+      "inputs": [
+        {
+          "resource": "Ferrium Bottle (Precipitation Acid)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Ferrium Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Precipitation Acid",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_25",
+      "inputs": [
+        {
+          "resource": "Ferrium Bottle (Sewage)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Ferrium Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Sewage",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_26",
+      "inputs": [
+        {
+          "resource": "Ferrium Bottle (Jincao Solution)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Ferrium Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Jincao Solution",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_27",
+      "inputs": [
+        {
+          "resource": "Ferrium Bottle (Yazhen Solution)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Ferrium Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Yazhen Solution",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_28",
+      "inputs": [
+        {
+          "resource": "Ferrium Bottle (Liquid Xiranite)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Ferrium Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Liquid Xiranite",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_29",
+      "inputs": [
+        {
+          "resource": "Ferrium Bottle (Liquid Heavy Xiranite)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Ferrium Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Liquid Heavy Xiranite",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_30",
+      "inputs": [
+        {
+          "resource": "Ferrium Bottle (Xircon Effluent)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Ferrium Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Xircon Effluent",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_31",
+      "inputs": [
+        {
+          "resource": "Ferrium Bottle (Inert Xircon Effluent)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Ferrium Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Inert Xircon Effluent",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_32",
+      "inputs": [
+        {
+          "resource": "Ferrium Bottle (Cuprium Solution)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Ferrium Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Cuprium Solution",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_33",
+      "inputs": [
+        {
+          "resource": "Ferrium Bottle (Hetonite Solution)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Ferrium Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Hetonite Solution",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_34",
+      "inputs": [
+        {
+          "resource": "Steel Bottle (Clean Water)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Steel Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Clean Water",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_35",
+      "inputs": [
+        {
+          "resource": "Steel Bottle (Precipitation Acid)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Steel Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Precipitation Acid",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_36",
+      "inputs": [
+        {
+          "resource": "Steel Bottle (Sewage)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Steel Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Sewage",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_37",
+      "inputs": [
+        {
+          "resource": "Steel Bottle (Jincao Solution)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Steel Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Jincao Solution",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_38",
+      "inputs": [
+        {
+          "resource": "Steel Bottle (Yazhen Solution)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Steel Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Yazhen Solution",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_39",
+      "inputs": [
+        {
+          "resource": "Steel Bottle (Liquid Xiranite)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Steel Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Liquid Xiranite",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_40",
+      "inputs": [
+        {
+          "resource": "Steel Bottle (Liquid Heavy Xiranite)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Steel Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Liquid Heavy Xiranite",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_41",
+      "inputs": [
+        {
+          "resource": "Steel Bottle (Xircon Effluent)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Steel Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Xircon Effluent",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_42",
+      "inputs": [
+        {
+          "resource": "Steel Bottle (Inert Xircon Effluent)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Steel Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Inert Xircon Effluent",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_43",
+      "inputs": [
+        {
+          "resource": "Steel Bottle (Cuprium Solution)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Steel Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Cuprium Solution",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_44",
+      "inputs": [
+        {
+          "resource": "Steel Bottle (Hetonite Solution)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Steel Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Hetonite Solution",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_45",
+      "inputs": [
+        {
+          "resource": "Cuprium Bottle (Clean Water)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cuprium Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Clean Water",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_46",
+      "inputs": [
+        {
+          "resource": "Cuprium Bottle (Precipitation Acid)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cuprium Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Precipitation Acid",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_47",
+      "inputs": [
+        {
+          "resource": "Cuprium Bottle (Sewage)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cuprium Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Sewage",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_48",
+      "inputs": [
+        {
+          "resource": "Cuprium Bottle (Jincao Solution)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cuprium Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Jincao Solution",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_49",
+      "inputs": [
+        {
+          "resource": "Cuprium Bottle (Yazhen Solution)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cuprium Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Yazhen Solution",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_50",
+      "inputs": [
+        {
+          "resource": "Cuprium Bottle (Liquid Xiranite)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cuprium Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Liquid Xiranite",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_51",
+      "inputs": [
+        {
+          "resource": "Cuprium Bottle (Liquid Heavy Xiranite)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cuprium Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Liquid Heavy Xiranite",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_52",
+      "inputs": [
+        {
+          "resource": "Cuprium Bottle (Xircon Effluent)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cuprium Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Xircon Effluent",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_53",
+      "inputs": [
+        {
+          "resource": "Cuprium Bottle (Inert Xircon Effluent)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cuprium Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Inert Xircon Effluent",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_54",
+      "inputs": [
+        {
+          "resource": "Cuprium Bottle (Cuprium Solution)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cuprium Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Cuprium Solution",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_55",
+      "inputs": [
+        {
+          "resource": "Cuprium Bottle (Hetonite Solution)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cuprium Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Hetonite Solution",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_56",
+      "inputs": [
+        {
+          "resource": "Hetonite Bottle (Clean Water)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Hetonite Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Clean Water",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_57",
+      "inputs": [
+        {
+          "resource": "Hetonite Bottle (Precipitation Acid)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Hetonite Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Precipitation Acid",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_58",
+      "inputs": [
+        {
+          "resource": "Hetonite Bottle (Sewage)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Hetonite Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Sewage",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_59",
+      "inputs": [
+        {
+          "resource": "Hetonite Bottle (Jincao Solution)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Hetonite Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Jincao Solution",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_60",
+      "inputs": [
+        {
+          "resource": "Hetonite Bottle (Yazhen Solution)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Hetonite Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Yazhen Solution",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_61",
+      "inputs": [
+        {
+          "resource": "Hetonite Bottle (Liquid Xiranite)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Hetonite Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Liquid Xiranite",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_62",
+      "inputs": [
+        {
+          "resource": "Hetonite Bottle (Liquid Heavy Xiranite)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Hetonite Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Liquid Heavy Xiranite",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_63",
+      "inputs": [
+        {
+          "resource": "Hetonite Bottle (Xircon Effluent)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Hetonite Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Xircon Effluent",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_64",
+      "inputs": [
+        {
+          "resource": "Hetonite Bottle (Inert Xircon Effluent)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Hetonite Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Inert Xircon Effluent",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_65",
+      "inputs": [
+        {
+          "resource": "Hetonite Bottle (Cuprium Solution)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Hetonite Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Cuprium Solution",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_66",
+      "inputs": [
+        {
+          "resource": "Hetonite Bottle (Hetonite Solution)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Hetonite Bottle",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Hetonite Solution",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_67",
+      "inputs": [
+        {
+          "resource": "Cuprium Canister (Aquagen)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cuprium Canister",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Aquagen",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_68",
+      "inputs": [
+        {
+          "resource": "Cuprium Canister (Acridgen)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cuprium Canister",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Acridgen",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_69",
+      "inputs": [
+        {
+          "resource": "Cuprium Canister (Xiragen)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cuprium Canister",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Xiragen",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_70",
+      "inputs": [
+        {
+          "resource": "Cuprium Canister (Heavy Xiragen)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cuprium Canister",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Heavy Xiragen",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_71",
+      "inputs": [
+        {
+          "resource": "Cuprium Canister (Inergen)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cuprium Canister",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Inergen",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_72",
+      "inputs": [
+        {
+          "resource": "Cuprium Canister (Cuprium Gas)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cuprium Canister",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Cuprium Gas",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_73",
+      "inputs": [
+        {
+          "resource": "Cuprium Canister (Hetonite Gas)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cuprium Canister",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Hetonite Gas",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_74",
+      "inputs": [
+        {
+          "resource": "Cuprium Canister (Pyrrolite Gas)",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cuprium Canister",
+          "kind": "item",
+          "rate": 30
+        },
+        {
+          "resource": "Pyrrolite Gas",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    }
+  ]
 };
 
 /** Shredding Unit — 12 recipes */
@@ -4387,14 +6662,14 @@ export const SHREDDING_UNIT: MachineType = {
       "id": "recipe_6",
       "inputs": [
         {
-          "resource": "Steel",
+          "resource": "Origocrust",
           "kind": "item",
           "rate": 30
         }
       ],
       "outputs": [
         {
-          "resource": "Steel Powder",
+          "resource": "Origocrust Powder",
           "kind": "item",
           "rate": 30
         }
@@ -4403,40 +6678,6 @@ export const SHREDDING_UNIT: MachineType = {
     },
     {
       "id": "recipe_7",
-      "inputs": [
-        {
-          "resource": "Yazhen",
-          "kind": "item",
-          "rate": 30
-        }
-      ],
-      "outputs": [
-        {
-          "resource": "Jincao",
-          "kind": "item",
-          "rate": 30
-        }
-      ]
-    },
-    {
-      "id": "recipe_8",
-      "inputs": [
-        {
-          "resource": "Sandleaf",
-          "kind": "item",
-          "rate": 30
-        }
-      ],
-      "outputs": [
-        {
-          "resource": "Sandleaf Powder",
-          "kind": "item",
-          "rate": 30
-        }
-      ]
-    },
-    {
-      "id": "recipe_9",
       "inputs": [
         {
           "resource": "Buckflower",
@@ -4448,12 +6689,13 @@ export const SHREDDING_UNIT: MachineType = {
         {
           "resource": "Buckflower Powder",
           "kind": "item",
-          "rate": 30
+          "rate": 60
         }
-      ]
+      ],
+      "time": 2
     },
     {
-      "id": "recipe_10",
+      "id": "recipe_8",
       "inputs": [
         {
           "resource": "Citrome",
@@ -4465,55 +6707,275 @@ export const SHREDDING_UNIT: MachineType = {
         {
           "resource": "Citrome Powder",
           "kind": "item",
+          "rate": 60
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_9",
+      "inputs": [
+        {
+          "resource": "Sandleaf",
+          "kind": "item",
           "rate": 30
         }
-      ]
+      ],
+      "outputs": [
+        {
+          "resource": "Sandleaf Powder",
+          "kind": "item",
+          "rate": 90
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_10",
+      "inputs": [
+        {
+          "resource": "Aketine",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Aketine Powder",
+          "kind": "item",
+          "rate": 60
+        }
+      ],
+      "time": 2
     },
     {
       "id": "recipe_11",
       "inputs": [
         {
-          "resource": "Wood",
+          "resource": "Jincao",
           "kind": "item",
           "rate": 30
         }
       ],
       "outputs": [
         {
-          "resource": "Wood Chips",
+          "resource": "Jincao Powder",
           "kind": "item",
-          "rate": 30
+          "rate": 60
         }
-      ]
+      ],
+      "time": 2
     },
     {
       "id": "recipe_12",
       "inputs": [
         {
-          "resource": "Ferrium",
+          "resource": "Yazhen",
           "kind": "item",
           "rate": 30
         }
       ],
       "outputs": [
         {
-          "resource": "Ferrium Part",
+          "resource": "Yazhen Powder",
           "kind": "item",
-          "rate": 30
+          "rate": 60
         }
-      ]
+      ],
+      "time": 2
     }
   ]
 };
 
-/** Solid-Gas Transmuting Unit — 0 recipes */
+/** Solid-Gas Transmuting Unit — 10 recipes */
 export const SOLID_GAS_TRANSMUTING_UNIT: MachineType = {
   "name": "Solid-Gas Transmuting Unit",
   "width": 5,
   "height": 5,
   "ports": [],
   "edgeBands": {},
-  "recipes": []
+  "recipes": [
+    {
+      "id": "recipe_1",
+      "inputs": [
+        {
+          "resource": "Xiragen",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Xiranite",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_2",
+      "inputs": [
+        {
+          "resource": "Heavy Xiragen",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Heavy Xiranite",
+          "kind": "item",
+          "rate": 12
+        }
+      ],
+      "time": 10
+    },
+    {
+      "id": "recipe_3",
+      "inputs": [
+        {
+          "resource": "Cuprium Gas",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cuprium",
+          "kind": "item",
+          "rate": 60
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_4",
+      "inputs": [
+        {
+          "resource": "Hetonite Gas",
+          "kind": "item",
+          "rate": 60
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Hetonite",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_5",
+      "inputs": [
+        {
+          "resource": "Pyrrolite Gas",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Pyrrolite",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_6",
+      "inputs": [
+        {
+          "resource": "Xiranite",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Xiragen",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_7",
+      "inputs": [
+        {
+          "resource": "Heavy Xiranite",
+          "kind": "item",
+          "rate": 12
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Heavy Xiragen",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "time": 10
+    },
+    {
+      "id": "recipe_8",
+      "inputs": [
+        {
+          "resource": "Cuprium",
+          "kind": "item",
+          "rate": 60
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Cuprium Gas",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_9",
+      "inputs": [
+        {
+          "resource": "Hetonite",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Hetonite Gas",
+          "kind": "item",
+          "rate": 60
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_10",
+      "inputs": [
+        {
+          "resource": "Pyrrolite",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Pyrrolite Gas",
+          "kind": "item",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    }
+  ]
 };
 
 /** Splitter — 0 recipes */
@@ -4647,7 +7109,7 @@ export const THERMAL_BANK: MachineType = {
         {
           "resource": "Power",
           "kind": "item",
-          "rate": 2200
+          "rate": 3200
         }
       ],
       "time": 40
@@ -4655,14 +7117,69 @@ export const THERMAL_BANK: MachineType = {
   ]
 };
 
-/** Water Treatment Unit — 0 recipes */
+/** Water Treatment Unit — 3 recipes */
 export const WATER_TREATMENT_UNIT: MachineType = {
   "name": "Water Treatment Unit",
   "width": 5,
   "height": 5,
   "ports": [],
   "edgeBands": {},
-  "recipes": []
+  "recipes": [
+    {
+      "id": "recipe_1",
+      "inputs": [
+        {
+          "resource": "Sewage",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Clean Water",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_2",
+      "inputs": [
+        {
+          "resource": "Xircon Effluent",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Clean Water",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    },
+    {
+      "id": "recipe_3",
+      "inputs": [
+        {
+          "resource": "Inert Xircon Effluent",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "outputs": [
+        {
+          "resource": "Clean Water",
+          "kind": "fluid",
+          "rate": 30
+        }
+      ],
+      "time": 2
+    }
+  ]
 };
 
 /** Xiranite Pylon — 0 recipes */
@@ -4685,32 +7202,14 @@ export const XIRANITE_RELAY: MachineType = {
   "recipes": []
 };
 
-/** Yazhen Plot — 1 recipes */
+/** Yazhen Plot — 0 recipes */
 export const YAZHEN_PLOT: MachineType = {
   "name": "Yazhen Plot",
   "width": 5,
   "height": 5,
   "ports": [],
   "edgeBands": {},
-  "recipes": [
-    {
-      "id": "recipe_1",
-      "inputs": [
-        {
-          "resource": "Yazhen Seed",
-          "kind": "item",
-          "rate": 30
-        }
-      ],
-      "outputs": [
-        {
-          "resource": "Yazhen",
-          "kind": "item",
-          "rate": 30
-        }
-      ]
-    }
-  ]
+  "recipes": []
 };
 
 /** Every machine type known to the editor. */

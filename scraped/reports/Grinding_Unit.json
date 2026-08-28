@@ -1,0 +1,17 @@
+{
+  "slug": "Grinding_Unit",
+  "name": "Grinding Unit",
+  "type": "Production II",
+  "footprint": [5, 5],
+  "powerUse": 50,
+  "description": "A facility that performs fine grinding of powdered materials.",
+  "recipes": [
+    {"id": "recipe_1", "inputs": [{"resource": "Ferrium Powder", "kind": "item", "rate": 60}, {"resource": "Sandleaf Powder", "kind": "item", "rate": 30}], "outputs": [{"resource": "Dense Ferrium Powder", "kind": "item", "rate": 30}], "time": 2},
+    {"id": "recipe_2", "inputs": [{"resource": "Amethyst Powder", "kind": "item", "rate": 60}, {"resource": "Sandleaf Powder", "kind": "item", "rate": 30}], "outputs": [{"resource": "Cryston Powder", "kind": "item", "rate": 30}], "time": 2},
+    {"id": "recipe_3", "inputs": [{"resource": "Originium Powder", "kind": "item", "rate": 60}, {"resource": "Sandleaf Powder", "kind": "item", "rate": 30}], "outputs": [{"resource": "Dense Originium Powder", "kind": "item", "rate": 30}], "time": 2},
+    {"id": "recipe_4", "inputs": [{"resource": "Carbon Powder", "kind": "item", "rate": 60}, {"resource": "Sandleaf Powder", "kind": "item", "rate": 30}], "outputs": [{"resource": "Dense Carbon Powder", "kind": "item", "rate": 30}], "time": 2},
+    {"id": "recipe_5", "inputs": [{"resource": "Origocrust Powder", "kind": "item", "rate": 60}, {"resource": "Sandleaf Powder", "kind": "item", "rate": 30}], "outputs": [{"resource": "Dense Origocrust Powder", "kind": "item", "rate": 30}], "time": 2},
+    {"id": "recipe_6", "inputs": [{"resource": "Buckflower Powder", "kind": "item", "rate": 60}, {"resource": "Sandleaf Powder", "kind": "item", "rate": 30}], "outputs": [{"resource": "Ground Buckflower Powder", "kind": "item", "rate": 30}], "time": 2},
+    {"id": "recipe_7", "inputs": [{"resource": "Citrome Powder", "kind": "item", "rate": 60}, {"resource": "Sandleaf Powder", "kind": "item", "rate": 30}], "outputs": [{"resource": "Ground Citrome Powder", "kind": "item", "rate": 30}], "time": 2}
+  ]
+}

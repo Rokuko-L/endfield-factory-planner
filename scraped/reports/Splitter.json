@@ -1,0 +1,12 @@
+{
+  "slug": "Splitter",
+  "name": "Splitter",
+  "type": "Logistics Units",
+  "footprint": [
+    1,
+    1
+  ],
+  "powerUse": 0,
+  "description": "A logistics unit that evenly divides product flow from 1 transport belt into multiple belts (up to 3).",
+  "recipes": []
+}

@@ -1,0 +1,24 @@
+{
+  "slug": "Portable_Originium_Rig",
+  "name": "Portable Originium Rig",
+  "type": "Resourcing",
+  "footprint": [
+    5,
+    5
+  ],
+  "powerUse": 0,
+  "description": "Mines Originium Ore. Does not need the power grid; self-powers using the Originium it mines. Extracts at 30/min.",
+  "recipes": [
+    {
+      "id": "recipe_1",
+      "inputs": [],
+      "outputs": [
+        {
+          "resource": "Originium Ore",
+          "kind": "item",
+          "rate": 30
+        }
+      ]
+    }
+  ]
+}

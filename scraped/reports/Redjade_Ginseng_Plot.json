@@ -1,0 +1,12 @@
+{
+  "slug": "Redjade_Ginseng_Plot",
+  "name": "Redjade Ginseng Plot",
+  "type": "Planting",
+  "footprint": [
+    5,
+    5
+  ],
+  "powerUse": 0,
+  "description": "Cultivation plot adjusted for growing Redjade Ginseng. Soil quality is far better than the average arable land in Wuling. The wiki does not list a structured in-game recipe for operating the plot; the only Crafting table on the wiki is for building the plot itself (Redjade Ginseng Seed + Carbon -> Redjade Ginseng Plot). Rarity 3.",
+  "recipes": []
+}

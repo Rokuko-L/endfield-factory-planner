@@ -1,0 +1,12 @@
+{
+  "slug": "Gas_Dispersing_Unit",
+  "name": "Gas Dispersing Unit",
+  "type": "Production II",
+  "footprint": [
+    5,
+    5
+  ],
+  "powerUse": 0,
+  "description": "Disperses a steady input of gas into a 13x13 area centered on itself, creating a matching gaseous environment (e.g. Inergen -> Stable, Hetonite Gas -> Acrid, water vapor -> Humid, Xiranite -> Xiranite environment). Only the listed minimum of 6/min is required; excess gas is wasted. AIC Facilities placed fully inside the environment can take advantage of its effects (most notably unlocking specific recipes). Multiple Gas Dispersing Units must be placed so their areas of effect do not overlap. Rarity 4. Constructed from 40 Cuprium Parts (requires Specified Wuling AIC Plan Tech).",
+  "recipes": []
+}
