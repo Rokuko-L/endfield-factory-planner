@@ -79,9 +79,14 @@ future enhancement.
 
 ## Where The Catalog Lives
 
-- **Hard-coded defaults**: `src/data.ts`. The Miner and Furnace
-  with one recipe each. Touched when adding the very first version
-  of a machine.
+- **Hard-coded defaults**: `src/data.ts`. Ships with all 38
+  Endfield facility types (Logistics, Depot, Production I,
+  Production II, Power) scraped from the wiki, plus two
+  hand-crafted placeholders (MINER, FURNACE) for the test suite.
+  Regenerate by running `node scrape.mjs && node parse.mjs && node
+  generate-data.mjs` (the three scripts are gitignored alongside
+  the intermediate `scraped/` and `parsed/` directories; only
+  the final `data.ts` is checked in).
 - **At runtime**: `state.machineTypes` in `src/main.ts`, hydrated
   from localStorage on page load.
 - **Persisted**: `localStorage[endfield.machineTypes.v1]`. JSON

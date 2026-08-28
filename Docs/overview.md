@@ -14,18 +14,26 @@ optimization, routing, or backend — everything runs client-side.
 ```
 src/
   types.ts        // Domain model: MachineInstance, MachineType, PortDef, EdgeBand, Connection, Layout
-  data.ts         // Sample machine definitions + ALL_MACHINE_TYPES registry
+  data.ts         // Catalog: ALL_MACHINE_TYPES (38 wiki machines + 2 hand-crafted placeholders)
   grid.ts         // Tile-occupancy grid (machines + connections): canPlace, placeMachine, removeMachine, placeConnectionTiles, removeConnection
   geometry.ts     // Side rotation + port tile computation (transformPort, getAdjacentTile, getPortAdjacentTile)
-  pathfinding.ts  // A* on free cells (findPath, internal MinHeap)
+  pathfinding.ts  // A* on free cells (findPath, findPathMulti, internal MinHeap)
+  recipes.ts      // Connection auto-detect: matchRecipe, reconcileConnectionRecipes
   renderer.ts     // Canvas drawing (grid, connections, machines, ports, hover, draft)
   main.ts         // UI wiring, event handling, editor state (place + connect modes)
+  machineEditor.ts // Dev-only modal for editing the catalog
+  machineStore.ts  // localStorage persistence of the catalog
+  machineValidate.ts // Catalog validation
   style.css       // Editor styling
 index.html        // Vite entry (toolbar, canvas, status panel)
 test/             // Vitest unit tests
   grid.test.ts
   geometry.test.ts
   pathfinding.test.ts
+  recipes.test.ts
+scrape.mjs         // Dev-only: fetch wiki pages (gitignored output in ./scraped/)
+parse.mjs         // Dev-only: parse HTML into machine records (gitignored output in ./parsed/)
+generate-data.mjs  // Dev-only: turn parsed records into src/data.ts
 ```
 
 **Data flow:**
@@ -35,6 +43,7 @@ Mouse/keyboard events ──> main.ts (state, mode)
                          │
                          ├──> Grid.canPlace / placeMachine / removeMachine (src/grid.ts)
                          ├──> findPath (src/pathfinding.ts) for connections
+                         ├──> matchRecipe (src/recipes.ts) for connection auto-detect
                          │
                          └──> Renderer.draw (src/renderer.ts)
                                  │
