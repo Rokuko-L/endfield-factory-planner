@@ -56,6 +56,32 @@ const PAGES = [
   ["Thermal_Bank", "Thermal Bank"],
   ["Xiranite_Pylon", "Xiranite Pylon"],
   ["Xiranite_Relay", "Xiranite Relay"],
+  // Resourcing (raw material extraction — needed for the production flow)
+  ["Electric_Mining_Rig", "Electric Mining Rig"],
+  ["Electric_Mining_Rig_Mk_II", "Electric Mining Rig Mk II"],
+  ["Hydro_Mining_Rig", "Hydro Mining Rig"],
+  ["Portable_Originium_Rig", "Portable Originium Rig"],
+  ["Fluid_Pump", "Fluid Pump"],
+  ["Fluid_Supply_Unit", "Fluid Supply Unit"],
+  // Planting (plant growth for carbon-based resources)
+  ["Aketine_Plot", "Aketine Plot"],
+  ["Amber_Rice_Plot", "Amber Rice Plot"],
+  ["Buckflower_Plot", "Buckflower Plot"],
+  ["Citrome_Plot", "Citrome Plot"],
+  ["Jincao_Plot", "Jincao Plot"],
+  ["Redjade_Ginseng_Plot", "Redjade Ginseng Plot"],
+  ["Reed_Rye_Plot", "Reed Rye Plot"],
+  ["Sandleaf_Plot", "Sandleaf Plot"],
+  ["Tartpepper_Plot", "Tartpepper Plot"],
+  ["Yazhen_Plot", "Yazhen Plot"],
+  // Resourcing remaining (gas)
+  ["Gas_Dispersing_Unit", "Gas Dispersing Unit"],
+  ["Gas_Extractor", "Gas Extractor"],
+  ["Gas_Reactor_Globe", "Gas Reactor Globe"],
+  ["Gas_Tank", "Gas Tank"],
+  // Production II cont.
+  ["Solid-Gas_Transmuting_Unit", "Solid-Gas Transmuting Unit"],
+  ["Fluid-Gas_Transmuting_Unit", "Fluid-Gas Transmuting Unit"],
 ];
 
 async function sleep(ms) {
