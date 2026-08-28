@@ -7,6 +7,7 @@ import type { MachineType } from "./types.ts";
 /** Aketine Plot — 0 recipes */
 export const AKETINE_PLOT: MachineType = {
   "name": "Aketine Plot",
+  "category": "Planting",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -17,6 +18,7 @@ export const AKETINE_PLOT: MachineType = {
 /** Amber Rice Plot — 0 recipes */
 export const AMBER_RICE_PLOT: MachineType = {
   "name": "Amber Rice Plot",
+  "category": "Planting",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -27,6 +29,7 @@ export const AMBER_RICE_PLOT: MachineType = {
 /** Belt Bridge — 0 recipes */
 export const BELT_BRIDGE: MachineType = {
   "name": "Belt Bridge",
+  "category": "Logistics Units",
   "width": 1,
   "height": 1,
   "ports": [],
@@ -37,6 +40,7 @@ export const BELT_BRIDGE: MachineType = {
 /** Buckflower Plot — 0 recipes */
 export const BUCKFLOWER_PLOT: MachineType = {
   "name": "Buckflower Plot",
+  "category": "Planting",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -47,6 +51,7 @@ export const BUCKFLOWER_PLOT: MachineType = {
 /** Citrome Plot — 0 recipes */
 export const CITROME_PLOT: MachineType = {
   "name": "Citrome Plot",
+  "category": "Planting",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -57,6 +62,7 @@ export const CITROME_PLOT: MachineType = {
 /** Conduit Inlet — 0 recipes */
 export const CONDUIT_INLET: MachineType = {
   "name": "Conduit Inlet",
+  "category": "Depot Access",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -67,6 +73,7 @@ export const CONDUIT_INLET: MachineType = {
 /** Conduit Inlet Manifold — 0 recipes */
 export const CONDUIT_INLET_MANIFOLD: MachineType = {
   "name": "Conduit Inlet Manifold",
+  "category": "Depot Access",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -77,6 +84,7 @@ export const CONDUIT_INLET_MANIFOLD: MachineType = {
 /** Conduit Outlet Manifold — 0 recipes */
 export const CONDUIT_OUTLET_MANIFOLD: MachineType = {
   "name": "Conduit Outlet Manifold",
+  "category": "Depot Access",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -87,6 +95,7 @@ export const CONDUIT_OUTLET_MANIFOLD: MachineType = {
 /** Converger — 0 recipes */
 export const CONVERGER: MachineType = {
   "name": "Converger",
+  "category": "Logistics Units",
   "width": 1,
   "height": 1,
   "ports": [],
@@ -97,6 +106,7 @@ export const CONVERGER: MachineType = {
 /** Depot Bus Port — 0 recipes */
 export const DEPOT_BUS_PORT: MachineType = {
   "name": "Depot Bus Port",
+  "category": "Depot Access",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -107,6 +117,7 @@ export const DEPOT_BUS_PORT: MachineType = {
 /** Depot Bus Section — 0 recipes */
 export const DEPOT_BUS_SECTION: MachineType = {
   "name": "Depot Bus Section",
+  "category": "Depot Access",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -117,6 +128,7 @@ export const DEPOT_BUS_SECTION: MachineType = {
 /** Depot Loader — 0 recipes */
 export const DEPOT_LOADER: MachineType = {
   "name": "Depot Loader",
+  "category": "Depot Access",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -127,6 +139,7 @@ export const DEPOT_LOADER: MachineType = {
 /** Depot Unloader — 0 recipes */
 export const DEPOT_UNLOADER: MachineType = {
   "name": "Depot Unloader",
+  "category": "Depot Access",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -137,6 +150,7 @@ export const DEPOT_UNLOADER: MachineType = {
 /** Electric Mining Rig — 2 recipes */
 export const ELECTRIC_MINING_RIG: MachineType = {
   "name": "Electric Mining Rig",
+  "category": "Resourcing",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -170,6 +184,7 @@ export const ELECTRIC_MINING_RIG: MachineType = {
 /** Electric Mining Rig Mk II — 1 recipes */
 export const ELECTRIC_MINING_RIG_MK_II: MachineType = {
   "name": "Electric Mining Rig Mk II",
+  "category": "Resourcing",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -192,6 +207,7 @@ export const ELECTRIC_MINING_RIG_MK_II: MachineType = {
 /** Electric Pylon — 0 recipes */
 export const ELECTRIC_PYLON: MachineType = {
   "name": "Electric Pylon",
+  "category": "Power",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -202,6 +218,7 @@ export const ELECTRIC_PYLON: MachineType = {
 /** Expanded Crucible — 8 recipes */
 export const EXPANDED_CRUCIBLE: MachineType = {
   "name": "Expanded Crucible",
+  "category": "Production II",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -412,6 +429,7 @@ export const EXPANDED_CRUCIBLE: MachineType = {
 /** Filling Unit — 78 recipes */
 export const FILLING_UNIT: MachineType = {
   "name": "Filling Unit",
+  "category": "Production II",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -2217,6 +2235,7 @@ export const FILLING_UNIT: MachineType = {
 /** Fitting Unit — 7 recipes */
 export const FITTING_UNIT: MachineType = {
   "name": "Fitting Unit",
+  "category": "Production I",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -2354,6 +2373,7 @@ export const FITTING_UNIT: MachineType = {
 /** Fluid-Gas Transmuting Unit — 12 recipes */
 export const FLUID_GAS_TRANSMUTING_UNIT: MachineType = {
   "name": "Fluid-Gas Transmuting Unit",
+  "category": "Production II",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -2581,6 +2601,7 @@ export const FLUID_GAS_TRANSMUTING_UNIT: MachineType = {
 /** Fluid Pump — 0 recipes */
 export const FLUID_PUMP: MachineType = {
   "name": "Fluid Pump",
+  "category": "Resourcing",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -2591,6 +2612,7 @@ export const FLUID_PUMP: MachineType = {
 /** Fluid Supply Unit — 0 recipes */
 export const FLUID_SUPPLY_UNIT: MachineType = {
   "name": "Fluid Supply Unit",
+  "category": "Miscellaneous",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -2601,6 +2623,7 @@ export const FLUID_SUPPLY_UNIT: MachineType = {
 /** Fluid Tank — 0 recipes */
 export const FLUID_TANK: MachineType = {
   "name": "Fluid Tank",
+  "category": "Depot Access",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -2611,6 +2634,7 @@ export const FLUID_TANK: MachineType = {
 /** Forge of the Sky — 4 recipes */
 export const FORGE_OF_THE_SKY: MachineType = {
   "name": "Forge of the Sky",
+  "category": "Production II",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -2714,6 +2738,7 @@ export const FORGE_OF_THE_SKY: MachineType = {
 /** Gas Dispersing Unit — 0 recipes */
 export const GAS_DISPERSING_UNIT: MachineType = {
   "name": "Gas Dispersing Unit",
+  "category": "Production II",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -2724,6 +2749,7 @@ export const GAS_DISPERSING_UNIT: MachineType = {
 /** Gas Extractor — 0 recipes */
 export const GAS_EXTRACTOR: MachineType = {
   "name": "Gas Extractor",
+  "category": "Resourcing",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -2734,6 +2760,7 @@ export const GAS_EXTRACTOR: MachineType = {
 /** Gas Reactor Globe — 1 recipes */
 export const GAS_REACTOR_GLOBE: MachineType = {
   "name": "Gas Reactor Globe",
+  "category": "Production II",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -2768,6 +2795,7 @@ export const GAS_REACTOR_GLOBE: MachineType = {
 /** Gas Tank — 0 recipes */
 export const GAS_TANK: MachineType = {
   "name": "Gas Tank",
+  "category": "Depot Access",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -2778,6 +2806,7 @@ export const GAS_TANK: MachineType = {
 /** Gearing Unit — 7 recipes */
 export const GEARING_UNIT: MachineType = {
   "name": "Gearing Unit",
+  "category": "Production II",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -2950,6 +2979,7 @@ export const GEARING_UNIT: MachineType = {
 /** Grinding Unit — 7 recipes */
 export const GRINDING_UNIT: MachineType = {
   "name": "Grinding Unit",
+  "category": "Production II",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -3122,6 +3152,7 @@ export const GRINDING_UNIT: MachineType = {
 /** Hydro Mining Rig — 1 recipes */
 export const HYDRO_MINING_RIG: MachineType = {
   "name": "Hydro Mining Rig",
+  "category": "Resourcing",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -3144,6 +3175,7 @@ export const HYDRO_MINING_RIG: MachineType = {
 /** Item Control Port — 0 recipes */
 export const ITEM_CONTROL_PORT: MachineType = {
   "name": "Item Control Port",
+  "category": "Logistics Units",
   "width": 1,
   "height": 1,
   "ports": [],
@@ -3154,6 +3186,7 @@ export const ITEM_CONTROL_PORT: MachineType = {
 /** Jincao Plot — 0 recipes */
 export const JINCAO_PLOT: MachineType = {
   "name": "Jincao Plot",
+  "category": "Planting",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -3164,6 +3197,7 @@ export const JINCAO_PLOT: MachineType = {
 /** Moulding Unit — 7 recipes */
 export const MOULDING_UNIT: MachineType = {
   "name": "Moulding Unit",
+  "category": "Production I",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -3306,6 +3340,7 @@ export const MOULDING_UNIT: MachineType = {
 /** Packaging Unit — 11 recipes */
 export const PACKAGING_UNIT: MachineType = {
   "name": "Packaging Unit",
+  "category": "Production II",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -3570,6 +3605,7 @@ export const PACKAGING_UNIT: MachineType = {
 /** Pipe Bridge — 0 recipes */
 export const PIPE_BRIDGE: MachineType = {
   "name": "Pipe Bridge",
+  "category": "Logistics Units",
   "width": 1,
   "height": 1,
   "ports": [],
@@ -3580,6 +3616,7 @@ export const PIPE_BRIDGE: MachineType = {
 /** Pipe Control Port — 0 recipes */
 export const PIPE_CONTROL_PORT: MachineType = {
   "name": "Pipe Control Port",
+  "category": "Logistics Units",
   "width": 1,
   "height": 1,
   "ports": [],
@@ -3590,6 +3627,7 @@ export const PIPE_CONTROL_PORT: MachineType = {
 /** Pipe Converger — 0 recipes */
 export const PIPE_CONVERGER: MachineType = {
   "name": "Pipe Converger",
+  "category": "Logistics Units",
   "width": 1,
   "height": 1,
   "ports": [],
@@ -3600,6 +3638,7 @@ export const PIPE_CONVERGER: MachineType = {
 /** Pipe Splitter — 0 recipes */
 export const PIPE_SPLITTER: MachineType = {
   "name": "Pipe Splitter",
+  "category": "Logistics Units",
   "width": 1,
   "height": 1,
   "ports": [],
@@ -3610,6 +3649,7 @@ export const PIPE_SPLITTER: MachineType = {
 /** Planting Unit — 6 recipes */
 export const PLANTING_UNIT: MachineType = {
   "name": "Planting Unit",
+  "category": "Production I",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -3739,6 +3779,7 @@ export const PLANTING_UNIT: MachineType = {
 /** Portable Originium Rig — 1 recipes */
 export const PORTABLE_ORIGINIUM_RIG: MachineType = {
   "name": "Portable Originium Rig",
+  "category": "Resourcing",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -3761,6 +3802,7 @@ export const PORTABLE_ORIGINIUM_RIG: MachineType = {
 /** Protocol Stash — 0 recipes */
 export const PROTOCOL_STASH: MachineType = {
   "name": "Protocol Stash",
+  "category": "Depot Access",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -3771,6 +3813,7 @@ export const PROTOCOL_STASH: MachineType = {
 /** Purification Unit — 6 recipes */
 export const PURIFICATION_UNIT: MachineType = {
   "name": "Purification Unit",
+  "category": "Production II",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -3920,6 +3963,7 @@ export const PURIFICATION_UNIT: MachineType = {
 /** Reactor Crucible — 8 recipes */
 export const REACTOR_CRUCIBLE: MachineType = {
   "name": "Reactor Crucible",
+  "category": "Production II",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -4130,6 +4174,7 @@ export const REACTOR_CRUCIBLE: MachineType = {
 /** Redjade Ginseng Plot — 0 recipes */
 export const REDJADE_GINSENG_PLOT: MachineType = {
   "name": "Redjade Ginseng Plot",
+  "category": "Planting",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -4140,6 +4185,7 @@ export const REDJADE_GINSENG_PLOT: MachineType = {
 /** Reed Rye Plot — 0 recipes */
 export const REED_RYE_PLOT: MachineType = {
   "name": "Reed Rye Plot",
+  "category": "Planting",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -4150,6 +4196,7 @@ export const REED_RYE_PLOT: MachineType = {
 /** Refining Unit — 26 recipes */
 export const REFINING_UNIT: MachineType = {
   "name": "Refining Unit",
+  "category": "Production I",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -4639,6 +4686,7 @@ export const REFINING_UNIT: MachineType = {
 /** Relay Tower — 0 recipes */
 export const RELAY_TOWER: MachineType = {
   "name": "Relay Tower",
+  "category": "Power",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -4649,6 +4697,7 @@ export const RELAY_TOWER: MachineType = {
 /** Sandleaf Plot — 0 recipes */
 export const SANDLEAF_PLOT: MachineType = {
   "name": "Sandleaf Plot",
+  "category": "Planting",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -4659,6 +4708,7 @@ export const SANDLEAF_PLOT: MachineType = {
 /** Seed-Picking Unit — 10 recipes */
 export const SEED_PICKING_UNIT: MachineType = {
   "name": "Seed-Picking Unit",
+  "category": "Production I",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -4850,6 +4900,7 @@ export const SEED_PICKING_UNIT: MachineType = {
 /** Separating Unit — 74 recipes */
 export const SEPARATING_UNIT: MachineType = {
   "name": "Separating Unit",
+  "category": "Production II",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -6563,6 +6614,7 @@ export const SEPARATING_UNIT: MachineType = {
 /** Shredding Unit — 12 recipes */
 export const SHREDDING_UNIT: MachineType = {
   "name": "Shredding Unit",
+  "category": "Production I",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -6790,6 +6842,7 @@ export const SHREDDING_UNIT: MachineType = {
 /** Solid-Gas Transmuting Unit — 10 recipes */
 export const SOLID_GAS_TRANSMUTING_UNIT: MachineType = {
   "name": "Solid-Gas Transmuting Unit",
+  "category": "Production II",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -6981,6 +7034,7 @@ export const SOLID_GAS_TRANSMUTING_UNIT: MachineType = {
 /** Splitter — 0 recipes */
 export const SPLITTER: MachineType = {
   "name": "Splitter",
+  "category": "Logistics Units",
   "width": 1,
   "height": 1,
   "ports": [],
@@ -6991,6 +7045,7 @@ export const SPLITTER: MachineType = {
 /** Tartpepper Plot — 0 recipes */
 export const TARTPEPPER_PLOT: MachineType = {
   "name": "Tartpepper Plot",
+  "category": "Planting",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -7001,6 +7056,7 @@ export const TARTPEPPER_PLOT: MachineType = {
 /** Thermal Bank — 6 recipes */
 export const THERMAL_BANK: MachineType = {
   "name": "Thermal Bank",
+  "category": "Power",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -7120,6 +7176,7 @@ export const THERMAL_BANK: MachineType = {
 /** Water Treatment Unit — 3 recipes */
 export const WATER_TREATMENT_UNIT: MachineType = {
   "name": "Water Treatment Unit",
+  "category": "Production I",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -7185,6 +7242,7 @@ export const WATER_TREATMENT_UNIT: MachineType = {
 /** Xiranite Pylon — 0 recipes */
 export const XIRANITE_PYLON: MachineType = {
   "name": "Xiranite Pylon",
+  "category": "Power",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -7195,6 +7253,7 @@ export const XIRANITE_PYLON: MachineType = {
 /** Xiranite Relay — 0 recipes */
 export const XIRANITE_RELAY: MachineType = {
   "name": "Xiranite Relay",
+  "category": "Power",
   "width": 5,
   "height": 5,
   "ports": [],
@@ -7205,6 +7264,7 @@ export const XIRANITE_RELAY: MachineType = {
 /** Yazhen Plot — 0 recipes */
 export const YAZHEN_PLOT: MachineType = {
   "name": "Yazhen Plot",
+  "category": "Planting",
   "width": 5,
   "height": 5,
   "ports": [],

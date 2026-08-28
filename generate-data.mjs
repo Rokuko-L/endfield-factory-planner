@@ -18,6 +18,7 @@ for (const f of files) {
   const data = JSON.parse(raw);
   machines.push({
     name: data.name,
+    category: data.type ?? undefined,
     width: data.footprint?.[0] ?? 5,
     height: data.footprint?.[1] ?? 5,
     ports: [],

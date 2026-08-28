@@ -43,6 +43,7 @@ export async function openMachineEditor(): Promise<MachineType[] | null> {
     const state = {
       types: loadMachineTypes(),
       selectedIndex: -1,
+      collapsed: new Set<string>(),
     };
 
     const listEl = overlay.querySelector(".machine-list") as HTMLElement;
@@ -57,18 +58,34 @@ export async function openMachineEditor(): Promise<MachineType[] | null> {
 
     function renderList() {
       listEl.innerHTML = "";
-      for (let i = 0; i < state.types.length; i++) {
-        const t = state.types[i]!;
-        const row = document.createElement("button");
-        row.type = "button";
-        row.className = "machine-list-item" + (i === state.selectedIndex ? " active" : "");
-        row.innerHTML = `<span class="name">${escapeHtml(t.name)}</span>
-          <span class="meta">${t.width}×${t.height} · ${t.recipes.length} recipes</span>`;
-        row.addEventListener("click", () => {
-          state.selectedIndex = i;
-          render();
+      const groups = groupByCategory(state.types);
+      for (const [cat, indices] of groups) {
+        const isCollapsed = state.collapsed.has(cat);
+        const head = document.createElement("button");
+        head.type = "button";
+        head.className = "machine-list-category" + (isCollapsed ? " collapsed" : "");
+        head.innerHTML = `<span class="caret">${isCollapsed ? "▸" : "▾"}</span> ${escapeHtml(cat)} (${indices.length})`;
+        head.title = isCollapsed ? "Expand group" : "Collapse group";
+        head.addEventListener("click", () => {
+          if (state.collapsed.has(cat)) state.collapsed.delete(cat);
+          else state.collapsed.add(cat);
+          renderList();
         });
-        listEl.appendChild(row);
+        listEl.appendChild(head);
+        if (isCollapsed) continue;
+        for (const i of indices) {
+          const t = state.types[i]!;
+          const row = document.createElement("button");
+          row.type = "button";
+          row.className = "machine-list-item" + (i === state.selectedIndex ? " active" : "");
+          row.innerHTML = `<span class="name">${escapeHtml(t.name)}</span>
+            <span class="meta">${t.width}×${t.height} · ${t.recipes.length} recipes</span>`;
+          row.addEventListener("click", () => {
+            state.selectedIndex = i;
+            render();
+          });
+          listEl.appendChild(row);
+        }
       }
     }
 
@@ -105,6 +122,7 @@ export async function openMachineEditor(): Promise<MachineType[] | null> {
     overlay.querySelector('[data-act="add"]')!.addEventListener("click", () => {
       const fresh: MachineType = {
         name: `New Machine ${state.types.length + 1}`,
+        category: "Miscellaneous",
         width: 3,
         height: 3,
         ports: [],
@@ -112,6 +130,7 @@ export async function openMachineEditor(): Promise<MachineType[] | null> {
         edgeBands: {},
       };
       state.types.push(fresh);
+      state.collapsed.delete("Miscellaneous");
       state.selectedIndex = state.types.length - 1;
       render();
     });
@@ -144,6 +163,38 @@ export async function openMachineEditor(): Promise<MachineType[] | null> {
     }
 
     render();
+  });
+}
+
+// --- grouping ---
+
+/** Display order for known facility categories; unknown ones sort
+ *  alphabetically after these, "Uncategorized" last. */
+const CATEGORY_ORDER: ReadonlyArray<string> = [
+  "Production I",
+  "Production II",
+  "Logistics Units",
+  "Depot Access",
+  "Power",
+  "Resourcing",
+  "Planting",
+];
+
+function groupByCategory(types: readonly MachineType[]): Array<[string, number[]]> {
+  const groups = new Map<string, number[]>();
+  for (let i = 0; i < types.length; i++) {
+    const cat = types[i]!.category?.trim() || "Uncategorized";
+    const arr = groups.get(cat);
+    if (arr) arr.push(i);
+    else groups.set(cat, [i]);
+  }
+  return [...groups.entries()].sort(([a], [b]) => {
+    const ia = CATEGORY_ORDER.indexOf(a);
+    const ib = CATEGORY_ORDER.indexOf(b);
+    if (ia !== -1 && ib !== -1) return ia - ib;
+    if (ia !== -1) return -1;
+    if (ib !== -1) return 1;
+    return a.localeCompare(b);
   });
 }
 
@@ -186,13 +237,16 @@ function buildBasicFields(m: MachineType, onChange: (next: MachineType) => void)
   grid.className = "field-grid";
 
   const nameInput = input("Name", m.name, (v) => onChange({ ...m, name: v }));
+  const categoryInput = input("Category", m.category ?? "", (v) =>
+    onChange({ ...m, category: v.trim() || undefined }),
+  );
   const widthInput = numberInput("Width", m.width, 1, 16, (v) =>
     onChange({ ...m, width: v }),
   );
   const heightInput = numberInput("Height", m.height, 1, 16, (v) =>
     onChange({ ...m, height: v }),
   );
-  grid.append(nameInput, widthInput, heightInput);
+  grid.append(nameInput, categoryInput, widthInput, heightInput);
   fieldset.appendChild(grid);
   return fieldset;
 }

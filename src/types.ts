@@ -76,6 +76,9 @@ export interface Recipe {
 export interface MachineType {
   /** Display name, e.g. "Miner". */
   name: string;
+  /** Facility category, e.g. "Production I" or "Logistics Units".
+   *  Used to group machines in the editor UI. */
+  category?: string;
   /** Footprint width in tiles. */
   width: number;
   /** Footprint height in tiles. */
