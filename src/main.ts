@@ -82,9 +82,12 @@ function rotate(): void {
 
 function placeMachine(x: number, y: number): void {
   const type = selectedType();
-  if (!grid.canPlace(type, x, y)) {
+  const isRot = state.orientation === 90 || state.orientation === 270;
+  const effW = isRot ? type.height : type.width;
+  const effH = isRot ? type.width : type.height;
+  if (!grid.canPlaceWithOrientation(type, x, y, state.orientation)) {
     setStatus(`Invalid placement! '${type.name}' overlaps or is out of bounds.`, true);
-    state.invalidFlash = { x, y, w: type.width, h: type.height };
+    state.invalidFlash = { x, y, w: effW, h: effH };
     redraw();
     setTimeout(() => {
       state.invalidFlash = null;
@@ -162,10 +165,13 @@ function boundingBoxArea(): number {
   let maxX = -Infinity;
   let maxY = -Infinity;
   for (const m of state.machines) {
+    const isRot = m.orientation === 90 || m.orientation === 270;
+    const effW = isRot ? m.type.height : m.type.width;
+    const effH = isRot ? m.type.width : m.type.height;
     minX = Math.min(minX, m.x);
     minY = Math.min(minY, m.y);
-    maxX = Math.max(maxX, m.x + m.type.width);
-    maxY = Math.max(maxY, m.y + m.type.height);
+    maxX = Math.max(maxX, m.x + effW);
+    maxY = Math.max(maxY, m.y + effH);
   }
   return (maxX - minX) * (maxY - minY);
 }
@@ -248,8 +254,11 @@ function redraw(): void {
   let preview = null;
   if (state.hover && state.mode === 'place') {
     const type = selectedType();
-    const valid = grid.canPlace(type, state.hover.x, state.hover.y);
-    preview = { ...state.hover, w: type.width, h: type.height, valid };
+    const isRot = state.orientation === 90 || state.orientation === 270;
+    const effW = isRot ? type.height : type.width;
+    const effH = isRot ? type.width : type.height;
+    const valid = grid.canPlaceWithOrientation(type, state.hover.x, state.hover.y, state.orientation);
+    preview = { ...state.hover, w: effW, h: effH, valid };
   }
   renderer.draw(
     state.machines,

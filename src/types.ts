@@ -22,17 +22,13 @@ export type ResourceKind = 'item' | 'fluid';
  * (facing north) orientation.
  */
 export interface PortDef {
-  /** Unique id, e.g. "iron_ore_input". */
   id: string;
   type: PortType;
-  /** Which side of the machine the port sits on (unrotated). */
   side: Side;
-  /** 0-based index along that side: left→right for north/south, top→bottom for east/west. */
   tileIndex: number;
-  /** Resource name, e.g. "Iron Ore", "Water". */
+  /** Carried resource name or '' for "any" (generic side — e.g. Reactor Crucible). */
   resource: string;
   kind: ResourceKind;
-  /** Rate: per minute for items, per second for fluids. */
   rate: number;
 }
 
@@ -42,11 +38,9 @@ export interface PortDef {
  * furnace is "the input side" rather than a single tile.
  */
 export interface EdgeBand {
-  /** Whether this edge receives or emits. */
   type: PortType;
-  /** The category of resource flowing across this edge. */
   resourceKind: ResourceKind;
-  /** Optional specific resource name for this band (e.g. "Iron Ore"). When absent the band is unconfigured. */
+  /** Specific resource name or ''/absent for "any" (generic side — e.g. Reactor Crucible). */
   resource?: string;
 }
 
@@ -130,8 +124,7 @@ export interface Connection {
    *  connection is "passthrough" — items flow but no transformation
    *  is implied). */
   matchedRecipeId: string | null;
-  /** The routed path. Does not include the start/end cells that lie on
-   *  the two ports — only the tiles the belt/pipe itself occupies. */
+  /** The routed path, inclusive of the port-adjacent endpoint tiles. */
   path: { x: number; y: number }[];
 }
 

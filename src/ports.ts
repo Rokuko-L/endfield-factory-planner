@@ -10,7 +10,10 @@ export function allPortCells(machines: MachineInstance[]): PortCell[] {
     for (const [unrotatedSide, band] of Object.entries(m.type.edgeBands ?? {})) {
       if (!band) continue;
       const side = rotateSide(unrotatedSide as Side, m.orientation);
-      const count = side === 'north' || side === 'south' ? m.type.width : m.type.height;
+      const isNorthSouth = side === 'north' || side === 'south';
+      const effW = m.orientation === 90 || m.orientation === 270 ? m.type.height : m.type.width;
+      const effH = m.orientation === 90 || m.orientation === 270 ? m.type.width : m.type.height;
+      const count = isNorthSouth ? effW : effH;
       const adjacentTiles: { x: number; y: number }[] = [];
       for (let i = 0; i < count; i++) adjacentTiles.push(getAdjacentTile(side, i, m));
       for (let i = 0; i < count; i++) {

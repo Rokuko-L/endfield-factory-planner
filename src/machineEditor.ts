@@ -328,8 +328,9 @@ function buildEdgeBandsSection(
           onChange({ ...m, edgeBands: nextBands });
         },
       );
-      const resourceInput = input("resource", band.resource ?? "", (v) => {
-        const nextBands = { ...bands, [side]: { ...band, resource: v.trim() || undefined } };
+      const resourceInput = input("resource (empty = any)", band.resource ?? "", (v) => {
+        const trimmed = v.trim();
+        const nextBands = { ...bands, [side]: { ...band, resource: trimmed || undefined } };
         onChange({ ...m, edgeBands: nextBands });
       });
       const remove = document.createElement("button");
@@ -381,7 +382,7 @@ function buildPortsSection(
       numberInput("tileIndex", p.tileIndex, 0, 31, (v) =>
         updatePort(m, idx, { tileIndex: v }, onChange),
       ),
-      input("resource", p.resource, (v) =>
+      input("resource (leave empty = any)", p.resource, (v) =>
         updatePort(m, idx, { resource: v }, onChange),
       ),
       select(["item", "fluid"], p.kind, (v) =>

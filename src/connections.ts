@@ -12,15 +12,17 @@ export function completeDraft(
 ): { connection: Connection; interior: { x: number; y: number }[] } | { error: string } {
   if (source.machine.id === target.machine.id) return { error: 'Cannot connect a machine to itself.' };
   if (source.kind !== target.kind) return { error: `Resource kind mismatch: '${source.kind}' vs '${target.kind}'.` };
-  if (source.resource !== target.resource) return { error: `Resource mismatch: '${source.resource}' vs '${target.resource}'.` };
+  const srcRes = source.resource?.trim() ?? '';
+  const tgtRes = target.resource?.trim() ?? '';
+  const bothSpecific = srcRes !== '' && tgtRes !== '';
+  if (bothSpecific && srcRes !== tgtRes) return { error: `Resource mismatch: '${srcRes}' vs '${tgtRes}'.` };
   const path = findPathMulti(grid, source.adjacentTiles, target.adjacentTiles);
   if (!path || path.length === 0) return { error: 'No path found between the picked ports.' };
   const fromTile = path[0]!;
   const toTile = path[path.length - 1]!;
   const fromCellIndex = source.adjacentTiles.findIndex((t) => t.x === fromTile.x && t.y === fromTile.y);
   const toCellIndex = target.adjacentTiles.findIndex((t) => t.x === toTile.x && t.y === toTile.y);
-  const interior = path.length > 2 ? path.slice(1, -1) : [];
-  return { connection: buildConnection(source, fromCellIndex, target, toCellIndex, interior), interior };
+  return { connection: buildConnection(source, fromCellIndex, target, toCellIndex, path), interior: path };
 }
 
 function buildConnection(
@@ -38,7 +40,8 @@ function buildConnection(
     toCellIndex >= 0 && target.portId.startsWith('band:')
       ? `band:${target.portId.slice('band:'.length)}:${toCellIndex}`
       : target.portId;
-  const recipe = matchRecipe(target.machine, source.resource, source.kind);
+  const resolvedResource = (source.resource?.trim() || target.resource?.trim() || source.resource) ?? '';
+  const recipe = resolvedResource.trim() ? matchRecipe(target.machine, resolvedResource.trim(), source.kind) : null;
   return {
     id: nextId('conn'),
     fromMachineId: source.machine.id,
@@ -46,7 +49,7 @@ function buildConnection(
     toMachineId: target.machine.id,
     toPortId,
     kind: source.kind,
-    resource: source.resource,
+    resource: resolvedResource.trim() || source.resource,
     matchedRecipeId: recipe ? recipe.id : null,
     path,
   };

@@ -70,11 +70,9 @@ export function getPortTile(
   machine: MachineInstance,
 ): { x: number; y: number } {
   const { side, tileIndex } = transformPort(port, machine);
-  const { width, height } = machine.type;
+  const { width, height } = effectiveSize(machine.type, machine.orientation);
   const { x, y } = machine;
 
-  // For north/south sides the index runs along the width (x); for
-  // east/west it runs along the height (y).
   switch (side) {
     case 'north':
       return { x: x + tileIndex, y: y - 1 };
@@ -85,6 +83,16 @@ export function getPortTile(
     case 'west':
       return { x: x - 1, y: y + tileIndex };
   }
+}
+
+export function effectiveSize(
+  type: { width: number; height: number },
+  orientation: Orientation,
+): { width: number; height: number } {
+  if (orientation === 90 || orientation === 270) {
+    return { width: type.height, height: type.width };
+  }
+  return { width: type.width, height: type.height };
 }
 
 /**
@@ -99,7 +107,7 @@ export function getAdjacentTile(
   cellIndex: number,
   machine: MachineInstance,
 ): { x: number; y: number } {
-  const { width, height } = machine.type;
+  const { width, height } = effectiveSize(machine.type, machine.orientation);
   const { x, y } = machine;
   switch (side) {
     case 'north':

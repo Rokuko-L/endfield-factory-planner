@@ -142,9 +142,11 @@ export class Renderer {
   private drawMachine(ctx: CanvasRenderingContext2D, m: MachineInstance): void {
     const t = this.tilePx;
     const { x, y } = m;
-    const { width, height } = m.type;
+    const { width: rawW, height: rawH } = m.type;
+    const isRot = m.orientation === 90 || m.orientation === 270;
+    const width = isRot ? rawH : rawW;
+    const height = isRot ? rawW : rawH;
 
-    // Footprint.
     ctx.fillStyle = '#39404f';
     ctx.fillRect(x * t, y * t, width * t, height * t);
     ctx.strokeStyle = '#8a93a8';
@@ -185,7 +187,9 @@ export class Renderer {
     const side = rotateSide(unrotatedSide, m.orientation);
     const palette = BAND_COLORS[`${band.resourceKind}-${band.type}`];
     if (!palette) return;
-    const { width, height } = m.type;
+    const isRot = m.orientation === 90 || m.orientation === 270;
+    const width = isRot ? m.type.height : m.type.width;
+    const height = isRot ? m.type.width : m.type.height;
     const { x, y } = m;
 
     // Subtle fill on each cell of the side.
@@ -246,10 +250,11 @@ export class Renderer {
     const palette = BAND_COLORS[`${port.kind}-${port.type}`];
     if (!palette) return;
     const { side, tileIndex } = transformPort(port, m);
-    const { width, height } = m.type;
     const { x, y } = m;
+    const isRot = m.orientation === 90 || m.orientation === 270;
+    const effW = isRot ? m.type.height : m.type.width;
+    const effH = isRot ? m.type.width : m.type.height;
 
-    // Cell origin in canvas pixels.
     let cx: number;
     let cy: number;
     switch (side) {
@@ -259,14 +264,14 @@ export class Renderer {
         break;
       case 'south':
         cx = x + tileIndex;
-        cy = y + height - 1;
+        cy = y + effH - 1;
         break;
       case 'west':
         cx = x;
         cy = y + tileIndex;
         break;
       case 'east':
-        cx = x + width - 1;
+        cx = x + effW - 1;
         cy = y + tileIndex;
         break;
     }

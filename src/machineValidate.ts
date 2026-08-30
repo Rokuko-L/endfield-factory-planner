@@ -67,8 +67,8 @@ function validatePort(p: PortDef, prefix: string): ValidationError[] {
   if (p.kind !== 'item' && p.kind !== 'fluid') errors.push({ field: `${prefix}.kind`, message: 'Kind must be "item" or "fluid".' });
   if (typeof p.tileIndex !== 'number' || p.tileIndex < 0) errors.push({ field: `${prefix}.tileIndex`, message: 'tileIndex must be ≥ 0.' });
   if (typeof p.rate !== 'number' || p.rate < 0) errors.push({ field: `${prefix}.rate`, message: 'rate must be ≥ 0.' });
-  if (!p.resource || typeof p.resource !== 'string' || p.resource.trim() === '') {
-    errors.push({ field: `${prefix}.resource`, message: 'resource is required.' });
+  if (typeof p.resource !== 'string') {
+    errors.push({ field: `${prefix}.resource`, message: 'resource must be a string.' });
   }
   return errors;
 }

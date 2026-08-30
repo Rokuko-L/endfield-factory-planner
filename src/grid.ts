@@ -1,3 +1,4 @@
+import { effectiveSize } from './geometry.ts';
 import type { MachineInstance, MachineType } from './types.ts';
 
 /**
@@ -50,8 +51,18 @@ export class Grid {
 
   /** True if every tile of the machine's footprint is in bounds and unoccupied by machines or connections. */
   canPlace(machine: MachineType, x: number, y: number): boolean {
-    for (let dy = 0; dy < machine.height; dy++) {
-      for (let dx = 0; dx < machine.width; dx++) {
+    return this.canPlaceWithOrientation(machine, x, y, 0);
+  }
+
+  canPlaceWithOrientation(
+    machine: MachineType,
+    x: number,
+    y: number,
+    orientation: import('./types.ts').Orientation,
+  ): boolean {
+    const { width, height } = effectiveSize(machine, orientation);
+    for (let dy = 0; dy < height; dy++) {
+      for (let dx = 0; dx < width; dx++) {
         if (!this.isFree(x + dx, y + dy)) return false;
       }
     }
@@ -65,14 +76,15 @@ export class Grid {
 
   /** Fills the machine's footprint tiles with its id. Throws on collision. */
   placeMachine(machine: MachineInstance): void {
-    if (!this.canPlace(machine.type, machine.x, machine.y)) {
+    if (!this.canPlaceWithOrientation(machine.type, machine.x, machine.y, machine.orientation)) {
       throw new Error(
         `Cannot place '${machine.type.name}' at (${machine.x}, ${machine.y}): ` +
           'footprint out of bounds or overlapping another machine or connection.',
       );
     }
-    for (let dy = 0; dy < machine.type.height; dy++) {
-      for (let dx = 0; dx < machine.type.width; dx++) {
+    const { width, height } = effectiveSize(machine.type, machine.orientation);
+    for (let dy = 0; dy < height; dy++) {
+      for (let dx = 0; dx < width; dx++) {
         this.machineCells[machine.y + dy]![machine.x + dx] = machine.id;
       }
     }

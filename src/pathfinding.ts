@@ -60,12 +60,12 @@ export function findPathMulti(
         }
         continue;
       }
-      // No clean L available — fall back to A* for this pair.
       const aPath = aStarPath(grid, s, e);
       if (aPath) {
         const cost = pathCost(aPath);
+        const expanded = expandPath(aPath);
         if (best === null || cost < best.cost) {
-          best = { path: aPath, cost };
+          best = { path: expanded, cost };
         }
       }
     }
