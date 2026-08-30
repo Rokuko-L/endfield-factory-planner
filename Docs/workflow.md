@@ -45,6 +45,14 @@ backend; the editor is fully client-side.
 endminsworkshop/
 ├── Docs/                This documentation tree
 ├── src/                 Application source
+│   ├── data/              Modular catalog (one file per category + index.ts barrel)
+│   ├── data.ts            Compatibility shim re-exporting data/index.ts
+│   ├── bands.ts           Edge-band resource lookup
+│   ├── ports.ts           Port-cell enumeration (allPortCells, pickPortAt)
+│   ├── connections.ts     Connection validation + creation
+│   ├── layout.ts          Editor state types
+│   ├── ids.ts             ID generation (UUID with fallback)
+│   └── ...
 ├── test/                Vitest unit tests
 ├── index.html           Vite entry
 ├── package.json
@@ -54,6 +62,16 @@ endminsworkshop/
 ```
 
 `node_modules/`, `dist/`, and editor scratch are gitignored.
+
+## Catalog Workflow
+
+- **Source of truth**: `src/data/` — one file per category plus
+  `index.ts` barrel. Edit directly to add or change machines.
+- **Quick iteration**: Define Machines → Save (localStorage) for
+  fast local iteration, Export JSON when ready to commit. Import JSON
+  reloads a previously exported catalog.
+- No `scraped/` or `scripts/` pipeline — the old wiki-scrape
+  machinery has been removed.
 
 ## Run Loop From WSL
 
@@ -79,8 +97,11 @@ namespace cannot reach directly — open the URL in a Windows browser.
 - **Click** on the grid to place the selected machine at that cell
   (the click becomes the top-left corner of its footprint).
 - **R** to rotate the next placement through 0° → 90° → 180° → 270°.
-- **Right-click** on a machine to remove it.
-- **Clear All** button to reset the layout.
+- **Right-click** on a machine to remove it (also removes its connections).
+- **Right-click** on a belt/pipe tile to remove the connection.
+- **Clear All** / **Clear Connections** buttons.
+- **Define Machines** — edit the catalog (Import/Export JSON, validation
+  on Save and on load).
 - The right-hand panel shows the live status, machine count, and the
   bounding-box area (in tiles) of all placed machines.
 

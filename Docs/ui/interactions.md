@@ -3,12 +3,16 @@
 The editor's interaction layer. `main.ts` owns the editor state, wires
 DOM events to the `Grid` and `Renderer`, and updates the status panel.
 There is no framework — just typed DOM access and small event
-handlers.
+handlers. Port and connection logic lives in `src/ports.ts` and
+`src/connections.ts`; ID generation in `src/ids.ts`; band resource
+lookup in `src/bands.ts`; state types in `src/layout.ts`.
 
 ## State
 
 ```ts
-const state = {
+// src/layout.ts — EditorState
+const state: EditorState = {
+  machineTypes: MachineType[];  // from loadMachineTypes() (validated on load)
   machines: MachineInstance[];
   connections: Connection[];
   selectedIndex: number;       // index into ALL_MACHINE_TYPES
@@ -77,17 +81,21 @@ results return `null` and the handlers become no-ops.
 
 ## Connection Flow
 
-1. User clicks somewhere on the canvas. `pickPortAt(tile)` walks
-   every machine's edge bands and single-tile ports and picks the
-   port cell whose adjacent tile is closest to the click (within a
-   3-tile radius).
+1. User clicks somewhere on the canvas. `pickPortAt(tile, machines)`
+   (in `src/ports.ts`) walks every machine's edge bands and
+   single-tile ports and picks the port cell whose adjacent tile is
+   closest to the click (within a 3-tile radius). Band resources are
+   resolved via `resourceForBand` in `src/bands.ts` (explicit
+   `edgeBands[side].resource` when present, else the machine's
+   recipe resources).
 2. **First click**: `state.draftSource` is set to the picked port
    info, `state.draftAdjacent` records the adjacent tile, and the
    status prompts the user to pick an input port. The renderer
    highlights the source cell.
-3. **Second click**: `completeDraft(picked)` validates the picks
-   (resource kind + name must match, source ≠ target machine) and
-   runs `findPathMulti(grid, source.adjacentTiles,
+3. **Second click**: `completeDraft(grid, source, target)` (in
+   `src/connections.ts`) validates the picks (resource kind + name
+   must match, source ≠ target machine) and runs
+   `findPathMulti(grid, source.adjacentTiles,
    target.adjacentTiles)`. The pathfinder is multi-source /
    multi-target: it considers **all** adjacent tiles on the source
    side and **all** on the target side, and picks the (start, end)

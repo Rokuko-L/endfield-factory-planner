@@ -1,0 +1,126 @@
+import type { MachineType } from "../types.ts";
+
+/** Electric Mining Rig — 2 recipes */
+export const ELECTRIC_MINING_RIG: MachineType = {
+  "name": "Electric Mining Rig",
+  "category": "Resourcing",
+  "width": 5,
+  "height": 5,
+  "ports": [],
+  "edgeBands": {},
+  "recipes": [
+    {
+      "id": "recipe_1",
+      "inputs": [],
+      "outputs": [
+        {
+          "resource": "Originium Ore",
+          "kind": "item",
+          "rate": 30
+        }
+      ]
+    },
+    {
+      "id": "recipe_2",
+      "inputs": [],
+      "outputs": [
+        {
+          "resource": "Amethyst Ore",
+          "kind": "item",
+          "rate": 30
+        }
+      ]
+    }
+  ]
+};
+
+/** Electric Mining Rig Mk II — 1 recipes */
+export const ELECTRIC_MINING_RIG_MK_II: MachineType = {
+  "name": "Electric Mining Rig Mk II",
+  "category": "Resourcing",
+  "width": 5,
+  "height": 5,
+  "ports": [],
+  "edgeBands": {},
+  "recipes": [
+    {
+      "id": "recipe_1",
+      "inputs": [],
+      "outputs": [
+        {
+          "resource": "Ferrium Ore",
+          "kind": "item",
+          "rate": 30
+        }
+      ]
+    }
+  ]
+};
+
+/** Fluid Pump — passthrough, no I/O */
+export const FLUID_PUMP: MachineType = {
+  "name": "Fluid Pump",
+  "category": "Resourcing",
+  "width": 5,
+  "height": 5,
+  "ports": [],
+  "edgeBands": {},
+  "recipes": []
+};
+
+/** Gas Extractor — passthrough, no I/O */
+export const GAS_EXTRACTOR: MachineType = {
+  "name": "Gas Extractor",
+  "category": "Resourcing",
+  "width": 5,
+  "height": 5,
+  "ports": [],
+  "edgeBands": {},
+  "recipes": []
+};
+
+/** Hydro Mining Rig — 1 recipes */
+export const HYDRO_MINING_RIG: MachineType = {
+  "name": "Hydro Mining Rig",
+  "category": "Resourcing",
+  "width": 5,
+  "height": 5,
+  "ports": [],
+  "edgeBands": {},
+  "recipes": [
+    {
+      "id": "recipe_1",
+      "inputs": [],
+      "outputs": [
+        {
+          "resource": "Cuprium Ore",
+          "kind": "item",
+          "rate": 30
+        }
+      ]
+    }
+  ]
+};
+
+/** Portable Originium Rig — 1 recipes */
+export const PORTABLE_ORIGINIUM_RIG: MachineType = {
+  "name": "Portable Originium Rig",
+  "category": "Resourcing",
+  "width": 5,
+  "height": 5,
+  "ports": [],
+  "edgeBands": {},
+  "recipes": [
+    {
+      "id": "recipe_1",
+      "inputs": [],
+      "outputs": [
+        {
+          "resource": "Originium Ore",
+          "kind": "item",
+          "rate": 30
+        }
+      ]
+    }
+  ]
+};

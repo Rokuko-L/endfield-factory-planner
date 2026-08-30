@@ -46,6 +46,8 @@ export interface EdgeBand {
   type: PortType;
   /** The category of resource flowing across this edge. */
   resourceKind: ResourceKind;
+  /** Optional specific resource name for this band (e.g. "Iron Ore"). When absent the band is unconfigured. */
+  resource?: string;
 }
 
 /** A recipe: a single transformation that takes N inputs and produces

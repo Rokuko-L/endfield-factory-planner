@@ -3,6 +3,8 @@ import {
   loadMachineTypes,
   saveMachineTypes,
   defaultMachineTypes,
+  exportCatalog,
+  importCatalog,
 } from './machineStore.ts';
 import { validateMachineTypes } from './machineValidate.ts';
 
@@ -23,6 +25,8 @@ export async function openMachineEditor(): Promise<MachineType[] | null> {
         <h2>Define Machines</h2>
         <div class="machine-editor-toolbar">
           <button type="button" data-act="add">+ Add Machine</button>
+          <button type="button" data-act="import">Import JSON</button>
+          <button type="button" data-act="export">Export JSON</button>
           <button type="button" data-act="reset">Reset to Defaults</button>
           <button type="button" data-act="save" class="primary">Save</button>
           <button type="button" data-act="cancel">Cancel</button>
@@ -119,43 +123,83 @@ export async function openMachineEditor(): Promise<MachineType[] | null> {
       }
     }
 
-    overlay.querySelector('[data-act="add"]')!.addEventListener("click", () => {
-      const fresh: MachineType = {
-        name: `New Machine ${state.types.length + 1}`,
-        category: "Miscellaneous",
-        width: 3,
-        height: 3,
-        ports: [],
-        recipes: [],
-        edgeBands: {},
-      };
-      state.types.push(fresh);
-      state.collapsed.delete("Miscellaneous");
-      state.selectedIndex = state.types.length - 1;
-      render();
-    });
+    function triggerImport() {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.json,application/json';
+      input.addEventListener('change', async () => {
+        const file = input.files?.[0];
+        if (!file) return;
+        const text = await file.text();
+        const result = importCatalog(text);
+        if (result.errors.length > 0) {
+          errorsEl.innerHTML = '';
+          for (const e of result.errors) {
+            const li = document.createElement('li');
+            li.textContent = `${e.field}: ${e.message}`;
+            errorsEl.appendChild(li);
+          }
+          return;
+        }
+        state.types = result.types;
+        state.selectedIndex = state.types.length > 0 ? 0 : -1;
+        render();
+      });
+      input.click();
+    }
 
-    overlay.querySelector('[data-act="reset"]')!.addEventListener("click", () => {
-      if (!confirm("Reset to defaults? This will discard your local edits.")) return;
-      state.types = defaultMachineTypes();
-      state.selectedIndex = 0;
-      render();
-    });
+    function triggerExport() {
+      const json = exportCatalog(state.types);
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'machines.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
 
-    overlay.querySelector('[data-act="save"]')!.addEventListener("click", () => {
-      const errs = validateMachineTypes(state.types);
-      if (errs.length > 0) {
-        renderErrors();
-        return;
+    overlay.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      const btn = target.closest('[data-act]') as HTMLElement | null;
+      if (!btn) return;
+      const act = btn.getAttribute('data-act');
+      if (act === 'add') {
+        const fresh: MachineType = {
+          name: `New Machine ${state.types.length + 1}`,
+          category: 'Miscellaneous',
+          width: 3,
+          height: 3,
+          ports: [],
+          recipes: [],
+          edgeBands: {},
+        };
+        state.types.push(fresh);
+        state.collapsed.delete('Miscellaneous');
+        state.selectedIndex = state.types.length - 1;
+        render();
+      } else if (act === 'import') {
+        triggerImport();
+      } else if (act === 'export') {
+        triggerExport();
+      } else if (act === 'reset') {
+        if (!confirm('Reset to defaults? This will discard your local edits.')) return;
+        state.types = defaultMachineTypes();
+        state.selectedIndex = 0;
+        render();
+      } else if (act === 'save') {
+        const errs = validateMachineTypes(state.types);
+        if (errs.length > 0) {
+          renderErrors();
+          return;
+        }
+        saveMachineTypes(state.types);
+        cleanup();
+        resolve(state.types);
+      } else if (act === 'cancel') {
+        cleanup();
+        resolve(null);
       }
-      saveMachineTypes(state.types);
-      cleanup();
-      resolve(state.types);
-    });
-
-    overlay.querySelector('[data-act="cancel"]')!.addEventListener("click", () => {
-      cleanup();
-      resolve(null);
     });
 
     function cleanup() {
@@ -260,7 +304,6 @@ function buildEdgeBandsSection(
   const bands = m.edgeBands ?? {};
   const list = document.createElement("div");
   list.className = "edge-bands";
-
   for (const side of VALID_SIDES) {
     const band = bands[side];
     const row = document.createElement("div");
@@ -285,6 +328,10 @@ function buildEdgeBandsSection(
           onChange({ ...m, edgeBands: nextBands });
         },
       );
+      const resourceInput = input("resource", band.resource ?? "", (v) => {
+        const nextBands = { ...bands, [side]: { ...band, resource: v.trim() || undefined } };
+        onChange({ ...m, edgeBands: nextBands });
+      });
       const remove = document.createElement("button");
       remove.type = "button";
       remove.textContent = "×";
@@ -294,7 +341,7 @@ function buildEdgeBandsSection(
         delete nextBands[side];
         onChange({ ...m, edgeBands: nextBands });
       });
-      row.append(typeSel, kindSel, remove);
+      row.append(typeSel, kindSel, resourceInput, remove);
     } else {
       const add = document.createElement("button");
       add.type = "button";
@@ -309,7 +356,6 @@ function buildEdgeBandsSection(
     }
     list.appendChild(row);
   }
-
   fieldset.appendChild(list);
   return fieldset;
 }
@@ -550,11 +596,33 @@ function numberInput(
   i.value = String(value);
   i.min = String(min);
   i.max = String(max);
+  const err = document.createElement("span");
+  err.className = "field-error";
+  err.style.display = "none";
+  err.style.color = "#f87171";
+  err.style.fontSize = "11px";
   i.addEventListener("input", () => {
-    const n = Number(i.value);
-    if (Number.isFinite(n)) onChange(n);
+    const raw = i.value.trim();
+    if (raw === "") {
+      err.textContent = "Required";
+      err.style.display = "inline";
+      return;
+    }
+    const n = Number(raw);
+    if (!Number.isFinite(n)) {
+      err.textContent = "Must be a number";
+      err.style.display = "inline";
+      return;
+    }
+    if (n < min || n > max) {
+      err.textContent = `Must be ${min}..${max}`;
+      err.style.display = "inline";
+      return;
+    }
+    err.style.display = "none";
+    onChange(n);
   });
-  wrap.appendChild(i);
+  wrap.append(i, err);
   return wrap;
 }
 

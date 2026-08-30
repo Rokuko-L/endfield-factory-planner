@@ -3,11 +3,46 @@
 How to add a new machine type and ship it through tests, dropdown,
 and editor.
 
-## 1. Define the `MachineType`
+## Add it in `src/data/`
 
-Open `src/data.ts` and append a new constant. A 3×3 Assembler with
-an item input on the entire south edge and an item output on the
-entire north edge:
+The catalog is the source of truth. Pick the file matching the
+category (e.g. `src/data/production-i.ts` for Production I, or
+create a new `src/data/<category>.ts`):
+
+```ts
+// src/data/production-i.ts
+export const ASSEMBLER: MachineType = {
+  name: 'Assembler',
+  width: 3,
+  height: 3,
+  ports: [],
+  edgeBands: {
+    south: { type: 'input',  resourceKind: 'item', resource: 'Iron Ore' },
+    north: { type: 'output', resourceKind: 'item', resource: 'Iron Plate' },
+  },
+  recipes: [
+    { id: 'recipe_1', inputs: [{ resource: 'Iron Ore', kind: 'item', rate: 30 }], outputs: [{ resource: 'Iron Plate', kind: 'item', rate: 30 }] },
+  ],
+};
+```
+
+Then add it to the barrel:
+
+```ts
+// src/data/index.ts
+import { ASSEMBLER } from "./production-i.ts";
+// ... re-export
+export const ALL_MACHINE_TYPES: MachineType[] = [ /* ... */ ASSEMBLER, /* ... */ ];
+```
+
+For quick iteration you can also use **Define Machines → Export
+JSON** to get a `machines.json` snapshot, hand-edit it, and Import it
+back. Or edit `src/data/*.ts` directly — no generation step needed.
+
+## `MachineType` shape
+
+A 3×3 Assembler with an item input on the entire south edge and an
+item output on the entire north edge:
 
 ```ts
 export const ASSEMBLER: MachineType = {
@@ -16,9 +51,10 @@ export const ASSEMBLER: MachineType = {
   height: 3,
   ports: [],
   edgeBands: {
-    south: { type: 'input',  resourceKind: 'item' },
-    north: { type: 'output', resourceKind: 'item' },
+    south: { type: 'input',  resourceKind: 'item', resource: 'Iron Ore' },
+    north: { type: 'output', resourceKind: 'item', resource: 'Iron Plate' },
   },
+  recipes: [ /* ... */ ],
 };
 ```
 
@@ -36,42 +72,29 @@ export const ASSEMBLER: MachineType = {
       id: 'water_in',
       type: 'input',
       side: 'west',
-      tileIndex: 1,         // center cell of the west edge
+      tileIndex: 1,
       resource: 'Water',
       kind: 'fluid',
       rate: 10,
     },
   ],
   edgeBands: {
-    south: { type: 'input',  resourceKind: 'item' },
-    north: { type: 'output', resourceKind: 'item' },
+    south: { type: 'input',  resourceKind: 'item', resource: 'Iron Ore' },
+    north: { type: 'output', resourceKind: 'item', resource: 'Iron Plate' },
   },
+  recipes: [ /* ... */ ],
 };
 ```
 
 Conventions:
 
-- `id` is unique within a `MachineType`. The editor doesn't depend on
-  the format, but `snake_case` is used in the existing data.
+- `id` is unique within a `MachineType`. `snake_case` is used in the existing data.
 - `rate` is **per minute for items**, **per second for fluids**.
-- `tileIndex` is 0-based. For 3-wide: indices 0 / 1 / 2 are
-  left / middle / right.
-- `side` and `tileIndex` are for the **unrotated** machine; the
-  editor rotates them automatically when the machine is placed.
+- `tileIndex` is 0-based. For 3-wide: indices 0 / 1 / 2 are left / middle / right.
+- `side` and `tileIndex` are for the **unrotated** machine; the editor rotates them automatically.
+- `edgeBands[].resource` is optional; when absent the band is "unconfigured" and `resourceForBand` falls back to the machine's recipe resources.
 
-## 2. Register It in `ALL_MACHINE_TYPES`
-
-The dropdown reads this array, so appending the new constant here is
-what makes the editor show it:
-
-```ts
-export const ALL_MACHINE_TYPES: MachineType[] = [MINER, FURNACE, ASSEMBLER];
-```
-
-`main.ts` does the rest — `populateSelector()` iterates the array and
-labels each option as `${name}  (${width}×${height})`.
-
-## 3. Sanity-Check the Rotation
+## Sanity-Check the Rotation
 
 Edge bands rotate automatically through `rotateSide`, so you don't
 have to think about them per orientation. Single-tile ports go
@@ -89,7 +112,7 @@ If any of these surprise you, double-check the source `side` and
 `tileIndex` first. The geometry math is in
 [core/geometry.md](../core/geometry.md).
 
-## 4. Run the Tests
+## Run the Tests
 
 ```bash
 npm test
@@ -100,7 +123,7 @@ want explicit coverage for the new machine, add a block in
 `test/geometry.test.ts` mirroring the existing
 `describe('Furnace ports stay on their rotated edges', ...)` block.
 
-## 5. Smoke-Test in the Browser
+## Smoke-Test in the Browser
 
 ```bash
 npm run dev
@@ -123,4 +146,3 @@ offsets) and rework `Grid.canPlace` to iterate that. That's a real
 data-model change — discuss before implementing.
 
 Related: [data.md](../core/data.md) · [geometry.md](../core/geometry.md) · [testing.md](testing.md) · [types.md](../core/types.md)
-

@@ -14,15 +14,31 @@ optimization, routing, or backend — everything runs client-side.
 ```
 src/
   types.ts        // Domain model: MachineInstance, MachineType, PortDef, EdgeBand, Connection, Layout
-  data.ts         // Catalog: ALL_MACHINE_TYPES (38 wiki machines + 2 hand-crafted placeholders)
-  grid.ts         // Tile-occupancy grid (machines + connections): canPlace, placeMachine, removeMachine, placeConnectionTiles, removeConnection
-  geometry.ts     // Side rotation + port tile computation (transformPort, getAdjacentTile, getPortAdjacentTile)
+  data/           // Modular catalog — one file per category + barrel (source of truth)
+    index.ts        // Barrel: re-exports every constant + ALL_MACHINE_TYPES
+    planting.ts     // Planting plots (10)
+    logistics-units.ts // Logistics Units (8, passthrough 1×1 — see data.md)
+    depot-access.ts // Depot Access (10)
+    resourcing.ts   // Resourcing rigs/pumps (6)
+    power.ts        // Power infra (5)
+    production-i.ts // Production I (7)
+    production-ii.ts// Production II (13)
+    miscellaneous.ts// Miscellaneous (1)
+    fixtures.ts     // MINER + FURNACE — test placeholders, not wiki-derived
+  data.ts         // Compatibility shim: export * from "./data/index.ts"
+  grid.ts         // Tile-occupancy grid (machines + connections)
+  geometry.ts     // Side rotation + port tile computation
   pathfinding.ts  // A* on free cells (findPath, findPathMulti, internal MinHeap)
   recipes.ts      // Connection auto-detect: matchRecipe, reconcileConnectionRecipes
+  bands.ts        // Edge-band resource lookup (resourceForBand)
+  ports.ts        // allPortCells, pickPortAt — enumerates every port cell on the grid
+  connections.ts  // completeDraft / buildConnection — validates and creates connections
+  layout.ts       // Editor state types (EditorState, PickedPort, PortCell)
+  ids.ts          // nextId — UUID with seeded fallback
   renderer.ts     // Canvas drawing (grid, connections, machines, ports, hover, draft)
   main.ts         // UI wiring, event handling, editor state (place + connect modes)
-  machineEditor.ts // Dev-only modal for editing the catalog
-  machineStore.ts  // localStorage persistence of the catalog
+  machineEditor.ts // Modal for editing the catalog (Import/Export, validation)
+  machineStore.ts  // Catalog persistence: localStorage + import/export + validation on load
   machineValidate.ts // Catalog validation
   style.css       // Editor styling
 index.html        // Vite entry (toolbar, canvas, status panel)
@@ -31,9 +47,6 @@ test/             // Vitest unit tests
   geometry.test.ts
   pathfinding.test.ts
   recipes.test.ts
-scrape.mjs         // Dev-only: fetch wiki pages (gitignored output in ./scraped/)
-parse.mjs         // Dev-only: parse HTML into machine records (gitignored output in ./parsed/)
-generate-data.mjs  // Dev-only: turn parsed records into src/data.ts
 ```
 
 **Data flow:**
@@ -42,7 +55,8 @@ generate-data.mjs  // Dev-only: turn parsed records into src/data.ts
 Mouse/keyboard events ──> main.ts (state, mode)
                          │
                          ├──> Grid.canPlace / placeMachine / removeMachine (src/grid.ts)
-                         ├──> findPath (src/pathfinding.ts) for connections
+                         ├──> pickPortAt / allPortCells (src/ports.ts) + resourceForBand (src/bands.ts)
+                         ├──> completeDraft (src/connections.ts) → findPathMulti (src/pathfinding.ts)
                          ├──> matchRecipe (src/recipes.ts) for connection auto-detect
                          │
                          └──> Renderer.draw (src/renderer.ts)
@@ -57,6 +71,10 @@ path → fills connection tiles). On every change it redraws the
 `Renderer` with the latest machine list, connections, hover
 preview, and the in-progress connection draft. The `Renderer` is a
 pure function of its inputs — it does not hold state.
+
+The catalog lives directly in `src/data/` (one file per category +
+barrel). Edit those files or use Define Machines → Export JSON to
+update the catalog. `scripts/` and `scraped/` have been removed.
 
 ---
 
@@ -74,7 +92,7 @@ pure function of its inputs — it does not hold state.
 | [ui/interactions.md](ui/interactions.md) | `main.ts` state machine, modes, event wiring, controls |
 | [reference/testing.md](reference/testing.md) | Vitest setup, what is covered, how to add tests |
 | [reference/extending.md](reference/extending.md) | How to add a new machine type (the canonical recipe) |
-| [reference/machine-editor.md](reference/machine-editor.md) | The dev-only machine editor modal |
+| [reference/machine-editor.md](reference/machine-editor.md) | The machine editor modal (Import/Export, validation) |
 
 ---
 
@@ -83,7 +101,7 @@ pure function of its inputs — it does not hold state.
 1. **Coordinates are grid tiles, top-left origin, y increasing downward.**
    `0,0` is the top-left cell; `width-1, height-1` is the bottom-right.
 2. **Port definitions are for the unrotated machine.** Rotation is applied
-   at render time and on port lookup — `data.ts` is orientation-agnostic.
+   at render time and on port lookup — `src/data/*` is orientation-agnostic.
 3. **Tile occupancy is the source of truth for placement.** Always go
    through `Grid.canPlace` before writing; `placeMachine` will throw on
    collision but the editor should *prevent* collisions, not just report
