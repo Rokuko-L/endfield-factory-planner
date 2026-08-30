@@ -27,3 +27,4 @@ coverage
 scraped/*
 !scraped/reports/
 parsed/
+.commandcode/
