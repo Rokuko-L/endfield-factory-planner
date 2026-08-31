@@ -88,7 +88,7 @@ export function sinkTotals(
   const out = new Map<string, { count: number; resources: Map<string, number> }>();
   for (const c of connections) {
     const target = byId.get(c.toMachineId);
-    if (!target || !isDepotSink(target)) continue;
+    if (!target || !(isDepotSink(target) || target.type.name === 'Refining Unit')) continue;
     let entry = out.get(target.id);
     if (!entry) {
       entry = { count: 0, resources: new Map() };
@@ -98,4 +98,17 @@ export function sinkTotals(
     entry.resources.set(c.resource, (entry.resources.get(c.resource) ?? 0) + 1);
   }
   return out;
+}
+
+export function stalledCount(connections: Connection[], machines: MachineInstance[]): number {
+  const byId = new Map(machines.map((m) => [m.id, m] as const));
+  let n = 0;
+  for (const c of connections) {
+    if (c.matchedRecipeId != null) continue;
+    const target = byId.get(c.toMachineId);
+    if (!target) continue;
+    if (isDepotMachine(target)) continue;
+    n++;
+  }
+  return n;
 }

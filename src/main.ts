@@ -6,7 +6,7 @@ import { openMachineEditor } from './machineEditor.ts';
 import { nextId } from './ids.ts';
 import { pickPortAt } from './ports.ts';
 import { completeDraft } from './connections.ts';
-import { isDepotMachine, loadDepotAssignments, saveDepotAssignments, sinkTotals } from './depot.ts';
+import { isDepotMachine, loadDepotAssignments, saveDepotAssignments, sinkTotals, stalledCount } from './depot.ts';
 import { openDepotPicker } from './depotPicker.ts';
 import type { MachineInstance, MachineType, Orientation } from './types.ts';
 import type { EditorState } from './layout.ts';
@@ -221,13 +221,22 @@ function updateMetrics(): void {
       text += `\n  ${label}: ${parts || '—'}`;
     }
   }
-  const stalled = state.connections.filter((c) => c.matchedRecipeId == null).length;
+  const stalled = stalledCount(state.connections, state.machines);
   if (stalled > 0) text += `\nStalled: ${stalled} (no recipe)`;
   metricsEl.textContent = text;
 }
 
+function effectivePicked(picked: ReturnType<typeof pickPortAt>): NonNullable<ReturnType<typeof pickPortAt>> {
+  if (!picked) return picked as never;
+  const assignment = state.depotAssignments[picked.machine.id];
+  if (assignment && assignment.resource.trim() !== '') {
+    return { ...picked, resource: assignment.resource, kind: assignment.kind } as typeof picked;
+  }
+  return picked;
+}
+
 function handleConnectClick(tile: { x: number; y: number }): void {
-  const picked = pickPortAt(tile, state.machines);
+  let picked = pickPortAt(tile, state.machines);
   if (!picked) {
     if (state.draftSource) setStatus('Cancelled connection draft.');
     state.draftSource = null;
@@ -236,6 +245,7 @@ function handleConnectClick(tile: { x: number; y: number }): void {
     redraw();
     return;
   }
+  picked = effectivePicked(picked);
   if (!state.draftSource) {
     state.draftSource = {
       machine: picked.machine,
@@ -248,8 +258,9 @@ function handleConnectClick(tile: { x: number; y: number }): void {
     };
     state.draftAdjacent = picked.cell;
     state.draftPath = null;
+    const label = picked.resource.trim() !== '' ? picked.resource : 'generic';
     setStatus(
-      `Source picked: ${picked.resource} (${picked.kind}) on ${picked.machine.type.name}. Click an input port to connect.`,
+      `Source picked: ${label} (${picked.kind}) on ${picked.machine.type.name}. Click an input port to connect.`,
     );
     redraw();
     return;
