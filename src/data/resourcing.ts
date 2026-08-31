@@ -1,6 +1,6 @@
 import type { MachineType } from "../types.ts";
 
-/** Electric Mining Rig — 2 recipes */
+/** Electric Mining Rig */
 export const ELECTRIC_MINING_RIG: MachineType = {
   "name": "Electric Mining Rig",
   "category": "Resourcing",
@@ -34,7 +34,7 @@ export const ELECTRIC_MINING_RIG: MachineType = {
   ]
 };
 
-/** Electric Mining Rig Mk II — 1 recipes */
+/** Electric Mining Rig Mk II */
 export const ELECTRIC_MINING_RIG_MK_II: MachineType = {
   "name": "Electric Mining Rig Mk II",
   "category": "Resourcing",
@@ -57,7 +57,7 @@ export const ELECTRIC_MINING_RIG_MK_II: MachineType = {
   ]
 };
 
-/** Fluid Pump — passthrough, no I/O */
+/** Fluid Pump */
 export const FLUID_PUMP: MachineType = {
   "name": "Fluid Pump",
   "category": "Resourcing",
@@ -68,7 +68,7 @@ export const FLUID_PUMP: MachineType = {
   "recipes": []
 };
 
-/** Gas Extractor — passthrough, no I/O */
+/** Gas Extractor */
 export const GAS_EXTRACTOR: MachineType = {
   "name": "Gas Extractor",
   "category": "Resourcing",
@@ -79,7 +79,7 @@ export const GAS_EXTRACTOR: MachineType = {
   "recipes": []
 };
 
-/** Hydro Mining Rig — 1 recipes */
+/** Hydro Mining Rig */
 export const HYDRO_MINING_RIG: MachineType = {
   "name": "Hydro Mining Rig",
   "category": "Resourcing",
@@ -102,7 +102,7 @@ export const HYDRO_MINING_RIG: MachineType = {
   ]
 };
 
-/** Portable Originium Rig — 1 recipes */
+/** Portable Originium Rig */
 export const PORTABLE_ORIGINIUM_RIG: MachineType = {
   "name": "Portable Originium Rig",
   "category": "Resourcing",
@@ -124,3 +124,4 @@ export const PORTABLE_ORIGINIUM_RIG: MachineType = {
     }
   ]
 };
+

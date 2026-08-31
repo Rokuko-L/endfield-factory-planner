@@ -305,11 +305,6 @@ export class Renderer {
     ctx.stroke();
   }
 
-  /**
-   * Paint a routed connection as a colored fill on every tile of the
-   * path. Draws after the grid and before machines so the machine
-   * footprint covers the connection's tiles near the machine edges.
-   */
   private drawConnections(ctx: CanvasRenderingContext2D, connections: Connection[]): void {
     const t = this.tilePx;
     for (const c of connections) {
@@ -317,13 +312,40 @@ export class Renderer {
       ctx.fillStyle = palette.fill;
       ctx.strokeStyle = palette.stroke;
       ctx.lineWidth = 2;
-      for (const tile of c.path) {
+      for (let i = 0; i < c.path.length; i++) {
+        const tile = c.path[i]!;
         const px = tile.x * t;
         const py = tile.y * t;
         ctx.fillRect(px, py, t, t);
         ctx.strokeRect(px + 1, py + 1, t - 2, t - 2);
+        const dir = this.directionAt(c.path, i);
+        if (!dir) continue;
+        const cx = (tile.x + 0.5) * t;
+        const cy = (tile.y + 0.5) * t;
+        const s = t * 0.34;
+        ctx.fillStyle = palette.stroke;
+        ctx.beginPath();
+        ctx.moveTo(cx + dir.dx * s * 0.5, cy + dir.dy * s * 0.5);
+        ctx.lineTo(cx - dir.dx * s * 0.28 + dir.dy * s * 0.28, cy - dir.dy * s * 0.28 - dir.dx * s * 0.28);
+        ctx.lineTo(cx - dir.dx * s * 0.28 - dir.dy * s * 0.28, cy - dir.dy * s * 0.28 + dir.dx * s * 0.28);
+        ctx.closePath();
+        ctx.fill();
+        ctx.fillStyle = palette.fill;
+        ctx.strokeStyle = palette.stroke;
       }
     }
+  }
+
+  private directionAt(path: { x: number; y: number }[], i: number): { dx: number; dy: number } | null {
+    if (path.length < 2) return null;
+    if (i < path.length - 1) {
+      const a = path[i]!;
+      const b = path[i + 1]!;
+      return { dx: Math.sign(b.x - a.x), dy: Math.sign(b.y - a.y) };
+    }
+    const a = path[path.length - 2]!;
+    const b = path[path.length - 1]!;
+    return { dx: Math.sign(b.x - a.x), dy: Math.sign(b.y - a.y) };
   }
 
   /**
@@ -345,8 +367,22 @@ export class Renderer {
     }
     if (path && path.length > 0) {
       ctx.fillStyle = 'rgba(253,230,138,0.45)';
-      for (const tile of path) {
+      for (let i = 0; i < path.length; i++) {
+        const tile = path[i]!;
         ctx.fillRect(tile.x * t, tile.y * t, t, t);
+        const dir = this.directionAt(path, i);
+        if (!dir) continue;
+        const cx = (tile.x + 0.5) * t;
+        const cy = (tile.y + 0.5) * t;
+        const s = t * 0.3;
+        ctx.fillStyle = 'rgba(120,90,0,0.95)';
+        ctx.beginPath();
+        ctx.moveTo(cx + dir.dx * s * 0.5, cy + dir.dy * s * 0.5);
+        ctx.lineTo(cx - dir.dx * s * 0.28 + dir.dy * s * 0.28, cy - dir.dy * s * 0.28 - dir.dx * s * 0.28);
+        ctx.lineTo(cx - dir.dx * s * 0.28 - dir.dy * s * 0.28, cy - dir.dy * s * 0.28 + dir.dx * s * 0.28);
+        ctx.closePath();
+        ctx.fill();
+        ctx.fillStyle = 'rgba(253,230,138,0.45)';
       }
     }
   }

@@ -1,13 +1,22 @@
 import type { MachineType } from "../types.ts";
 
-/** Fitting Unit — 7 recipes */
+/** Fitting Unit */
 export const FITTING_UNIT: MachineType = {
   "name": "Fitting Unit",
   "category": "Production I",
-  "width": 5,
-  "height": 5,
+  "width": 3,
+  "height": 3,
   "ports": [],
-  "edgeBands": {},
+  "edgeBands": {
+    "north": {
+      "type": "output",
+      "resourceKind": "item"
+    },
+    "south": {
+      "type": "input",
+      "resourceKind": "item"
+    }
+  },
   "recipes": [
     {
       "id": "recipe_1",
@@ -138,14 +147,23 @@ export const FITTING_UNIT: MachineType = {
   ]
 };
 
-/** Moulding Unit — 7 recipes */
+/** Moulding Unit */
 export const MOULDING_UNIT: MachineType = {
   "name": "Moulding Unit",
   "category": "Production I",
-  "width": 5,
-  "height": 5,
+  "width": 3,
+  "height": 3,
   "ports": [],
-  "edgeBands": {},
+  "edgeBands": {
+    "north": {
+      "type": "output",
+      "resourceKind": "item"
+    },
+    "south": {
+      "type": "input",
+      "resourceKind": "item"
+    }
+  },
   "recipes": [
     {
       "id": "recipe_1",
@@ -281,14 +299,23 @@ export const MOULDING_UNIT: MachineType = {
   ]
 };
 
-/** Planting Unit — 6 recipes */
+/** Planting Unit */
 export const PLANTING_UNIT: MachineType = {
   "name": "Planting Unit",
   "category": "Production I",
   "width": 5,
   "height": 5,
   "ports": [],
-  "edgeBands": {},
+  "edgeBands": {
+    "north": {
+      "type": "output",
+      "resourceKind": "item"
+    },
+    "south": {
+      "type": "input",
+      "resourceKind": "item"
+    }
+  },
   "recipes": [
     {
       "id": "recipe_1",
@@ -411,14 +438,23 @@ export const PLANTING_UNIT: MachineType = {
   ]
 };
 
-/** Refining Unit — 26 recipes */
+/** Refining Unit */
 export const REFINING_UNIT: MachineType = {
   "name": "Refining Unit",
   "category": "Production I",
-  "width": 5,
-  "height": 5,
+  "width": 3,
+  "height": 3,
   "ports": [],
-  "edgeBands": {},
+  "edgeBands": {
+    "north": {
+      "type": "output",
+      "resourceKind": "item"
+    },
+    "south": {
+      "type": "input",
+      "resourceKind": "item"
+    }
+  },
   "recipes": [
     {
       "id": "recipe_1",
@@ -901,14 +937,23 @@ export const REFINING_UNIT: MachineType = {
   ]
 };
 
-/** Seed-Picking Unit — 10 recipes */
+/** Seed-Picking Unit */
 export const SEED_PICKING_UNIT: MachineType = {
   "name": "Seed-Picking Unit",
   "category": "Production I",
   "width": 5,
   "height": 5,
   "ports": [],
-  "edgeBands": {},
+  "edgeBands": {
+    "north": {
+      "type": "output",
+      "resourceKind": "item"
+    },
+    "south": {
+      "type": "input",
+      "resourceKind": "item"
+    }
+  },
   "recipes": [
     {
       "id": "recipe_1",
@@ -1093,14 +1138,23 @@ export const SEED_PICKING_UNIT: MachineType = {
   ]
 };
 
-/** Shredding Unit — 12 recipes */
+/** Shredding Unit */
 export const SHREDDING_UNIT: MachineType = {
   "name": "Shredding Unit",
   "category": "Production I",
-  "width": 5,
-  "height": 5,
+  "width": 3,
+  "height": 3,
   "ports": [],
-  "edgeBands": {},
+  "edgeBands": {
+    "north": {
+      "type": "output",
+      "resourceKind": "item"
+    },
+    "south": {
+      "type": "input",
+      "resourceKind": "item"
+    }
+  },
   "recipes": [
     {
       "id": "recipe_1",
@@ -1321,13 +1375,23 @@ export const SHREDDING_UNIT: MachineType = {
   ]
 };
 
-/** Water Treatment Unit — 3 recipes */
+/** Water Treatment Unit */
 export const WATER_TREATMENT_UNIT: MachineType = {
   "name": "Water Treatment Unit",
   "category": "Production I",
-  "width": 5,
-  "height": 5,
-  "ports": [],
+  "width": 3,
+  "height": 3,
+  "ports": [
+    {
+      "id": "port_1",
+      "type": "input",
+      "side": "east",
+      "tileIndex": 1,
+      "resource": "",
+      "kind": "fluid",
+      "rate": 30
+    }
+  ],
   "edgeBands": {},
   "recipes": [
     {
@@ -1339,13 +1403,7 @@ export const WATER_TREATMENT_UNIT: MachineType = {
           "rate": 30
         }
       ],
-      "outputs": [
-        {
-          "resource": "Clean Water",
-          "kind": "fluid",
-          "rate": 30
-        }
-      ],
+      "outputs": [],
       "time": 2
     },
     {
@@ -1357,13 +1415,7 @@ export const WATER_TREATMENT_UNIT: MachineType = {
           "rate": 30
         }
       ],
-      "outputs": [
-        {
-          "resource": "Clean Water",
-          "kind": "fluid",
-          "rate": 30
-        }
-      ],
+      "outputs": [],
       "time": 2
     },
     {
@@ -1375,14 +1427,9 @@ export const WATER_TREATMENT_UNIT: MachineType = {
           "rate": 30
         }
       ],
-      "outputs": [
-        {
-          "resource": "Clean Water",
-          "kind": "fluid",
-          "rate": 30
-        }
-      ],
+      "outputs": [],
       "time": 2
     }
   ]
 };
+

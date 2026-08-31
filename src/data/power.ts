@@ -1,33 +1,33 @@
 import type { MachineType } from "../types.ts";
 
-/** Electric Pylon — passthrough, no I/O */
+/** Electric Pylon */
 export const ELECTRIC_PYLON: MachineType = {
   "name": "Electric Pylon",
   "category": "Power",
-  "width": 5,
-  "height": 5,
+  "width": 2,
+  "height": 2,
   "ports": [],
   "edgeBands": {},
   "recipes": []
 };
 
-/** Relay Tower — passthrough, no I/O */
+/** Relay Tower */
 export const RELAY_TOWER: MachineType = {
   "name": "Relay Tower",
   "category": "Power",
-  "width": 5,
-  "height": 5,
+  "width": 3,
+  "height": 3,
   "ports": [],
   "edgeBands": {},
   "recipes": []
 };
 
-/** Thermal Bank — 6 recipes */
+/** Thermal Bank */
 export const THERMAL_BANK: MachineType = {
   "name": "Thermal Bank",
   "category": "Power",
-  "width": 5,
-  "height": 5,
+  "width": 2,
+  "height": 2,
   "ports": [],
   "edgeBands": {},
   "recipes": [
@@ -142,24 +142,25 @@ export const THERMAL_BANK: MachineType = {
   ]
 };
 
-/** Xiranite Pylon — passthrough, no I/O */
+/** Xiranite Pylon */
 export const XIRANITE_PYLON: MachineType = {
   "name": "Xiranite Pylon",
   "category": "Power",
-  "width": 5,
-  "height": 5,
+  "width": 2,
+  "height": 2,
   "ports": [],
   "edgeBands": {},
   "recipes": []
 };
 
-/** Xiranite Relay — passthrough, no I/O */
+/** Xiranite Relay */
 export const XIRANITE_RELAY: MachineType = {
   "name": "Xiranite Relay",
   "category": "Power",
-  "width": 5,
-  "height": 5,
+  "width": 3,
+  "height": 3,
   "ports": [],
   "edgeBands": {},
   "recipes": []
 };
+

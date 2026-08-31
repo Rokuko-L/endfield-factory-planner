@@ -1,12 +1,121 @@
 import type { MachineType } from "../types.ts";
 
-/** Expanded Crucible — 8 recipes */
+/** Expanded Crucible */
 export const EXPANDED_CRUCIBLE: MachineType = {
   "name": "Expanded Crucible",
   "category": "Production II",
-  "width": 5,
+  "width": 6,
   "height": 5,
-  "ports": [],
+  "ports": [
+    {
+      "id": "port_1",
+      "type": "input",
+      "side": "south",
+      "tileIndex": 1,
+      "resource": "",
+      "kind": "item",
+      "rate": 30
+    },
+    {
+      "id": "port_2",
+      "type": "input",
+      "side": "south",
+      "tileIndex": 2,
+      "resource": "",
+      "kind": "item",
+      "rate": 30
+    },
+    {
+      "id": "port_3",
+      "type": "input",
+      "side": "south",
+      "tileIndex": 3,
+      "resource": "",
+      "kind": "item",
+      "rate": 30
+    },
+    {
+      "id": "port_4",
+      "type": "input",
+      "side": "south",
+      "tileIndex": 4,
+      "resource": "",
+      "kind": "item",
+      "rate": 30
+    },
+    {
+      "id": "port_5",
+      "type": "output",
+      "side": "west",
+      "tileIndex": 1,
+      "resource": "",
+      "kind": "fluid",
+      "rate": 30
+    },
+    {
+      "id": "port_6",
+      "type": "output",
+      "side": "west",
+      "tileIndex": 3,
+      "resource": "",
+      "kind": "fluid",
+      "rate": 30
+    },
+    {
+      "id": "port_7",
+      "type": "output",
+      "side": "north",
+      "tileIndex": 1,
+      "resource": "",
+      "kind": "item",
+      "rate": 30
+    },
+    {
+      "id": "port_8",
+      "type": "output",
+      "side": "north",
+      "tileIndex": 2,
+      "resource": "",
+      "kind": "item",
+      "rate": 30
+    },
+    {
+      "id": "port_9",
+      "type": "output",
+      "side": "north",
+      "tileIndex": 3,
+      "resource": "",
+      "kind": "item",
+      "rate": 30
+    },
+    {
+      "id": "port_10",
+      "type": "output",
+      "side": "north",
+      "tileIndex": 4,
+      "resource": "",
+      "kind": "item",
+      "rate": 30
+    },
+    {
+      "id": "port_11",
+      "type": "input",
+      "side": "east",
+      "tileIndex": 1,
+      "resource": "",
+      "kind": "fluid",
+      "rate": 30
+    },
+    {
+      "id": "port_12",
+      "type": "input",
+      "side": "east",
+      "tileIndex": 3,
+      "resource": "",
+      "kind": "fluid",
+      "rate": 30
+    }
+  ],
   "edgeBands": {},
   "recipes": [
     {
@@ -211,14 +320,23 @@ export const EXPANDED_CRUCIBLE: MachineType = {
   ]
 };
 
-/** Filling Unit — 78 recipes */
+/** Filling Unit */
 export const FILLING_UNIT: MachineType = {
   "name": "Filling Unit",
   "category": "Production II",
-  "width": 5,
-  "height": 5,
+  "width": 6,
+  "height": 4,
   "ports": [],
-  "edgeBands": {},
+  "edgeBands": {
+    "north": {
+      "type": "output",
+      "resourceKind": "item"
+    },
+    "south": {
+      "type": "input",
+      "resourceKind": "item"
+    }
+  },
   "recipes": [
     {
       "id": "recipe_1",
@@ -2017,7 +2135,7 @@ export const FILLING_UNIT: MachineType = {
   ]
 };
 
-/** Fluid-Gas Transmuting Unit — 12 recipes */
+/** Fluid-Gas Transmuting Unit */
 export const FLUID_GAS_TRANSMUTING_UNIT: MachineType = {
   "name": "Fluid-Gas Transmuting Unit",
   "category": "Production II",
@@ -2245,14 +2363,23 @@ export const FLUID_GAS_TRANSMUTING_UNIT: MachineType = {
   ]
 };
 
-/** Forge of the Sky — 4 recipes */
+/** Forge of the Sky */
 export const FORGE_OF_THE_SKY: MachineType = {
   "name": "Forge of the Sky",
   "category": "Production II",
   "width": 5,
   "height": 5,
   "ports": [],
-  "edgeBands": {},
+  "edgeBands": {
+    "north": {
+      "type": "output",
+      "resourceKind": "item"
+    },
+    "south": {
+      "type": "input",
+      "resourceKind": "item"
+    }
+  },
   "recipes": [
     {
       "id": "recipe_1",
@@ -2349,7 +2476,7 @@ export const FORGE_OF_THE_SKY: MachineType = {
   ]
 };
 
-/** Gas Dispersing Unit — passthrough, no I/O */
+/** Gas Dispersing Unit */
 export const GAS_DISPERSING_UNIT: MachineType = {
   "name": "Gas Dispersing Unit",
   "category": "Production II",
@@ -2360,7 +2487,7 @@ export const GAS_DISPERSING_UNIT: MachineType = {
   "recipes": []
 };
 
-/** Gas Reactor Globe — 1 recipes */
+/** Gas Reactor Globe */
 export const GAS_REACTOR_GLOBE: MachineType = {
   "name": "Gas Reactor Globe",
   "category": "Production II",
@@ -2395,14 +2522,23 @@ export const GAS_REACTOR_GLOBE: MachineType = {
   ]
 };
 
-/** Gearing Unit — 7 recipes */
+/** Gearing Unit */
 export const GEARING_UNIT: MachineType = {
   "name": "Gearing Unit",
   "category": "Production II",
-  "width": 5,
-  "height": 5,
+  "width": 6,
+  "height": 4,
   "ports": [],
-  "edgeBands": {},
+  "edgeBands": {
+    "north": {
+      "type": "output",
+      "resourceKind": "item"
+    },
+    "south": {
+      "type": "input",
+      "resourceKind": "item"
+    }
+  },
   "recipes": [
     {
       "id": "recipe_1",
@@ -2568,14 +2704,23 @@ export const GEARING_UNIT: MachineType = {
   ]
 };
 
-/** Grinding Unit — 7 recipes */
+/** Grinding Unit */
 export const GRINDING_UNIT: MachineType = {
   "name": "Grinding Unit",
   "category": "Production II",
-  "width": 5,
-  "height": 5,
+  "width": 6,
+  "height": 4,
   "ports": [],
-  "edgeBands": {},
+  "edgeBands": {
+    "north": {
+      "type": "output",
+      "resourceKind": "item"
+    },
+    "south": {
+      "type": "input",
+      "resourceKind": "item"
+    }
+  },
   "recipes": [
     {
       "id": "recipe_1",
@@ -2741,14 +2886,23 @@ export const GRINDING_UNIT: MachineType = {
   ]
 };
 
-/** Packaging Unit — 11 recipes */
+/** Packaging Unit */
 export const PACKAGING_UNIT: MachineType = {
   "name": "Packaging Unit",
   "category": "Production II",
-  "width": 5,
-  "height": 5,
+  "width": 6,
+  "height": 4,
   "ports": [],
-  "edgeBands": {},
+  "edgeBands": {
+    "north": {
+      "type": "output",
+      "resourceKind": "item"
+    },
+    "south": {
+      "type": "input",
+      "resourceKind": "item"
+    }
+  },
   "recipes": [
     {
       "id": "recipe_1",
@@ -3006,13 +3160,50 @@ export const PACKAGING_UNIT: MachineType = {
   ]
 };
 
-/** Purification Unit — 6 recipes */
+/** Purification Unit */
 export const PURIFICATION_UNIT: MachineType = {
   "name": "Purification Unit",
   "category": "Production II",
   "width": 5,
   "height": 5,
-  "ports": [],
+  "ports": [
+    {
+      "id": "port_1",
+      "type": "input",
+      "side": "east",
+      "tileIndex": 1,
+      "resource": "",
+      "kind": "fluid",
+      "rate": 30
+    },
+    {
+      "id": "port_2",
+      "type": "input",
+      "side": "east",
+      "tileIndex": 3,
+      "resource": "",
+      "kind": "fluid",
+      "rate": 30
+    },
+    {
+      "id": "port_3",
+      "type": "input",
+      "side": "west",
+      "tileIndex": 1,
+      "resource": "",
+      "kind": "fluid",
+      "rate": 30
+    },
+    {
+      "id": "port_4",
+      "type": "input",
+      "side": "west",
+      "tileIndex": 3,
+      "resource": "",
+      "kind": "fluid",
+      "rate": 30
+    }
+  ],
   "edgeBands": {},
   "recipes": [
     {
@@ -3156,13 +3347,86 @@ export const PURIFICATION_UNIT: MachineType = {
   ]
 };
 
-/** Reactor Crucible — 8 recipes */
+/** Reactor Crucible */
 export const REACTOR_CRUCIBLE: MachineType = {
   "name": "Reactor Crucible",
   "category": "Production II",
   "width": 5,
   "height": 5,
-  "ports": [],
+  "ports": [
+    {
+      "id": "port_1",
+      "type": "input",
+      "side": "south",
+      "tileIndex": 1,
+      "resource": "",
+      "kind": "item",
+      "rate": 30
+    },
+    {
+      "id": "port_2",
+      "type": "input",
+      "side": "south",
+      "tileIndex": 3,
+      "resource": "",
+      "kind": "item",
+      "rate": 30
+    },
+    {
+      "id": "port_3",
+      "type": "output",
+      "side": "west",
+      "tileIndex": 1,
+      "resource": "",
+      "kind": "fluid",
+      "rate": 30
+    },
+    {
+      "id": "port_4",
+      "type": "output",
+      "side": "west",
+      "tileIndex": 3,
+      "resource": "",
+      "kind": "fluid",
+      "rate": 30
+    },
+    {
+      "id": "port_5",
+      "type": "output",
+      "side": "north",
+      "tileIndex": 1,
+      "resource": "",
+      "kind": "item",
+      "rate": 30
+    },
+    {
+      "id": "port_6",
+      "type": "output",
+      "side": "north",
+      "tileIndex": 3,
+      "resource": "",
+      "kind": "item",
+      "rate": 30
+    },
+    {
+      "id": "port_7",
+      "type": "input",
+      "side": "east",
+      "tileIndex": 1,
+      "resource": "",
+      "kind": "fluid",
+      "rate": 30
+    },
+    {
+      "id": "port_8",
+      "type": "input",
+      "side": "east",
+      "tileIndex": 3,
+      "resource": "",
+      "kind": "fluid",
+      "rate": 30
+    }
+  ],
   "edgeBands": {},
   "recipes": [
     {
@@ -3367,7 +3631,7 @@ export const REACTOR_CRUCIBLE: MachineType = {
   ]
 };
 
-/** Separating Unit — 74 recipes */
+/** Separating Unit */
 export const SEPARATING_UNIT: MachineType = {
   "name": "Separating Unit",
   "category": "Production II",
@@ -5081,7 +5345,7 @@ export const SEPARATING_UNIT: MachineType = {
   ]
 };
 
-/** Solid-Gas Transmuting Unit — 10 recipes */
+/** Solid-Gas Transmuting Unit */
 export const SOLID_GAS_TRANSMUTING_UNIT: MachineType = {
   "name": "Solid-Gas Transmuting Unit",
   "category": "Production II",
@@ -5272,3 +5536,4 @@ export const SOLID_GAS_TRANSMUTING_UNIT: MachineType = {
     }
   ]
 };
+

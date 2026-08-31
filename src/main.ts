@@ -6,6 +6,8 @@ import { openMachineEditor } from './machineEditor.ts';
 import { nextId } from './ids.ts';
 import { pickPortAt } from './ports.ts';
 import { completeDraft } from './connections.ts';
+import { isDepotMachine, loadDepotAssignments, saveDepotAssignments, sinkTotals } from './depot.ts';
+import { openDepotPicker } from './depotPicker.ts';
 import type { MachineInstance, MachineType, Orientation } from './types.ts';
 import type { EditorState } from './layout.ts';
 import './style.css';
@@ -40,6 +42,7 @@ const state: EditorState = {
   draftSource: null,
   draftAdjacent: null,
   draftPath: null,
+  depotAssignments: loadDepotAssignments(),
 };
 
 function selectedType(): MachineType {
@@ -108,9 +111,33 @@ function placeMachine(x: number, y: number): void {
   redraw();
 }
 
+async function handleDepotClick(machine: MachineInstance): Promise<boolean> {
+  if (!isDepotMachine(machine)) return false;
+  const current = state.depotAssignments[machine.id] ?? null;
+  const next = await openDepotPicker(machine, state.machineTypes, current);
+  if (next) {
+    state.depotAssignments[machine.id] = next;
+  } else if (current && !next) {
+    delete state.depotAssignments[machine.id];
+  } else if (!current && !next) {
+    setStatus(`No resource set for ${machine.type.name} — acts as generic sink/source.`);
+    redraw();
+    return true;
+  }
+  saveDepotAssignments(state.depotAssignments);
+  const label = next ? `${next.resource} (${next.kind})` : 'generic';
+  setStatus(`${machine.type.name} now ${label}.`);
+  redraw();
+  return true;
+}
+
 function removeMachineAt(x: number, y: number): void {
   const id = grid.getOccupancyAt(x, y);
   if (!id) return;
+  if (state.depotAssignments[id]) {
+    delete state.depotAssignments[id];
+    saveDepotAssignments(state.depotAssignments);
+  }
   const removedMachines = new Set([id]);
   for (const c of [...state.connections]) {
     if (removedMachines.has(c.fromMachineId) || removedMachines.has(c.toMachineId)) {
@@ -144,6 +171,8 @@ function clearAll(): void {
   state.draftSource = null;
   state.draftAdjacent = null;
   state.draftPath = null;
+  state.depotAssignments = {};
+  saveDepotAssignments(state.depotAssignments);
   setStatus('Cleared layout.');
   redraw();
 }
@@ -178,10 +207,23 @@ function boundingBoxArea(): number {
 
 function updateMetrics(): void {
   const area = boundingBoxArea();
-  metricsEl.textContent =
+  let text =
     `Machines: ${state.machines.length}\n` +
     `Connections: ${state.connections.length}\n` +
     `Bounding box: ${area} tile${area === 1 ? '' : 's'}`;
+  const sinks = sinkTotals(state.connections, state.machines);
+  if (sinks.size > 0) {
+    text += '\nSinks:';
+    for (const [id, info] of sinks) {
+      const m = state.machines.find((x) => x.id === id);
+      const label = m ? m.type.name : id;
+      const parts = [...info.resources.entries()].map(([r, n]) => `${r} x${n}`).join(', ');
+      text += `\n  ${label}: ${parts || '—'}`;
+    }
+  }
+  const stalled = state.connections.filter((c) => c.matchedRecipeId == null).length;
+  if (stalled > 0) text += `\nStalled: ${stalled} (no recipe)`;
+  metricsEl.textContent = text;
 }
 
 function handleConnectClick(tile: { x: number; y: number }): void {
@@ -305,11 +347,20 @@ canvas.addEventListener('pointerleave', () => {
   redraw();
 });
 
-canvas.addEventListener('click', (e) => {
+canvas.addEventListener('click', async (e) => {
   const tile = eventToTile(e);
   if (!tile) return;
-  if (state.mode === 'place') placeMachine(tile.x, tile.y);
-  else handleConnectClick(tile);
+  if (state.mode === 'place') {
+    const occupantId = grid.getOccupancyAt(tile.x, tile.y);
+    if (occupantId) {
+      const occupant = state.machines.find((m) => m.id === occupantId);
+      if (occupant && isDepotMachine(occupant)) {
+        await handleDepotClick(occupant);
+        return;
+      }
+    }
+    placeMachine(tile.x, tile.y);
+  } else handleConnectClick(tile);
 });
 
 canvas.addEventListener('contextmenu', (e) => {

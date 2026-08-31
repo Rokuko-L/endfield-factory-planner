@@ -21,6 +21,12 @@ export interface PortCell {
   adjacentTiles: { x: number; y: number }[];
 }
 
+export interface DepotAssignment {
+  resource: string;
+  kind: ResourceKind;
+  rate: number;
+}
+
 export interface EditorState {
   machineTypes: import('./types.ts').MachineType[];
   machines: MachineInstance[];
@@ -33,4 +39,5 @@ export interface EditorState {
   draftSource: PickedPort | null;
   draftAdjacent: { x: number; y: number } | null;
   draftPath: { x: number; y: number }[] | null;
+  depotAssignments: Record<string, DepotAssignment>;
 }
