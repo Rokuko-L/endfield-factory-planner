@@ -26,6 +26,10 @@ export async function openDepotPicker(
         </div>
       </header>
       <div class="machine-editor-body" style="flex-direction:column;gap:12px;padding:16px;">
+        <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;">
+          <label class="field" style="min-width:160px;"><span class="field-label">Source rate /min</span><input type="number" min="0" step="1" data-role="rate" value="30" style="width:100%;" /></label>
+          <label class="field" style="min-width:160px;"><span class="field-label">Kind</span><input type="text" data-role="kind" value="${escapeHtml(kind ?? 'item')}" readonly /></label>
+        </div>
         <label class="field"><span class="field-label">Search</span><input type="text" data-role="search" placeholder="Filter resources…" style="width:100%;" /></label>
         <div data-role="list" style="max-height:320px;overflow:auto;border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:8px;display:flex;flex-direction:column;gap:4px;"></div>
         <div data-role="picked" style="font-size:13px;opacity:0.9;"></div>
@@ -36,6 +40,8 @@ export async function openDepotPicker(
     const searchEl = overlay.querySelector('[data-role="search"]') as HTMLInputElement;
     const listEl = overlay.querySelector('[data-role="list"]') as HTMLElement;
     const pickedEl = overlay.querySelector('[data-role="picked"]') as HTMLElement;
+    const rateEl = overlay.querySelector('[data-role="rate"]') as HTMLInputElement;
+    if (rateEl && current) rateEl.value = String(current.rate);
 
     let selected: DepotAssignment | null = current ? { ...current } : null;
     let filter = '';
@@ -81,6 +87,10 @@ export async function openDepotPicker(
       if (!act) return;
       const a = act.getAttribute('data-act');
       if (a === 'save') {
+        if (selected) {
+          const r = Number((overlay.querySelector('[data-role="rate"]') as HTMLInputElement).value);
+          selected = { ...selected, rate: Number.isFinite(r) && r >= 0 ? r : 30 };
+        }
         cleanup();
         resolve(selected);
       } else if (a === 'clear') {

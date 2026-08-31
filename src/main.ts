@@ -8,7 +8,8 @@ import { pickPortAt } from './ports.ts';
 import { completeDraft } from './connections.ts';
 import { isDepotMachine, loadDepotAssignments, saveDepotAssignments, sinkTotals, stalledCount } from './depot.ts';
 import { openDepotPicker } from './depotPicker.ts';
-import type { MachineInstance, MachineType, Orientation } from './types.ts';
+import { renderRecipeInfoPanel } from './recipeInfoUi.ts';
+import type { Connection, MachineInstance, MachineType, Orientation } from './types.ts';
 import type { EditorState } from './layout.ts';
 import './style.css';
 
@@ -25,7 +26,19 @@ const clearConnectionsBtn = document.querySelector<HTMLButtonElement>('#clear-co
 const modePlaceBtn = document.querySelector<HTMLButtonElement>('#mode-place')!;
 const modeConnectBtn = document.querySelector<HTMLButtonElement>('#mode-connect')!;
 const defineMachinesBtn = document.querySelector<HTMLButtonElement>('#define-machines')!;
+const demoBtn = document.querySelector<HTMLButtonElement>('#demo-lc-valley')!;
+const recipeInfoEl = document.querySelector<HTMLElement>('#recipe-info')!;
 const canvas = document.querySelector<HTMLCanvasElement>('#grid')!;
+
+let selectedMachineId: string | null = null;
+function selectedMachine(): MachineInstance | null {
+  if (!selectedMachineId) return null;
+  return state.machines.find((m) => m.id === selectedMachineId) ?? null;
+}
+function refreshRecipeInfo(): void {
+  const m = selectedMachine();
+  renderRecipeInfoPanel(recipeInfoEl, m, state.connections, m ? state.depotAssignments[m.id] : undefined);
+}
 
 const grid = new Grid(GRID_SIZE, GRID_SIZE);
 const renderer = new Renderer(canvas, grid);
@@ -187,6 +200,98 @@ function clearConnections(): void {
   redraw();
 }
 
+function placeDemoMachine(
+  typeName: string,
+  x: number,
+  y: number,
+  orientation: Orientation = 0,
+): MachineInstance | null {
+  const type = state.machineTypes.find((t) => t.name === typeName);
+  if (!type) return null;
+  if (!grid.canPlaceWithOrientation(type, x, y, orientation)) return null;
+  const m: MachineInstance = { id: nextId('machine'), type, x, y, orientation };
+  grid.placeMachine(m);
+  state.machines.push(m);
+  return m;
+}
+
+function demoConnect(
+  from: MachineInstance,
+  to: MachineInstance,
+  resource: string,
+  kind: 'item' | 'fluid',
+): Connection | null {
+  const fromType = from.type;
+  const toType = to.type;
+  if (fromType.ports.length === 0 || toType.ports.length === 0) return null;
+  const fp = fromType.ports.find((p) => p.kind === kind) ?? fromType.ports[0]!;
+  const tp = toType.ports.find((p) => p.kind === kind) ?? toType.ports[0]!;
+  const source: ReturnType<typeof pickPortAt> = {
+    machine: from,
+    side: 'north',
+    cellIndex: 0,
+    kind: fp.kind,
+    resource: fp.resource,
+    portId: `port:${fp.id}`,
+    cell: { x: from.x, y: from.y - 1 },
+    adjacentTiles: [{ x: from.x, y: from.y - 1 }],
+  };
+  const target: ReturnType<typeof pickPortAt> = {
+    machine: to,
+    side: 'south',
+    cellIndex: 0,
+    kind: tp.kind,
+    resource: tp.resource,
+    portId: `port:${tp.id}`,
+    cell: { x: to.x, y: to.y + 1 },
+    adjacentTiles: [{ x: to.x, y: to.y + 1 }],
+  };
+  const sourceWithResource = { ...source, resource } as typeof source;
+  const result = completeDraft(grid, sourceWithResource, target);
+  if ('error' in result) {
+    setStatus(`Demo connect failed: ${result.error}`, true);
+    return null;
+  }
+  try {
+    grid.placeConnectionTiles(result.connection.id, result.connection.path);
+  } catch (err) {
+    setStatus(`Demo connect failed: ${(err as Error).message}`, true);
+    return null;
+  }
+  state.connections.push(result.connection);
+  return result.connection;
+}
+
+function loadLcValleyDemo(): void {
+  clearAll();
+  setMode('place');
+  const y = 6;
+  const ferriumUnloader = placeDemoMachine('Depot Unloader', 4, y + 4);
+  const ferriumConveyor = placeDemoMachine('Belt Bridge', 6, y + 4);
+  const fittingUnit = placeDemoMachine('Fitting Unit', 7, y + 3);
+  const originUnloader = placeDemoMachine('Depot Unloader', 4, y + 10);
+  const originConveyor = placeDemoMachine('Belt Bridge', 6, y + 10);
+  const packagingUnit = placeDemoMachine('Packaging Unit', 7, y + 7);
+  const lcLoader = placeDemoMachine('Depot Loader', 14, y + 6);
+  if (!ferriumUnloader || !ferriumConveyor || !fittingUnit || !originUnloader || !originConveyor || !packagingUnit || !lcLoader) {
+    setStatus('Demo: missing required machines in catalog.', true);
+    return;
+  }
+  state.depotAssignments[ferriumUnloader.id] = { resource: 'Ferrium', kind: 'item', rate: 30 };
+  state.depotAssignments[originUnloader.id] = { resource: 'Originium Powder', kind: 'item', rate: 60 };
+  saveDepotAssignments(state.depotAssignments);
+  const ferriumToFitting = demoConnect(ferriumUnloader, fittingUnit, 'Ferrium', 'item');
+  const fittingToPackaging = demoConnect(fittingUnit, packagingUnit, 'Ferrium Part', 'item');
+  const originToPackaging = demoConnect(originUnloader, packagingUnit, 'Originium Powder', 'item');
+  const packagingToLoader = demoConnect(packagingUnit, lcLoader, 'LC Valley Battery', 'item');
+  if (!ferriumToFitting || !fittingToPackaging || !originToPackaging || !packagingToLoader) {
+    setStatus('Demo: one or more demo connections failed.', true);
+  }
+  selectedMachineId = packagingUnit.id;
+  setStatus('LC Valley demo loaded — 6 LC Valley Battery / min, 100% efficiency.');
+  redraw();
+}
+
 function boundingBoxArea(): number {
   if (state.machines.length === 0) return 0;
   let minX = Infinity;
@@ -322,6 +427,7 @@ function redraw(): void {
     state.draftPath,
   );
   updateMetrics();
+  refreshRecipeInfo();
 }
 
 function populateSelector(): void {
@@ -369,9 +475,25 @@ canvas.addEventListener('click', async (e) => {
         await handleDepotClick(occupant);
         return;
       }
+      if (occupant) {
+        selectedMachineId = occupant.id;
+        refreshRecipeInfo();
+        return;
+      }
     }
     placeMachine(tile.x, tile.y);
-  } else handleConnectClick(tile);
+  } else {
+    handleConnectClick(tile);
+  }
+});
+
+canvas.addEventListener('click', (e) => {
+  if (e.detail >= 2) return;
+});
+
+recipeInfoEl.addEventListener('recipe-info-close', () => {
+  selectedMachineId = null;
+  refreshRecipeInfo();
 });
 
 canvas.addEventListener('contextmenu', (e) => {
@@ -396,6 +518,7 @@ defineMachinesBtn.addEventListener('click', async () => {
     redraw();
   }
 });
+demoBtn.addEventListener('click', loadLcValleyDemo);
 
 window.addEventListener('keydown', (e) => {
   if (e.target instanceof HTMLSelectElement) return;
