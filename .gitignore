@@ -17,9 +17,11 @@ pnpm-debug.log*
 .idea
 .vscode/*
 !.vscode/extensions.json
+.commandcode/
 
 # Coverage
 coverage
 
-# (scraped/ and parsed/ removed — catalog now lives directly in src/data/)
-.commandcode/
+# Images
+enkad-images
+
