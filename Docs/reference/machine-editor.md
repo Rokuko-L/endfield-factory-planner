@@ -7,10 +7,11 @@ catalog of `MachineType` entries that the rest of the editor uses.
 
 - **Hard-coded defaults**: `src/data/*.ts` + barrel `src/data/index.ts`
   (`src/data.ts` is a compatibility shim re-exporting the barrel).
-- **At runtime**: `state.machineTypes` in `src/main.ts`, hydrated
+- **At runtime**: `state.machineTypes` in `src/editor/state.ts` (wired by `src/main.ts`), hydrated
   from `localStorage` on page load, validated via `machineValidate`.
   Corrupt or invalid localStorage is evicted and falls back to
   `ALL_MACHINE_TYPES`.
+- **Editor UI**: `src/machineEditor/*` — `index.ts` owns the overlay, `grouping.ts` orders categories, `machineForm.ts` builds the per-machine form, `formControls.ts` holds shared inputs.
 - **Persisted (session)**: `localStorage[endfield.machineTypes.v1]`.
   JSON blob. View / edit from DevTools → Application → Local Storage.
 - **Persisted (durable)**: edit `src/data/*.ts` directly, or export a

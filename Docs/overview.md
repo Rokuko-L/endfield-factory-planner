@@ -40,8 +40,25 @@ src/
   layout.ts       // Editor state types (EditorState, PickedPort, PortCell, DepotAssignment)
   ids.ts          // nextId — UUID with seeded fallback
   renderer.ts     // Canvas drawing (grid, connections, machines, ports, hover, draft)
-  main.ts         // UI wiring, event handling, editor state (place + connect modes)
-  machineEditor.ts // Modal for editing the catalog (Import/Export, validation)
+  editor/         // Editor wiring split from main.ts (composition root)
+    state.ts        // Grid, EditorState, selectedMachine, renderer
+    status.ts       // setStatus
+    metrics.ts      // boundingBoxArea, updateMetrics
+    canvas.ts       // eventToTile
+    selection.ts    // refreshRecipeInfo
+    placement.ts    // placeMachine, removeMachineAt, clearAll, populateSelector, rotate
+    connect.ts      // handleDepotClick, handleConnectClick, setMode
+    demo.ts         // loadLcValleyDemo
+    redraw.ts       // redraw
+  machineEditor/  // Define Machines modal (split from machineEditor.ts)
+    index.ts        // openMachineEditor (overlay + toolbar)
+    grouping.ts     // groupByCategory
+    formControls.ts // input, numberInput, select, escapeHtml
+    machineForm.ts  // buildMachineForm + header + footprint fields
+    edgeBandForm.ts // buildEdgeBandsSection
+    portForm.ts     // buildPortsSection
+    recipeForm.ts   // buildRecipesSection + slot list
+  main.ts         // Thin composition root: queries DOM, wires events, calls editor/*
   machineStore.ts  // Catalog persistence: localStorage + import/export + validation on load
   machineValidate.ts // Catalog validation
   style.css       // Editor styling
@@ -68,13 +85,7 @@ Mouse/keyboard events ──> main.ts (state, mode)
                                  └──> geometry.getAdjacentTile per port (src/geometry.ts)
 ```
 
-`main.ts` owns the editor state and the `Grid` instance. It runs in
-one of two modes: **place** (default — click to add machines) or
-**connect** (click output port → click input port → A* finds a
-path → fills connection tiles). On every change it redraws the
-`Renderer` with the latest machine list, connections, hover
-preview, and the in-progress connection draft. The `Renderer` is a
-pure function of its inputs — it does not hold state.
+`main.ts` is a thin composition root that wires DOM events to `src/editor/*` and `src/machineEditor/*`. The shared `EditorState` + `Grid` + `Renderer` live in `src/editor/state.ts` (`main.ts` owns the wiring, not the logic). On every change the editor redraws via `editor/redraw.ts` → `Renderer.draw` (pure). See `[ui/interactions.md](ui/interactions.md)` for the event table.
 
 The catalog lives directly in `src/data/` (one file per category +
 barrel). Edit those files or use Define Machines → Export JSON to

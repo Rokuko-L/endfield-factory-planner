@@ -1,11 +1,13 @@
-# UI / Interactions (`src/main.ts`, `index.html`, `src/style.css`)
+# UI / Interactions (`src/main.ts` + `src/editor/*`, `index.html`, `src/style.css`)
 
-The editor's interaction layer. `main.ts` owns the editor state, wires
-DOM events to the `Grid` and `Renderer`, and updates the status panel.
-There is no framework — just typed DOM access and small event
-handlers. Port and connection logic lives in `src/ports.ts` and
-`src/connections.ts`; ID generation in `src/ids.ts`; band resource
-lookup in `src/bands.ts`; state types in `src/layout.ts`.
+The editor's interaction layer. `main.ts` is a thin composition root
+that wires DOM events; the actual editor logic lives in `src/editor/*`
+and the Define Machines modal in `src/machineEditor/*`. There is no
+framework — just typed DOM access and small event handlers. Port and
+connection logic lives in `src/ports.ts` and `src/connections.ts`; ID
+generation in `src/ids.ts`; band resource lookup in `src/bands.ts`;
+state types in `src/layout.ts`; shared `EditorState` + `Grid` +
+`Renderer` in `src/editor/state.ts`.
 
 ## State
 
