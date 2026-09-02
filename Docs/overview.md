@@ -33,7 +33,11 @@ src/
   bands.ts        // Edge-band resource lookup (resourceForBand)
   ports.ts        // allPortCells, pickPortAt — enumerates every port cell on the grid
   connections.ts  // completeDraft / buildConnection — validates and creates connections
-  layout.ts       // Editor state types (EditorState, PickedPort, PortCell)
+  depot.ts        // Depot assignment, source/sink detection, sinkTotals/stalledCount
+  depotPicker.ts  // Depot resource picker modal (openDepotPicker)
+  recipeInfo.ts   // Recipe resolution for the selected machine (selectedRecipeFor)
+  recipeInfoUi.ts // Recipe info panel renderer (renderRecipeInfoPanel)
+  layout.ts       // Editor state types (EditorState, PickedPort, PortCell, DepotAssignment)
   ids.ts          // nextId — UUID with seeded fallback
   renderer.ts     // Canvas drawing (grid, connections, machines, ports, hover, draft)
   main.ts         // UI wiring, event handling, editor state (place + connect modes)
@@ -41,12 +45,12 @@ src/
   machineStore.ts  // Catalog persistence: localStorage + import/export + validation on load
   machineValidate.ts // Catalog validation
   style.css       // Editor styling
-index.html        // Vite entry (toolbar, canvas, status panel)
-test/             // Vitest unit tests
-  grid.test.ts
-  geometry.test.ts
-  pathfinding.test.ts
-  recipes.test.ts
+  index.html        // Vite entry (toolbar, canvas, status panel)
+  test/             // Vitest unit tests
+    grid.test.ts
+    geometry.test.ts
+    pathfinding.test.ts
+    recipes.test.ts
 ```
 
 **Data flow:**
@@ -89,7 +93,11 @@ update the catalog. `scripts/` and `scraped/` have been removed.
 | [core/geometry.md](core/geometry.md) | Port rotation rules and the tile-index mirror |
 | [core/pathfinding.md](core/pathfinding.md) | A* on free cells, obstacle model, algorithm notes |
 | [core/renderer.md](core/renderer.md) | Canvas drawing conventions, colors, and DPI scaling |
+| [core/depot.md](core/depot.md) | Depot source/sink rules, resource enumeration, assignment persistence |
+| [core/recipe-info.md](core/recipe-info.md) | Recipe resolution for the selected machine |
 | [ui/interactions.md](ui/interactions.md) | `main.ts` state machine, modes, event wiring, controls |
+| [ui/depot-picker.md](ui/depot-picker.md) | Depot resource picker modal |
+| [ui/recipe-info-ui.md](ui/recipe-info-ui.md) | Recipe info panel rendering |
 | [reference/testing.md](reference/testing.md) | Vitest setup, what is covered, how to add tests |
 | [reference/extending.md](reference/extending.md) | How to add a new machine type (the canonical recipe) |
 | [reference/machine-editor.md](reference/machine-editor.md) | The machine editor modal (Import/Export, validation) |
