@@ -7,7 +7,6 @@ const CATEGORY_ORDER: ReadonlyArray<string> = [
   'Depot Access',
   'Power',
   'Resourcing',
-  'Planting',
 ];
 
 export function groupByCategory(types: readonly MachineType[]): Array<[string, number[]]> {

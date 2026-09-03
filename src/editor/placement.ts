@@ -4,6 +4,7 @@ import type { MachineInstance } from '../types.ts';
 import { grid, state, ORIENTATIONS, selectedType } from './state.ts';
 import { setStatus } from './status.ts';
 import { redraw } from './redraw.ts';
+import { groupByCategory } from '../machineEditor/grouping.ts';
 
 export function updateOrientationLabel(): void {
   const el = document.querySelector<HTMLElement>('#orientation-label')!;
@@ -103,11 +104,18 @@ export function clearConnections(): void {
 export function populateSelector(): void {
   const select = document.querySelector<HTMLSelectElement>('#machine-select')!;
   select.innerHTML = '';
-  for (const [i, t] of state.machineTypes.entries()) {
-    const option = document.createElement('option');
-    option.value = String(i);
-    option.textContent = `${t.name}  (${t.width}×${t.height})`;
-    select.appendChild(option);
+  const groups = groupByCategory(state.machineTypes);
+  for (const [category, indices] of groups) {
+    const group = document.createElement('optgroup');
+    group.label = category;
+    for (const i of indices) {
+      const t = state.machineTypes[i]!;
+      const option = document.createElement('option');
+      option.value = String(i);
+      option.textContent = `${t.name}  (${t.width}×${t.height})`;
+      group.appendChild(option);
+    }
+    select.appendChild(group);
   }
   if (state.machineTypes.length > 0) {
     state.selectedIndex = Math.min(state.selectedIndex, state.machineTypes.length - 1);
