@@ -6,6 +6,7 @@ export const BELT_BRIDGE: MachineType = {
   "category": "Logistics Units",
   "width": 1,
   "height": 1,
+  "noPower": true,
   "ports": [
     {
       "id": "port_1",
@@ -36,6 +37,7 @@ export const CONVERGER: MachineType = {
   "category": "Logistics Units",
   "width": 1,
   "height": 1,
+  "noPower": true,
   "ports": [
     {
       "id": "port_1",
@@ -84,6 +86,7 @@ export const ITEM_CONTROL_PORT: MachineType = {
   "category": "Logistics Units",
   "width": 1,
   "height": 1,
+  "noPower": true,
   "ports": [
     {
       "id": "port_1",
@@ -114,6 +117,7 @@ export const PIPE_BRIDGE: MachineType = {
   "category": "Logistics Units",
   "width": 1,
   "height": 1,
+  "noPower": true,
   "ports": [
     {
       "id": "port_1",
@@ -144,6 +148,7 @@ export const PIPE_CONTROL_PORT: MachineType = {
   "category": "Logistics Units",
   "width": 1,
   "height": 1,
+  "noPower": true,
   "ports": [
     {
       "id": "port_1",
@@ -174,6 +179,7 @@ export const PIPE_CONVERGER: MachineType = {
   "category": "Logistics Units",
   "width": 1,
   "height": 1,
+  "noPower": true,
   "ports": [
     {
       "id": "port_1",
@@ -222,6 +228,7 @@ export const PIPE_SPLITTER: MachineType = {
   "category": "Logistics Units",
   "width": 1,
   "height": 1,
+  "noPower": true,
   "ports": [
     {
       "id": "port_1",
@@ -270,6 +277,7 @@ export const SPLITTER: MachineType = {
   "category": "Logistics Units",
   "width": 1,
   "height": 1,
+  "noPower": true,
   "ports": [
     {
       "id": "port_1",

@@ -6,6 +6,7 @@ export const CONDUIT_INLET: MachineType = {
   "category": "Depot Access",
   "width": 3,
   "height": 3,
+  "noPower": true,
   "ports": [
     {
       "id": "port_1",
@@ -27,6 +28,7 @@ export const CONDUIT_INLET_MANIFOLD: MachineType = {
   "category": "Depot Access",
   "width": 3,
   "height": 5,
+  "noPower": true,
   "ports": [
     {
       "id": "port_1",
@@ -57,6 +59,7 @@ export const CONDUIT_OUTLET: MachineType = {
   "category": "Depot Access",
   "width": 3,
   "height": 3,
+  "noPower": true,
   "ports": [
     {
       "id": "port_1",
@@ -78,6 +81,7 @@ export const CONDUIT_OUTLET_MANIFOLD: MachineType = {
   "category": "Depot Access",
   "width": 3,
   "height": 5,
+  "noPower": true,
   "ports": [
     {
       "id": "port_1",
@@ -108,6 +112,7 @@ export const DEPOT_BUS_PORT: MachineType = {
   "category": "Depot Access",
   "width": 4,
   "height": 4,
+  "noPower": true,
   "ports": [],
   "edgeBands": {},
   "recipes": []
@@ -119,6 +124,7 @@ export const DEPOT_BUS_SECTION: MachineType = {
   "category": "Depot Access",
   "width": 4,
   "height": 8,
+  "noPower": true,
   "ports": [],
   "edgeBands": {},
   "recipes": []
@@ -130,6 +136,7 @@ export const DEPOT_LOADER: MachineType = {
   "category": "Depot Access",
   "width": 3,
   "height": 1,
+  "noPower": true,
   "ports": [
     {
       "id": "port_1",
@@ -151,6 +158,7 @@ export const DEPOT_UNLOADER: MachineType = {
   "category": "Depot Access",
   "width": 3,
   "height": 1,
+  "noPower": true,
   "ports": [
     {
       "id": "port_1",
@@ -172,6 +180,7 @@ export const FLUID_TANK: MachineType = {
   "category": "Depot Access",
   "width": 3,
   "height": 3,
+  "noPower": true,
   "ports": [
     {
       "id": "port_1",
@@ -202,6 +211,7 @@ export const GAS_TANK: MachineType = {
   "category": "Depot Access",
   "width": 3,
   "height": 3,
+  "noPower": true,
   "ports": [],
   "edgeBands": {},
   "recipes": []
@@ -213,6 +223,7 @@ export const PROTOCOL_STASH: MachineType = {
   "category": "Depot Access",
   "width": 3,
   "height": 3,
+  "noPower": true,
   "ports": [],
   "edgeBands": {
     "north": {
@@ -226,4 +237,3 @@ export const PROTOCOL_STASH: MachineType = {
   },
   "recipes": []
 };
-

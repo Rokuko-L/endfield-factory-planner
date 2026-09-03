@@ -40,8 +40,10 @@ export function machineInAoe(
  * Determine if a machine is powered by any power source in the layout.
  * A machine is powered if any part of its footprint falls within the
  * AoE of a power-providing machine (excluding itself).
+ * Machines with noPower set are always considered powered.
  */
 export function isPowered(target: MachineInstance, allMachines: MachineInstance[]): boolean {
+  if (target.type.noPower) return true;
   for (const source of allMachines) {
     if (source.id === target.id) continue;
     const aoe = powerAoe(source);

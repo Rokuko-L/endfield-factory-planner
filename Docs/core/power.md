@@ -15,6 +15,8 @@ powerRange?: number; // tiles from footprint edge
 - **Pylons** (Electric Pylon, Xiranite Pylon): 2x2 footprint, range 5
 - **Relays** (Relay Tower, Xiranite Relay): 3x3 footprint, range 2
 - Machines without `powerRange` neither provide nor require power.
+- Machines with `noPower: true` (Logistics Units, Depot Access) always
+  show as powered and don't need to be in a power AoE.
 
 ## Functions
 

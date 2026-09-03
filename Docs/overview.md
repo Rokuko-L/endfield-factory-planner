@@ -16,14 +16,12 @@ src/
   types.ts        // Domain model: MachineInstance, MachineType, PortDef, EdgeBand, Connection, Layout
   data/           // Modular catalog — one file per category + barrel (source of truth)
     index.ts        // Barrel: re-exports every constant + ALL_MACHINE_TYPES
-    planting.ts     // Planting plots (10)
     logistics-units.ts // Logistics Units (8, passthrough 1×1 — see data.md)
     depot-access.ts // Depot Access (10)
     resourcing.ts   // Resourcing rigs/pumps (6)
     power.ts        // Power infra (5)
     production-i.ts // Production I (7)
     production-ii.ts// Production II (13)
-    miscellaneous.ts// Miscellaneous (1)
     fixtures.ts     // MINER + FURNACE — test placeholders, not wiki-derived
   data.ts         // Compatibility shim: export * from "./data/index.ts"
   grid.ts         // Tile-occupancy grid (machines + connections)

@@ -82,6 +82,8 @@ export interface MachineType {
   /** Power area-of-effect radius in tiles from the machine footprint edge.
    *  When set, this machine provides power to other machines within range. */
   powerRange?: number;
+  /** When true, this machine does not require power (always shows as on). */
+  noPower?: boolean;
   /** Per-port data, kept for future per-tile routing. May be empty when
    *  the visual is driven entirely by `edgeBands`. */
   ports: PortDef[];

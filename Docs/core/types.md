@@ -16,7 +16,7 @@ from here. All coordinates are **grid tiles** with top-left origin
 | `EdgeBand` | A full-edge port zone: type + resourceKind for one side. |
 | `RecipeSlot` | A single resource entry on a recipe input or output. |
 | `Recipe` | N inputs + M outputs + optional craft time. The auto-detect key. |
-| `MachineType` | A footprint definition: name, width, height, powerRange, ports, edgeBands, recipes. |
+| `MachineType` | A footprint definition: name, width, height, powerRange, noPower, ports, edgeBands, recipes. |
 | `MachineInstance` | A placed machine: id, type, x, y, orientation. |
 | `Connection` | A routed link between two machines: id, from/to, kind, resource, matchedRecipeId, path. |
 | `Layout` | The full editor state: `{ machines, connections }`. |
@@ -91,9 +91,10 @@ render as plain footprints with no port indicators.
 ## `MachineType` vs `MachineInstance`
 
 - `MachineType` is the **blueprint**: a footprint size, an optional
-  `powerRange` (AoE radius in tiles from the footprint edge), a list of
-  single-tile ports, and a map of edge bands. It has no position.
-  Many `MachineInstance`s can share the same `MachineType`.
+  `powerRange` (AoE radius in tiles from the footprint edge), an optional
+  `noPower` flag (machine doesn't require power), a list of single-tile
+  ports, and a map of edge bands. It has no position. Many
+  `MachineInstance`s can share the same `MachineType`.
 - `MachineInstance` is a **placed copy**: a unique id, a reference to
   its `MachineType`, the top-left tile coordinates `(x, y)`, and the
   current `orientation`.
