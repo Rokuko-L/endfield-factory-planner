@@ -1,6 +1,6 @@
 import type { MachineType } from "../types.ts";
 
-/** Belt Bridge */
+/** Belt Bridge — allows a belt to cross over/under another belt */
 export const BELT_BRIDGE: MachineType = {
   "name": "Belt Bridge",
   "category": "Logistics Units",
@@ -9,7 +9,7 @@ export const BELT_BRIDGE: MachineType = {
   "noPower": true,
   "ports": [
     {
-      "id": "port_1",
+      "id": "port_ns_out",
       "type": "output",
       "side": "north",
       "tileIndex": 0,
@@ -18,9 +18,76 @@ export const BELT_BRIDGE: MachineType = {
       "rate": 30
     },
     {
-      "id": "port_2",
+      "id": "port_ns_in",
       "type": "input",
       "side": "south",
+      "tileIndex": 0,
+      "resource": "",
+      "kind": "item",
+      "rate": 30
+    },
+    {
+      "id": "port_ew_out",
+      "type": "output",
+      "side": "east",
+      "tileIndex": 0,
+      "resource": "",
+      "kind": "item",
+      "rate": 30
+    },
+    {
+      "id": "port_ew_in",
+      "type": "input",
+      "side": "west",
+      "tileIndex": 0,
+      "resource": "",
+      "kind": "item",
+      "rate": 30
+    }
+  ],
+  "edgeBands": {},
+  "recipes": []
+};
+
+/** Belt Bridge (alt) — reversed east-west flow */
+export const BELT_BRIDGE_ALT: MachineType = {
+  "name": "Belt Bridge (Alt)",
+  "category": "Logistics Units",
+  "width": 1,
+  "height": 1,
+  "noPower": true,
+  "ports": [
+    {
+      "id": "port_ns_out",
+      "type": "output",
+      "side": "north",
+      "tileIndex": 0,
+      "resource": "",
+      "kind": "item",
+      "rate": 30
+    },
+    {
+      "id": "port_ns_in",
+      "type": "input",
+      "side": "south",
+      "tileIndex": 0,
+      "resource": "",
+      "kind": "item",
+      "rate": 30
+    },
+    {
+      "id": "port_we_out",
+      "type": "output",
+      "side": "west",
+      "tileIndex": 0,
+      "resource": "",
+      "kind": "item",
+      "rate": 30
+    },
+    {
+      "id": "port_we_in",
+      "type": "input",
+      "side": "east",
       "tileIndex": 0,
       "resource": "",
       "kind": "item",
@@ -111,7 +178,7 @@ export const ITEM_CONTROL_PORT: MachineType = {
   "recipes": []
 };
 
-/** Pipe Bridge */
+/** Pipe Bridge — allows a pipe to cross over/under another pipe */
 export const PIPE_BRIDGE: MachineType = {
   "name": "Pipe Bridge",
   "category": "Logistics Units",
@@ -120,22 +187,89 @@ export const PIPE_BRIDGE: MachineType = {
   "noPower": true,
   "ports": [
     {
-      "id": "port_1",
+      "id": "port_ns_out",
       "type": "output",
       "side": "north",
       "tileIndex": 0,
       "resource": "",
       "kind": "fluid",
-      "rate": 30
+      "rate": 2
     },
     {
-      "id": "port_2",
+      "id": "port_ns_in",
       "type": "input",
       "side": "south",
       "tileIndex": 0,
       "resource": "",
       "kind": "fluid",
-      "rate": 30
+      "rate": 2
+    },
+    {
+      "id": "port_ew_out",
+      "type": "output",
+      "side": "east",
+      "tileIndex": 0,
+      "resource": "",
+      "kind": "fluid",
+      "rate": 2
+    },
+    {
+      "id": "port_ew_in",
+      "type": "input",
+      "side": "west",
+      "tileIndex": 0,
+      "resource": "",
+      "kind": "fluid",
+      "rate": 2
+    }
+  ],
+  "edgeBands": {},
+  "recipes": []
+};
+
+/** Pipe Bridge (alt) — reversed east-west flow */
+export const PIPE_BRIDGE_ALT: MachineType = {
+  "name": "Pipe Bridge (Alt)",
+  "category": "Logistics Units",
+  "width": 1,
+  "height": 1,
+  "noPower": true,
+  "ports": [
+    {
+      "id": "port_ns_out",
+      "type": "output",
+      "side": "north",
+      "tileIndex": 0,
+      "resource": "",
+      "kind": "fluid",
+      "rate": 2
+    },
+    {
+      "id": "port_ns_in",
+      "type": "input",
+      "side": "south",
+      "tileIndex": 0,
+      "resource": "",
+      "kind": "fluid",
+      "rate": 2
+    },
+    {
+      "id": "port_we_out",
+      "type": "output",
+      "side": "west",
+      "tileIndex": 0,
+      "resource": "",
+      "kind": "fluid",
+      "rate": 2
+    },
+    {
+      "id": "port_we_in",
+      "type": "input",
+      "side": "east",
+      "tileIndex": 0,
+      "resource": "",
+      "kind": "fluid",
+      "rate": 2
     }
   ],
   "edgeBands": {},

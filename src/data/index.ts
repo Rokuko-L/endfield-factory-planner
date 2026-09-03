@@ -1,7 +1,7 @@
 // Barrel for the modular catalog. Re-exports every MachineType constant and ALL_MACHINE_TYPES.
 import type { MachineType } from "../types.ts";
 
-import { BELT_BRIDGE, CONVERGER, ITEM_CONTROL_PORT, PIPE_BRIDGE, PIPE_CONTROL_PORT, PIPE_CONVERGER, PIPE_SPLITTER, SPLITTER } from "./logistics-units.ts";
+import { BELT_BRIDGE, BELT_BRIDGE_ALT, CONVERGER, ITEM_CONTROL_PORT, PIPE_BRIDGE, PIPE_BRIDGE_ALT, PIPE_CONTROL_PORT, PIPE_CONVERGER, PIPE_SPLITTER, SPLITTER } from "./logistics-units.ts";
 import { CONDUIT_INLET, CONDUIT_INLET_MANIFOLD, CONDUIT_OUTLET_MANIFOLD, DEPOT_BUS_PORT, DEPOT_BUS_SECTION, DEPOT_LOADER, DEPOT_UNLOADER, FLUID_TANK, GAS_TANK, PROTOCOL_STASH } from "./depot-access.ts";
 import { ELECTRIC_MINING_RIG, ELECTRIC_MINING_RIG_MK_II, FLUID_PUMP, GAS_EXTRACTOR, HYDRO_MINING_RIG, PORTABLE_ORIGINIUM_RIG } from "./resourcing.ts";
 import { ELECTRIC_PYLON, RELAY_TOWER, THERMAL_BANK, XIRANITE_PYLON, XIRANITE_RELAY } from "./power.ts";
@@ -9,7 +9,7 @@ import { EXPANDED_CRUCIBLE, FILLING_UNIT, FLUID_GAS_TRANSMUTING_UNIT, FORGE_OF_T
 import { FITTING_UNIT, MOULDING_UNIT, PLANTING_UNIT, REFINING_UNIT, SEED_PICKING_UNIT, SHREDDING_UNIT, WATER_TREATMENT_UNIT } from "./production-i.ts";
 import { MINER, FURNACE } from "./fixtures.ts";
 
-export * from "./logistics-units.ts";
+export { BELT_BRIDGE, BELT_BRIDGE_ALT, CONVERGER, ITEM_CONTROL_PORT, PIPE_BRIDGE, PIPE_BRIDGE_ALT, PIPE_CONTROL_PORT, PIPE_CONVERGER, PIPE_SPLITTER, SPLITTER } from "./logistics-units.ts";
 export * from "./depot-access.ts";
 export * from "./resourcing.ts";
 export * from "./power.ts";
@@ -20,9 +20,11 @@ export * from "./fixtures.ts";
 /** Every machine type known to the editor. */
 export const ALL_MACHINE_TYPES: MachineType[] = [
   BELT_BRIDGE,
+  BELT_BRIDGE_ALT,
   CONVERGER,
   ITEM_CONTROL_PORT,
   PIPE_BRIDGE,
+  PIPE_BRIDGE_ALT,
   PIPE_CONTROL_PORT,
   PIPE_CONVERGER,
   PIPE_SPLITTER,
