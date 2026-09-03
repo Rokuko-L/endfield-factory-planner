@@ -2,7 +2,7 @@ import type { MachineType } from './types.ts';
 import { ALL_MACHINE_TYPES as DEFAULT_MACHINE_TYPES } from './data/index.ts';
 import { validateMachineTypes } from './machineValidate.ts';
 
-const STORAGE_KEY = 'endfield.machineTypes.v1';
+const STORAGE_KEY = 'endfield.machineTypes.v2';
 
 export function loadMachineTypes(): MachineType[] {
   const raw = localStorage.getItem(STORAGE_KEY);
