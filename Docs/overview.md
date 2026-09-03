@@ -29,6 +29,7 @@ src/
   pathfinding.ts  // A* on free cells (findPath, findPathMulti, internal MinHeap)
   recipes.ts      // Connection auto-detect: matchRecipe, reconcileConnectionRecipes
   power.ts        // Power AoE: powerAoe, isPowered, machineInAoe
+  logistics.ts    // Belt/pipe bridges, splitter/converger logic
   bands.ts        // Edge-band resource lookup (resourceForBand)
   ports.ts        // allPortCells, pickPortAt — enumerates every port cell on the grid
   connections.ts  // completeDraft / buildConnection — validates and creates connections
@@ -79,6 +80,7 @@ Mouse/keyboard events ──> main.ts (state, mode)
                          ├──> completeDraft (src/connections.ts) → findPathMulti (src/pathfinding.ts)
                          ├──> matchRecipe (src/recipes.ts) for connection auto-detect
                          ├──> powerAoe / isPowered (src/power.ts) for power AoE + status
+                         ├──> getBridgePoints / getSplitterThroughput (src/logistics.ts)
                          │
                          └──> Renderer.draw (src/renderer.ts)
                                  │
@@ -105,6 +107,7 @@ update the catalog. `scripts/` and `scraped/` have been removed.
 | [core/pathfinding.md](core/pathfinding.md) | A* on free cells, obstacle model, algorithm notes |
 | [core/renderer.md](core/renderer.md) | Canvas drawing conventions, colors, and DPI scaling |
 | [core/power.md](core/power.md) | Power AoE system: pylons, relays, powered status |
+| [core/logistics.md](core/logistics.md) | Belt/pipe bridges, splitter/converger logic |
 | [core/depot.md](core/depot.md) | Depot source/sink rules, resource enumeration, assignment persistence |
 | [core/recipe-info.md](core/recipe-info.md) | Recipe resolution for the selected machine |
 | [ui/interactions.md](ui/interactions.md) | `main.ts` state machine, modes, event wiring, controls |

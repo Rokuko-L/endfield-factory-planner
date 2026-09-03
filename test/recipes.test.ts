@@ -102,6 +102,7 @@ describe("reconcileConnectionRecipes", () => {
         resource: "Iron Ore",
         matchedRecipeId: null,
         path: [],
+        throughput: 30,
       },
     ];
     const out = reconcileConnectionRecipes(conns, [furnace]);
@@ -127,6 +128,7 @@ describe("reconcileConnectionRecipes", () => {
         resource: "Copper Ore",
         matchedRecipeId: null,
         path: [],
+        throughput: 30,
       },
     ];
     const out = reconcileConnectionRecipes(conns, [furnace]);
@@ -145,6 +147,7 @@ describe("reconcileConnectionRecipes", () => {
         resource: "Iron Ore",
         matchedRecipeId: "manual",
         path: [],
+        throughput: 30,
       },
     ];
     const out = reconcileConnectionRecipes(conns, []);
@@ -163,6 +166,7 @@ describe("reconcileConnectionRecipes", () => {
         resource: "Iron Ore",
         matchedRecipeId: null,
         path: [],
+        throughput: 30,
       },
     ];
     const out = reconcileConnectionRecipes(conns, []);

@@ -7,23 +7,29 @@ import type { MachineInstance, MachineType } from './types.ts';
  *
  * 1. **Machine occupancy** — each cell holds the id of the machine
  *    occupying it, or null when empty.
- * 2. **Connection occupancy** — each cell holds the id of the connection
- *    (belt/pipe) occupying it, or null when empty.
+ * 2. **Connection occupancy** — each cell holds an array of connection
+ *    ids (belts/pipes) occupying it. Connections can stack on top of
+ *    each other, but cannot overlap with machines.
  *
- * A cell is *free* iff both layers are null. Both layers are
- * row-major: `cells[y][x]`.
+ * A cell is *free* iff both layers are empty. A cell is *connection-free*
+ * iff the machine layer is empty (allowing connections to stack).
  */
 export class Grid {
   private readonly machineCells: (string | null)[][];
-  private readonly connectionCells: (string | null)[][];
+  private readonly connectionCells: string[][][];
 
   constructor(public readonly width: number, public readonly height: number) {
     this.machineCells = Array.from({ length: height }, () =>
       Array<string | null>(width).fill(null),
     );
-    this.connectionCells = Array.from({ length: height }, () =>
-      Array<string | null>(width).fill(null),
-    );
+    this.connectionCells = [];
+    for (let y = 0; y < height; y++) {
+      const row: string[][] = [];
+      for (let x = 0; x < width; x++) {
+        row.push([]);
+      }
+      this.connectionCells.push(row);
+    }
   }
 
   /** True if the given tile is inside the grid. */
@@ -31,10 +37,16 @@ export class Grid {
     return x >= 0 && y >= 0 && x < this.width && y < this.height;
   }
 
-  /** True if the tile is in bounds and has neither a machine nor a connection. */
+  /** True if the tile is in bounds and has neither a machine nor any connection. */
   isFree(x: number, y: number): boolean {
     if (!this.isWithinBounds(x, y)) return false;
-    return this.machineCells[y]?.[x] == null && this.connectionCells[y]?.[x] == null;
+    return this.machineCells[y]?.[x] == null && this.connectionCells[y]![x]!.length === 0;
+  }
+
+  /** True if the tile is in bounds and has no machine (connections can stack). */
+  isConnectionFree(x: number, y: number): boolean {
+    if (!this.isWithinBounds(x, y)) return false;
+    return this.machineCells[y]?.[x] == null;
   }
 
   /** The id of the machine at a tile, or null if empty/out of bounds. */
@@ -43,10 +55,17 @@ export class Grid {
     return this.machineCells[y]?.[x] ?? null;
   }
 
-  /** The id of the connection at a tile, or null if empty/out of bounds. */
+  /** The first connection id at a tile, or null if empty/out of bounds. */
   getConnectionAt(x: number, y: number): string | null {
     if (!this.isWithinBounds(x, y)) return null;
-    return this.connectionCells[y]?.[x] ?? null;
+    const connections = this.connectionCells[y]?.[x];
+    return connections && connections.length > 0 ? connections[0]! : null;
+  }
+
+  /** All connection ids at a tile. */
+  getConnectionsAt(x: number, y: number): string[] {
+    if (!this.isWithinBounds(x, y)) return [];
+    return this.connectionCells[y]?.[x] ?? [];
   }
 
   /** True if every tile of the machine's footprint is in bounds and unoccupied by machines or connections. */
@@ -69,9 +88,9 @@ export class Grid {
     return true;
   }
 
-  /** True if the single tile is in bounds and free. */
+  /** True if the single tile is in bounds and has no machine (connections can stack). */
   canPlaceConnection(x: number, y: number): boolean {
-    return this.isFree(x, y);
+    return this.isConnectionFree(x, y);
   }
 
   /** Fills the machine's footprint tiles with its id. Throws on collision. */
@@ -103,18 +122,21 @@ export class Grid {
 
   /**
    * Mark the given tiles as occupied by the connection. Throws if any
-   * tile is not free.
+   * tile has a machine (connections can stack on connections, not machines).
    */
   placeConnectionTiles(connectionId: string, tiles: { x: number; y: number }[]): void {
     for (const t of tiles) {
       if (!this.canPlaceConnection(t.x, t.y)) {
         throw new Error(
-          `Cannot place connection tile at (${t.x}, ${t.y}): cell is occupied.`,
+          `Cannot place connection tile at (${t.x}, ${t.y}): cell has a machine.`,
         );
       }
     }
     for (const t of tiles) {
-      this.connectionCells[t.y]![t.x] = connectionId;
+      const cell = this.connectionCells[t.y]![t.x]!;
+      if (!cell.includes(connectionId)) {
+        cell.push(connectionId);
+      }
     }
   }
 
@@ -122,8 +144,10 @@ export class Grid {
   removeConnection(connectionId: string): void {
     for (let y = 0; y < this.height; y++) {
       for (let x = 0; x < this.width; x++) {
-        if (this.connectionCells[y]?.[x] === connectionId) {
-          this.connectionCells[y]![x] = null;
+        const cell = this.connectionCells[y]![x]!;
+        const idx = cell.indexOf(connectionId);
+        if (idx !== -1) {
+          cell.splice(idx, 1);
         }
       }
     }
@@ -145,7 +169,7 @@ export class Grid {
     const tiles: { x: number; y: number }[] = [];
     for (let y = 0; y < this.height; y++) {
       for (let x = 0; x < this.width; x++) {
-        if (this.connectionCells[y]?.[x] !== null) tiles.push({ x, y });
+        if (this.connectionCells[y]![x]!.length > 0) tiles.push({ x, y });
       }
     }
     return tiles;

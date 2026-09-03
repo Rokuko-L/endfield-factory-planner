@@ -42,6 +42,8 @@ function buildConnection(
       : target.portId;
   const resolvedResource = (source.resource?.trim() || target.resource?.trim() || source.resource) ?? '';
   const recipe = resolvedResource.trim() ? matchRecipe(target.machine, resolvedResource.trim(), source.kind) : null;
+  // Throughput: belts 30/min, pipes 2/s
+  const throughput = source.kind === 'item' ? 30 : 2;
   return {
     id: nextId('conn'),
     fromMachineId: source.machine.id,
@@ -52,5 +54,6 @@ function buildConnection(
     resource: resolvedResource.trim() || source.resource,
     matchedRecipeId: recipe ? recipe.id : null,
     path,
+    throughput,
   };
 }
