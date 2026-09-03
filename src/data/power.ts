@@ -6,6 +6,7 @@ export const ELECTRIC_PYLON: MachineType = {
   "category": "Power",
   "width": 2,
   "height": 2,
+  "powerRange": 5,
   "ports": [],
   "edgeBands": {},
   "recipes": []
@@ -17,6 +18,7 @@ export const RELAY_TOWER: MachineType = {
   "category": "Power",
   "width": 3,
   "height": 3,
+  "powerRange": 2,
   "ports": [],
   "edgeBands": {},
   "recipes": []
@@ -148,6 +150,7 @@ export const XIRANITE_PYLON: MachineType = {
   "category": "Power",
   "width": 2,
   "height": 2,
+  "powerRange": 5,
   "ports": [],
   "edgeBands": {},
   "recipes": []
@@ -159,6 +162,7 @@ export const XIRANITE_RELAY: MachineType = {
   "category": "Power",
   "width": 3,
   "height": 3,
+  "powerRange": 2,
   "ports": [],
   "edgeBands": {},
   "recipes": []

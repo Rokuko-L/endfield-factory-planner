@@ -19,6 +19,7 @@ export function redraw(): void {
     state.invalidFlash,
     state.draftAdjacent,
     state.draftPath,
+    state.powerPreviewId,
   );
   updateMetrics();
   refreshRecipeInfo();

@@ -40,4 +40,6 @@ export interface EditorState {
   draftAdjacent: { x: number; y: number } | null;
   draftPath: { x: number; y: number }[] | null;
   depotAssignments: Record<string, DepotAssignment>;
+  /** Machine id currently selected for power AoE preview, or null. */
+  powerPreviewId: string | null;
 }

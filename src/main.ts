@@ -53,9 +53,19 @@ canvas.addEventListener('click', async (e) => {
       if (occupant) {
         setSelectedMachineId(occupant.id);
         refreshRecipeInfo();
+        // Toggle power AoE preview if clicking on a power machine
+        if (occupant.type.powerRange != null) {
+          state.powerPreviewId = state.powerPreviewId === occupant.id ? null : occupant.id;
+          const aoe = state.powerPreviewId ? `${occupant.type.powerRange} tiles` : 'off';
+          setStatus(`${occupant.type.name} power AoE: ${aoe}.`);
+        } else {
+          state.powerPreviewId = null;
+        }
+        redraw();
         return;
       }
     }
+    state.powerPreviewId = null;
     placeMachine(tile.x, tile.y);
   } else {
     handleConnectClick(tile);

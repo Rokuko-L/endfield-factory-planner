@@ -1,6 +1,7 @@
 import type { Grid } from './grid.ts';
 import type { Connection, MachineInstance, PortDef, Side } from './types.ts';
-import { rotateSide, transformPort } from './geometry.ts';
+import { rotateSide, transformPort, effectiveSize } from './geometry.ts';
+import { powerAoe, isPowered } from './power.ts';
 
 /**
  * Color pairs for edge bands and single-tile ports. Each entry is a
@@ -69,6 +70,7 @@ export class Renderer {
    * @param invalidFlash Top-left tile whose footprint failed placement, or null.
    * @param draftSource Tile of the picked source port (in connection mode), or null.
    * @param draftPath Path returned by A* during preview, or null.
+   * @param powerPreviewId Machine id to show power AoE for, or null.
    */
   draw(
     machines: MachineInstance[],
@@ -77,6 +79,7 @@ export class Renderer {
     invalidFlash: { x: number; y: number; w: number; h: number } | null,
     draftSource: { x: number; y: number } | null,
     draftPath: { x: number; y: number }[] | null,
+    powerPreviewId: string | null = null,
   ): void {
     const ctx = this.canvas.getContext('2d');
     if (!ctx) return;
@@ -86,6 +89,8 @@ export class Renderer {
     this.drawTiles(ctx, previewFootprint, invalidFlash);
     this.drawConnections(ctx, connections);
     for (const m of machines) this.drawMachine(ctx, m);
+    this.drawPowerAoe(ctx, machines, powerPreviewId);
+    this.drawPowerStatus(ctx, machines);
     this.drawDraft(ctx, draftSource, draftPath);
   }
 
@@ -303,6 +308,57 @@ export class Renderer {
         break;
     }
     ctx.stroke();
+  }
+
+  /**
+   * Draw the power AoE overlay for the selected power machine.
+   * Shows a translucent yellow highlight over the area of effect.
+   */
+  private drawPowerAoe(
+    ctx: CanvasRenderingContext2D,
+    machines: MachineInstance[],
+    powerPreviewId: string | null,
+  ): void {
+    if (!powerPreviewId) return;
+    const source = machines.find((m) => m.id === powerPreviewId);
+    if (!source) return;
+    const aoe = powerAoe(source);
+    if (!aoe) return;
+
+    const t = this.tilePx;
+    ctx.fillStyle = 'rgba(250,204,21,0.15)';
+    ctx.fillRect(aoe.x * t, aoe.y * t, aoe.w * t, aoe.h * t);
+
+    ctx.strokeStyle = 'rgba(250,204,21,0.5)';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([4, 4]);
+    ctx.strokeRect(aoe.x * t + 1, aoe.y * t + 1, aoe.w * t - 2, aoe.h * t - 2);
+    ctx.setLineDash([]);
+  }
+
+  /**
+   * Draw power status indicator on each machine.
+   * Green dot = powered, red dot = unpowered.
+   */
+  private drawPowerStatus(ctx: CanvasRenderingContext2D, machines: MachineInstance[]): void {
+    const t = this.tilePx;
+    for (const m of machines) {
+      const powered = isPowered(m, machines);
+      const { width } = effectiveSize(m.type, m.orientation);
+
+      // Indicator position: top-right corner of machine
+      const cx = (m.x + width) * t - 6;
+      const cy = m.y * t + 6;
+      const r = 4;
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.fillStyle = powered ? '#4ade80' : '#f87171';
+      ctx.fill();
+      ctx.strokeStyle = '#1e293b';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
   }
 
   private drawConnections(ctx: CanvasRenderingContext2D, connections: Connection[]): void {

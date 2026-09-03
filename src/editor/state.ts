@@ -23,6 +23,7 @@ export const state: EditorState = {
   draftAdjacent: null,
   draftPath: null,
   depotAssignments: loadDepotAssignments(),
+  powerPreviewId: null,
 };
 
 let selectedMachineId: string | null = null;
