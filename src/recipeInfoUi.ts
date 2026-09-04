@@ -86,8 +86,10 @@ export function renderRecipeInfoPanel(
   supplyHeader.textContent = 'Supply | Demand';
   table.append(inputHeader, supplyHeader);
   for (const slot of info.recipe.inputs) {
-    const inb = info.inbound.find((c) => c.resource === slot.resource && c.kind === slot.kind);
-    const supply = inb ? slot.rate : 0;
+    const status = info.inputStatus.find(
+      (s) => s.slot.resource === slot.resource && s.slot.kind === slot.kind,
+    );
+    const supply = status ? status.delivered : 0;
     const demand = slot.rate;
     table.append(
       cell(`${slot.resource} (${slot.kind})`),

@@ -1,7 +1,7 @@
 import { saveDepotAssignments } from '../depot.ts';
 import { nextId } from '../ids.ts';
 import { completeDraft } from '../connections.ts';
-import { pickPortAt } from '../ports.ts';
+import { allPortCells, pickPortAt } from '../ports.ts';
 import type { Connection, MachineInstance, Orientation } from '../types.ts';
 import { grid, state, setSelectedMachineId } from './state.ts';
 import { clearAll } from './placement.ts';
@@ -30,35 +30,40 @@ function demoConnect(
   resource: string,
   kind: 'item' | 'fluid',
 ): Connection | null {
-  const fromType = from.type;
-  const toType = to.type;
-  if (fromType.ports.length === 0 || toType.ports.length === 0) return null;
-  const fp = fromType.ports.find((p) => p.kind === kind) ?? fromType.ports[0]!;
-  const tp = toType.ports.find((p) => p.kind === kind) ?? toType.ports[0]!;
-  const source: ReturnType<typeof pickPortAt> = {
-    machine: from,
-    side: 'north',
-    cellIndex: 0,
-    type: 'output',
-    kind: fp.kind,
-    resource: fp.resource,
-    portId: `port:${fp.id}`,
-    cell: { x: from.x, y: from.y - 1 },
-    adjacentTiles: [{ x: from.x, y: from.y - 1 }],
+  // Pick a real output cell on `from` and a real input cell on `to`
+  // (edge bands or ports — band-only machines like the Fitting Unit have
+  // no `ports` entries at all).
+  const fromCells = allPortCells([from]).filter((p) => p.type === 'output' && p.kind === kind);
+  const toCells = allPortCells([to]).filter((p) => p.type === 'input' && p.kind === kind);
+  const sourceCell = fromCells[0];
+  const targetCell = toCells[0];
+  if (!sourceCell || !targetCell) {
+    setStatus(`Demo connect failed: no ${kind} ${!sourceCell ? 'output' : 'input'} port on ${!sourceCell ? from.type.name : to.type.name}.`, true);
+    return null;
+  }
+  const source: NonNullable<ReturnType<typeof pickPortAt>> = {
+    machine: sourceCell.machine,
+    side: sourceCell.side,
+    cellIndex: sourceCell.cellIndex,
+    type: sourceCell.type,
+    kind: sourceCell.kind,
+    resource,
+    portId: sourceCell.portId,
+    cell: sourceCell.cell,
+    adjacentTiles: sourceCell.adjacentTiles,
   };
-  const target: ReturnType<typeof pickPortAt> = {
-    machine: to,
-    side: 'south',
-    cellIndex: 0,
-    type: 'input',
-    kind: tp.kind,
-    resource: tp.resource,
-    portId: `port:${tp.id}`,
-    cell: { x: to.x, y: to.y + 1 },
-    adjacentTiles: [{ x: to.x, y: to.y + 1 }],
+  const target: NonNullable<ReturnType<typeof pickPortAt>> = {
+    machine: targetCell.machine,
+    side: targetCell.side,
+    cellIndex: targetCell.cellIndex,
+    type: targetCell.type,
+    kind: targetCell.kind,
+    resource: targetCell.resource,
+    portId: targetCell.portId,
+    cell: targetCell.cell,
+    adjacentTiles: targetCell.adjacentTiles,
   };
-  const sourceWithResource = { ...source, resource } as typeof source;
-  const result = completeDraft(grid, sourceWithResource, target);
+  const result = completeDraft(grid, source, target, state.connections);
   if ('error' in result) {
     setStatus(`Demo connect failed: ${result.error}`, true);
     return null;
@@ -76,29 +81,36 @@ function demoConnect(
 export function loadLcValleyDemo(): void {
   clearAll();
   setMode('place');
-  const y = 6;
-  const ferriumUnloader = placeDemoMachine('Depot Unloader', 4, y + 4);
-  const ferriumConveyor = placeDemoMachine('Belt Bridge', 6, y + 4);
-  const fittingUnit = placeDemoMachine('Fitting Unit', 7, y + 3);
-  const originUnloader = placeDemoMachine('Depot Unloader', 4, y + 10);
-  const originConveyor = placeDemoMachine('Belt Bridge', 6, y + 10);
-  const packagingUnit = placeDemoMachine('Packaging Unit', 7, y + 7);
-  const lcLoader = placeDemoMachine('Depot Loader', 14, y + 6);
-  if (!ferriumUnloader || !ferriumConveyor || !fittingUnit || !originUnloader || !originConveyor || !packagingUnit || !lcLoader) {
-    setStatus('Demo: missing required machines in catalog.', true);
+  // Layout fits the current catalog sizes (Depot Unloader 3×1, Fitting Unit
+  // 3×3, Packaging Unit 6×4, Depot Loader 3×1, Electric Pylon 2×2). The two
+  // pylons sit inside each other's AoE so every powered machine is covered.
+  const amethystUnloader = placeDemoMachine('Depot Unloader', 4, 8);
+  const fittingUnit = placeDemoMachine('Fitting Unit', 8, 8);
+  const packagingUnit = placeDemoMachine('Packaging Unit', 14, 8);
+  const lcLoader = placeDemoMachine('Depot Loader', 21, 9);
+  const powder1 = placeDemoMachine('Depot Unloader', 8, 16);
+  const powder2 = placeDemoMachine('Depot Unloader', 12, 16);
+  const pylon1 = placeDemoMachine('Electric Pylon', 10, 12);
+  const pylon2 = placeDemoMachine('Electric Pylon', 13, 13);
+  if (!amethystUnloader || !fittingUnit || !packagingUnit || !lcLoader || !powder1 || !powder2 || !pylon1 || !pylon2) {
+    setStatus('Demo: a machine is missing from the catalog or does not fit.', true);
     return;
   }
-  state.depotAssignments[ferriumUnloader.id] = { resource: 'Ferrium', kind: 'item', rate: 30 };
-  state.depotAssignments[originUnloader.id] = { resource: 'Originium Powder', kind: 'item', rate: 60 };
+  // LC Valley Battery = Amethyst Part 30/min + Originium Powder 60/min → 6/min,
+  // so the powder line needs TWO belts to run the Packaging Unit at 100%.
+  state.depotAssignments[amethystUnloader.id] = { resource: 'Amethyst Fiber', kind: 'item', rate: 30 };
+  state.depotAssignments[powder1.id] = { resource: 'Originium Powder', kind: 'item', rate: 30 };
+  state.depotAssignments[powder2.id] = { resource: 'Originium Powder', kind: 'item', rate: 30 };
   saveDepotAssignments(state.depotAssignments);
-  const ferriumToFitting = demoConnect(ferriumUnloader, fittingUnit, 'Ferrium', 'item');
-  const fittingToPackaging = demoConnect(fittingUnit, packagingUnit, 'Ferrium Part', 'item');
-  const originToPackaging = demoConnect(originUnloader, packagingUnit, 'Originium Powder', 'item');
+  const fiberToFitting = demoConnect(amethystUnloader, fittingUnit, 'Amethyst Fiber', 'item');
+  const fittingToPackaging = demoConnect(fittingUnit, packagingUnit, 'Amethyst Part', 'item');
+  const powder1ToPackaging = demoConnect(powder1, packagingUnit, 'Originium Powder', 'item');
+  const powder2ToPackaging = demoConnect(powder2, packagingUnit, 'Originium Powder', 'item');
   const packagingToLoader = demoConnect(packagingUnit, lcLoader, 'LC Valley Battery', 'item');
-  if (!ferriumToFitting || !fittingToPackaging || !originToPackaging || !packagingToLoader) {
+  if (!fiberToFitting || !fittingToPackaging || !powder1ToPackaging || !powder2ToPackaging || !packagingToLoader) {
     setStatus('Demo: one or more demo connections failed.', true);
   }
   setSelectedMachineId(packagingUnit.id);
-  setStatus('LC Valley demo loaded — 6 LC Valley Battery / min, 100% efficiency.');
+  setStatus('LC Valley demo loaded — 6 LC Valley Battery / min at 100% efficiency.');
   redraw();
 }

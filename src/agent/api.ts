@@ -2,6 +2,7 @@ import { saveDepotAssignments } from '../depot.ts';
 import { grid, state } from '../editor/state.ts';
 import { clearAll, clearConnections, placeMachine, removeConnectionAt, removeMachineAt, rotate, updateOrientationLabel } from '../editor/placement.ts';
 import { isPowered } from '../power.ts';
+import { selectedRecipeFor } from '../recipeInfo.ts';
 import { setMode } from '../editor/connect.ts';
 import { handleCanvasClick } from '../editor/click.ts';
 import { loadLcValleyDemo } from '../editor/demo.ts';
@@ -36,6 +37,7 @@ export interface AgentApi {
   assignDepot(x: number, y: number, resource: string, kind?: 'item' | 'fluid', rate?: number): string;
   ports(x?: number, y?: number): string;
   power(): string;
+  recipe(x: number, y: number): string;
   demo(): string;
   clearAll(): string;
   clearConnections(): string;
@@ -54,6 +56,7 @@ look:
   snapshot()             JSON of machines/connections/ports (for programmatic use)
   ports(x?, y?)          port cells of one machine (at tile x,y) or all machines
   power()                machines that are UNPOWERED (outside every pylon AoE)
+  recipe(x, y)           recipe panel of the machine at a tile: rates, supply/demand, efficiency
   types(filter?)         catalog entries (name, index, size, category, recipes)
   status()               last status message      history(n?) recent messages
 act:
@@ -208,6 +211,31 @@ function buildApi(): AgentApi {
       return unpowered
         .map((m) => `${m.type.name} at (${m.x},${m.y}) is UNPOWERED — place a pylon/relay within range`)
         .join('\n');
+    },
+
+    recipe: (x, y) => {
+      const id = machineIdAt(x, y);
+      const machine = id ? state.machines.find((m) => m.id === id) : undefined;
+      if (!machine) return `ERROR: no machine at (${x},${y})`;
+      const info = selectedRecipeFor(machine, state.connections);
+      if (!info) return `ERROR: no recipe info for machine at (${x},${y})`;
+      const lines = [
+        `${machine.type.name} at (${x},${y}) — recipe: ${info.recipe.id} (${info.source})`,
+        ...info.inputStatus.map((s) => {
+          const unit = s.slot.kind === 'fluid' ? 's' : 'min';
+          return `  in : ${s.slot.resource} (${s.slot.kind}) needs ${s.slot.rate}/${unit} — fed ${s.delivered}/${unit} via ${s.connections} connection${s.connections === 1 ? '' : 's'}`;
+        }),
+        ...info.recipe.outputs.map((s) => {
+          const unit = s.kind === 'fluid' ? 's' : 'min';
+          return `  out: ${s.resource} (${s.kind}) ${s.rate}/${unit}`;
+        }),
+        `  supply ${info.supply} · demand ${info.demand} · efficiency ${Math.round(info.efficiency * 100)}%`,
+        `  inbound connections: ${info.inbound.length} · outbound: ${info.outbound.length}`,
+      ];
+      if (info.inbound.length === 0 && info.recipe.inputs.length > 0) {
+        lines.push('  ! no inbound connections — machine is not being fed');
+      }
+      return lines.join('\n');
     },
 
     demo: () => {
