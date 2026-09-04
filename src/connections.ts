@@ -1,5 +1,6 @@
-import { findPathMulti } from './pathfinding.ts';
+import { findPathMultiCrossing } from './pathfinding.ts';
 import { matchRecipe } from './recipes.ts';
+import { isCrossingAt, maxThroughput } from './logistics.ts';
 import { nextId } from './ids.ts';
 import type { Grid } from './grid.ts';
 import type { Connection, Recipe } from './types.ts';
@@ -23,9 +24,23 @@ export function completeDraft(
   const tgtRes = target.resource?.trim() ?? '';
   const bothSpecific = srcRes !== '' && tgtRes !== '';
   if (bothSpecific && srcRes !== tgtRes) return { error: `Resource mismatch: '${srcRes}' vs '${tgtRes}'.` };
-  // Route around machines *and* other connections — a tile carries at most one belt/pipe.
-  const path = findPathMulti(grid, source.adjacentTiles, target.adjacentTiles);
+  // Router prefers clean routes but may cross an existing line (expensive)
+  // — auto-bridging as a last resort.
+  const path = findPathMultiCrossing(grid, source.adjacentTiles, target.adjacentTiles);
   if (!path || path.length === 0) return { error: 'No path found between the picked ports.' };
+  // A shared tile is only legal as a perpendicular over/under pass;
+  // same-direction overlap (stacking) is rejected.
+  for (const tile of path) {
+    for (const c of existingConnections) {
+      if (!c.path.some((t) => t.x === tile.x && t.y === tile.y)) continue;
+      if (!isCrossingAt(path, c.path, tile)) {
+        return {
+          error:
+            'Connections cannot overlap — they may only cross other lines perpendicular (bridge).',
+        };
+      }
+    }
+  }
   const fromTile = path[0]!;
   const toTile = path[path.length - 1]!;
   const fromCellIndex = source.adjacentTiles.findIndex((t) => t.x === fromTile.x && t.y === fromTile.y);
@@ -89,8 +104,8 @@ function buildConnection(
   const explicit = source.resource?.trim() || target.resource?.trim() || '';
   const resolvedResource = explicit || inferredSourceResource(source, existingConnections);
   const recipe = resolvedResource.trim() ? matchRecipe(target.machine, resolvedResource.trim(), source.kind) : null;
-  // Throughput: belts 30/min, pipes 2/s
-  const throughput = source.kind === 'item' ? 30 : 2;
+  // Throughput from the transport constants, per minute (belts 30, pipes 120).
+  const throughput = maxThroughput(source.kind);
   return {
     id: nextId('conn'),
     fromMachineId: source.machine.id,

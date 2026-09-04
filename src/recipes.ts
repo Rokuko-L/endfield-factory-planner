@@ -1,4 +1,4 @@
-import type { Connection, MachineInstance, Recipe, ResourceKind } from './types.ts';
+import type { Connection, MachineInstance, MachineType, Recipe, ResourceKind } from './types.ts';
 
 /**
  * Find the recipe on `target` that consumes a connection's
@@ -23,6 +23,32 @@ export function matchRecipe(
     }
   }
   return null;
+}
+
+/**
+ * Pick the recipe that the current inbound connections actually feed:
+ * the one with the most distinct input slots receiving a matching
+ * connection. Machines like the Packaging Unit share inputs across
+ * recipes (Amethyst Part feeds both Industrial Explosive and LC Valley
+ * Battery), so "first recipe containing the resource" picks the wrong
+ * craft — counting fed slots disambiguates.
+ */
+export function selectBestRecipe(
+  type: MachineType,
+  inbound: Connection[],
+): Recipe | null {
+  let best: Recipe | null = null;
+  let bestFed = 0;
+  for (const recipe of type.recipes) {
+    const fed = recipe.inputs.filter((slot) =>
+      inbound.some((c) => c.resource === slot.resource && c.kind === slot.kind),
+    ).length;
+    if (fed > bestFed) {
+      best = recipe;
+      bestFed = fed;
+    }
+  }
+  return best;
 }
 
 /**

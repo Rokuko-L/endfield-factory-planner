@@ -131,7 +131,7 @@ export interface Connection {
   matchedRecipeId: string | null;
   /** The routed path, inclusive of the port-adjacent endpoint tiles. */
   path: { x: number; y: number }[];
-  /** Throughput in items/min (belts) or items/sec (pipes). */
+  /** Flow this line carries, per minute (belts 30, pipes 120). */
   throughput: number;
 }
 

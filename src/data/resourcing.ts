@@ -74,9 +74,38 @@ export const GAS_EXTRACTOR: MachineType = {
   "category": "Resourcing",
   "width": 5,
   "height": 5,
+  "noPower": true,
   "ports": [],
-  "edgeBands": {},
-  "recipes": []
+  "edgeBands": {
+    "south": {
+      "type": "output",
+      "resourceKind": "fluid"
+    }
+  },
+  "recipes": [
+    {
+      "id": "recipe_1",
+      "inputs": [],
+      "outputs": [
+        {
+          "resource": "Inergen",
+          "kind": "fluid",
+          "rate": 2
+        }
+      ]
+    },
+    {
+      "id": "recipe_2",
+      "inputs": [],
+      "outputs": [
+        {
+          "resource": "Xiragen",
+          "kind": "fluid",
+          "rate": 2
+        }
+      ]
+    }
+  ]
 };
 
 /** Hydro Mining Rig */

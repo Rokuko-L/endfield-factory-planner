@@ -89,23 +89,24 @@ describe('Grid', () => {
     expect(grid.getOccupancyAt(5, 5)).toBeNull();
   });
 });
-describe('Grid connection occupancy (no stacking)', () => {
-  it('a tile carries at most one connection — a different connection cannot overlap', () => {
+describe('Grid connection occupancy (crossing rules)', () => {
+  it('a tile may host a second connection (crossing) but never a third', () => {
     const grid = new Grid(10, 10);
     grid.placeConnectionTiles('c1', [{ x: 2, y: 2 }]);
     expect(grid.getConnectionAt(2, 2)).toBe('c1');
-    expect(() => grid.placeConnectionTiles('c2', [{ x: 2, y: 2 }])).toThrow(
-      'cell already has a connection',
+    expect(() => grid.placeConnectionTiles('c2', [{ x: 2, y: 2 }])).not.toThrow();
+    expect(grid.getConnectionsAt(2, 2)).toEqual(['c1', 'c2']);
+    expect(() => grid.placeConnectionTiles('c3', [{ x: 2, y: 2 }])).toThrow(
+      'already crosses two connections',
     );
-    // the original connection is untouched
-    expect(grid.getConnectionAt(2, 2)).toBe('c1');
   });
 
-  it('the same connection may re-place its own tiles', () => {
+  it('placing the same connection twice on a tile throws', () => {
     const grid = new Grid(10, 10);
     grid.placeConnectionTiles('c1', [{ x: 2, y: 2 }]);
-    expect(() => grid.placeConnectionTiles('c1', [{ x: 2, y: 2 }])).not.toThrow();
-    expect(grid.connectionTiles()).toEqual([{ x: 2, y: 2 }]);
+    expect(() => grid.placeConnectionTiles('c1', [{ x: 2, y: 2 }])).toThrow(
+      'connection already covers the tile',
+    );
   });
 
   it('machines cannot be placed on a connection tile and vice versa', () => {

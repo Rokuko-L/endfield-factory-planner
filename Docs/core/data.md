@@ -102,3 +102,26 @@ declared in the JSDoc on `PortDef.rate` and is not enforced by the type
 system — it is a convention.
 
 Related: [types.md](types.md) · [extending.md](../reference/extending.md) · [renderer.md](renderer.md)
+
+## Gases Ride Pipes
+
+All gaseous resources — Cuprium/Hetonite/Pyrrolite Gas, Inergen, Xiragen,
+Acridgen, Heavy Xiragen — are cataloged as `kind: "fluid"` so they flow
+through pipes (120/min), matching the game
+([Flow Rate](https://endfield.wiki.gg/wiki/Flow_Rate)). Canisters remain
+items.
+
+Gas chain anchors (wiki-derived):
+
+- **Gas Extractor** — produces Inergen or Xiragen (2/s), needs no power
+  (natural flow extraction), fluid output band on the south edge.
+- **Gas Dispersing Unit** — consumes a gas at a **0.1/s (6/min) minimum**
+  to create environments; excess is wasted. Fluid input band, north edge.
+- Fluid-Gas / Solid-Gas Transmuting Units and the Gas Reactor Globe
+  consume/produce gases in 2s recipes at 30–60/min.
+
+Known gap: some gas consumers (e.g. Filling Unit) still have item-only
+edge bands, so their gas-side recipes are not yet connectable in the
+editor — their bands predate fluid gases.
+
+Related: [flow.md](flow.md) for how these rates propagate.

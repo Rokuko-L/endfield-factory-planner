@@ -1,4 +1,5 @@
 import type { MachineInstance, Connection } from './types.ts';
+import type { FlowReport } from './flow.ts';
 import { selectedRecipeFor } from './recipeInfo.ts';
 
 export function renderRecipeInfoPanel(
@@ -6,6 +7,7 @@ export function renderRecipeInfoPanel(
   machine: MachineInstance | null,
   connections: Connection[],
   assignment: { resource: string; kind: 'item' | 'fluid'; rate: number } | undefined,
+  flow?: FlowReport,
 ): void {
   host.innerHTML = '';
   if (!machine) {
@@ -15,7 +17,7 @@ export function renderRecipeInfoPanel(
     host.appendChild(empty);
     return;
   }
-  const info = selectedRecipeFor(machine, connections);
+  const info = selectedRecipeFor(machine, connections, flow);
   if (!info) {
     const empty = document.createElement('div');
     empty.className = 'info-empty';

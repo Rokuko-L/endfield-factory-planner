@@ -2,6 +2,7 @@ import type { Grid } from './grid.ts';
 import type { Connection, MachineInstance, PortDef, Side } from './types.ts';
 import { rotateSide, transformPort, effectiveSize } from './geometry.ts';
 import { powerAoe, isPowered } from './power.ts';
+import type { FlowReport } from './flow.ts';
 
 /**
  * Color pairs for edge bands and single-tile ports. Each entry is a
@@ -80,6 +81,7 @@ export class Renderer {
     draftSource: { x: number; y: number } | null,
     draftPath: { x: number; y: number }[] | null,
     powerPreviewId: string | null = null,
+    flow: FlowReport | null = null,
   ): void {
     const ctx = this.canvas.getContext('2d');
     if (!ctx) return;
@@ -92,6 +94,41 @@ export class Renderer {
     this.drawPowerAoe(ctx, machines, powerPreviewId);
     this.drawPowerStatus(ctx, machines);
     this.drawDraft(ctx, draftSource, draftPath);
+    if (flow) this.drawFlowFlags(ctx, machines, flow);
+  }
+
+  /**
+   * Flow health badges: amber '!' on starved machines (efficiency < 1),
+   * red '×' on machines touching a clogged line. Drawn at the machine's
+   * top-right corner.
+   */
+  private drawFlowFlags(ctx: CanvasRenderingContext2D, machines: MachineInstance[], flow: FlowReport): void {
+    const t = this.tilePx;
+    for (const mf of flow.machines) {
+      const m = machines.find((mm) => mm.id === mf.machineId);
+      if (!m) continue;
+      const hasClogged = flow.connections.some(
+        (c) => c.clogged && (c.toMachineId === m.id || c.fromMachineId === m.id),
+      );
+      const starved = mf.inputs.length > 0 && mf.efficiency < 1 - 1e-9;
+      if (!hasClogged && !starved) continue;
+      const w = effectiveSize(m.type, m.orientation).width;
+      const cx = (m.x + w) * t;
+      const cy = m.y * t;
+      const r = t * 0.32;
+      ctx.beginPath();
+      ctx.arc(cx - r, cy + r, r, 0, Math.PI * 2);
+      ctx.fillStyle = hasClogged ? '#d9534f' : '#e0a030';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(0,0,0,0.6)';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+      ctx.fillStyle = '#1a1a1a';
+      ctx.font = `bold ${Math.round(r * 1.3)}px sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(hasClogged ? '×' : '!', cx - r, cy + r + 1);
+    }
   }
 
   private drawTiles(

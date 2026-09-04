@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest';
 import { Grid } from '../src/grid.ts';
 import { completeDraft } from '../src/connections.ts';
 import { allPortCells } from '../src/ports.ts';
-import type { MachineInstance, MachineType } from '../src/types.ts';
+import { isCrossingAt } from '../src/logistics.ts';
+import { MINER } from '../src/data.ts';
+import type { Connection, MachineInstance, MachineType } from '../src/types.ts';
 import type { PickedPort, PortCell } from '../src/layout.ts';
 
 /** north band = output, south band = input (like Refining/Moulding Units). */
@@ -167,23 +169,89 @@ describe('completeDraft direction validation', () => {
     expect(out.connection.matchedRecipeId).toBe(null);
   });
 
-  it('refuses to route through an existing belt when it blocks the only corridor', () => {
+  it('auto-bridges: routes perpendicular across a single belt line (over/under pass)', () => {
     const grid = new Grid(20, 20);
     const a = makeMachine(depot, 'a', 2, 8);
     const b = makeMachine(producer, 'b', 14, 8);
     grid.placeMachine(a);
     grid.placeMachine(b);
-    // A wall of an existing belt sealing the two machines off from each other.
+    // A single vertical belt line between the machines — crossable at right angles.
     const wall = [];
-    for (let y = 0; y < 20; y++) {
-      wall.push({ x: 8, y });
-    }
+    for (let y = 0; y < 20; y++) wall.push({ x: 8, y });
     grid.placeConnectionTiles('wall', wall);
+    const wallConn: Connection = {
+      id: 'wall',
+      fromMachineId: 'far',
+      fromPortId: 'p',
+      toMachineId: 'far2',
+      toPortId: 'p',
+      kind: 'item',
+      resource: 'Whatever',
+      matchedRecipeId: null,
+      path: wall,
+      throughput: 30,
+    };
     const result = completeDraft(
       grid,
       pickedOf(portOf(a, 'port:p_out')),
       portOf(b, 'band:south:1'),
+      [wallConn],
     );
-    expect('error' in result && result.error).toBe('No path found between the picked ports.');
+    if ('error' in result) throw new Error(`expected success, got: ${result.error}`);
+    // The only shared tiles are the perpendicular crossing at x=8.
+    const shared = result.connection.path.filter((t) => t.x === 8);
+    expect(shared.length).toBe(1);
+    expect(isCrossingAt(result.connection.path, wall, shared[0]!)).toBe(true);
+  });
+
+  it('rejects running along an existing belt (colinear stacking)', () => {
+    const grid = new Grid(20, 5);
+    const a = makeMachine(depot, 'a', 0, 4);
+    grid.placeMachine(a);
+    // A 1×1 consumer whose only input band faces north at (5,3).
+    const consumer: MachineType = {
+      name: 'Sink',
+      width: 1,
+      height: 1,
+      noPower: true,
+      ports: [],
+      edgeBands: { north: { type: 'input', resourceKind: 'item' } },
+      recipes: [],
+    };
+    const b = makeMachine(consumer, 'b', 5, 4);
+    grid.placeMachine(b);
+    // Existing belt on the corridor row between them.
+    const belt = [
+      { x: 2, y: 3 },
+      { x: 3, y: 3 },
+      { x: 4, y: 3 },
+    ];
+    grid.placeConnectionTiles('belt', belt);
+    // Seal every detour with 1×1 blockers: row y=2 above and row y=4 below.
+    const blocker: MachineType = { ...MINER, name: 'Blocker', width: 1, height: 1, edgeBands: {} };
+    for (const [x, y] of [[1, 2], [2, 2], [3, 2], [4, 2], [5, 2], [3, 4], [4, 4]] as const) {
+      grid.placeMachine(makeMachine(blocker, `blk${x}_${y}`, x, y));
+    }
+    const beltConn: Connection = {
+      id: 'belt',
+      fromMachineId: 'far',
+      fromPortId: 'p',
+      toMachineId: 'far2',
+      toPortId: 'p',
+      kind: 'item',
+      resource: 'Whatever',
+      matchedRecipeId: null,
+      path: belt,
+      throughput: 30,
+    };
+    const result = completeDraft(
+      grid,
+      pickedOf(portOf(a, 'port:p_out')),
+      portOf(b, 'band:north:0'),
+      [beltConn],
+    );
+    expect('error' in result && result.error).toBe(
+      'Connections cannot overlap — they may only cross other lines perpendicular (bridge).',
+    );
   });
 });

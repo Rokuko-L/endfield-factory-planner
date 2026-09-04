@@ -1,87 +1,62 @@
-import type { Connection, MachineInstance } from './types.ts';
-
-/** Max throughput for belts (items/min) and pipes (items/sec). */
-const MAX_THROUGHPUT: Record<'item' | 'fluid', number> = {
-  item: 30,
-  fluid: 2,
-};
+import type { ResourceKind } from './types.ts';
 
 /**
- * Check if a machine is a splitter (has multiple outputs).
+ * Transport capacities, per minute. The single source of truth for flow
+ * math (see Wiki Flow Rate: belts 30/min, pipes 120/min for liquids and
+ * gases alike; exceeding capacity clogs the line).
  */
-export function isSplitter(machine: MachineInstance): boolean {
-  return machine.type.name === 'Splitter' || machine.type.name === 'Pipe Splitter';
+export const ITEM_BELT_RATE = 30;
+export const PIPE_RATE = 120;
+
+/** Max throughput per minute for a connection kind. */
+export function maxThroughput(kind: ResourceKind): number {
+  return kind === 'fluid' ? PIPE_RATE : ITEM_BELT_RATE;
 }
 
 /**
- * Check if a machine is a converger (has multiple inputs).
+ * Normalize a rate slot to per-minute. Catalog rates are per-minute for
+ * items and per-second for fluids (implicit by kind) — e.g. a gas recipe
+ * input of 0.1/s is 6/min, the minimum-flow requirement of the Gas
+ * Dispersing Unit.
  */
-export function isConverger(machine: MachineInstance): boolean {
-  return machine.type.name === 'Converger' || machine.type.name === 'Pipe Converger';
+export function ratePerMin(slot: { rate: number; kind: ResourceKind }): number {
+  return slot.kind === 'fluid' ? slot.rate * 60 : slot.rate;
 }
 
 /**
- * Get the output connections from a splitter machine.
- * Only returns connections that actually exist.
+ * The direction of a connection's path at a specific tile.
+ * Returns {dx, dy} flow direction, or null if the path has no direction
+ * there (single-tile path).
  */
-export function getSplitterOutputs(
-  machine: MachineInstance,
-  allConnections: Connection[],
-): Connection[] {
-  return allConnections.filter((c) => c.fromMachineId === machine.id);
+export function pathDirectionAt(
+  path: { x: number; y: number }[],
+  tile: { x: number; y: number },
+): { dx: number; dy: number } | null {
+  const idx = path.findIndex((t) => t.x === tile.x && t.y === tile.y);
+  if (idx === -1) return null;
+  if (idx < path.length - 1) {
+    const a = path[idx]!;
+    const b = path[idx + 1]!;
+    return { dx: Math.sign(b.x - a.x), dy: Math.sign(b.y - a.y) };
+  }
+  if (idx > 0) {
+    const a = path[idx - 1]!;
+    const b = path[idx]!;
+    return { dx: Math.sign(b.x - a.x), dy: Math.sign(b.y - a.y) };
+  }
+  return null;
 }
 
-/**
- * Get the input connections to a converger machine.
- */
-export function getConvergerInputs(
-  machine: MachineInstance,
-  allConnections: Connection[],
-): Connection[] {
-  return allConnections.filter((c) => c.toMachineId === machine.id);
+/** True if two paths cross perpendicular at the tile (a bridge/overpass). */
+export function isCrossingAt(
+  pathA: { x: number; y: number }[],
+  pathB: { x: number; y: number }[],
+  tile: { x: number; y: number },
+): boolean {
+  const a = pathDirectionAt(pathA, tile);
+  const b = pathDirectionAt(pathB, tile);
+  if (!a || !b) return false;
+  // Perpendicular iff the direction vectors are orthogonal — same-axis
+  // overlap (including opposite directions) is never a valid crossing.
+  return a.dx * b.dx + a.dy * b.dy === 0;
 }
-
-/**
- * Calculate effective throughput for a connection passing through a splitter.
- * Round-robin distribution: input throughput divided by available outputs.
- * If an output has no belt, it's skipped.
- */
-export function getSplitterThroughput(
-  conn: Connection,
-  machine: MachineInstance,
-  allConnections: Connection[],
-): number {
-  if (!isSplitter(machine)) return conn.throughput;
-  const outputs = getSplitterOutputs(machine, allConnections);
-  if (outputs.length === 0) return conn.throughput;
-  // Round-robin: divide input throughput by number of available outputs
-  return Math.floor(conn.throughput / outputs.length);
-}
-
-/**
- * Calculate effective throughput for a converger output.
- * Capped at max throughput (30/min for belts, 2/s for pipes).
- * Round-robin: each input gets a turn, but total output is capped.
- */
-export function getConvergerThroughput(
-  machine: MachineInstance,
-  allConnections: Connection[],
-): number {
-  if (!isConverger(machine)) return 0;
-  const inputs = getConvergerInputs(machine, allConnections);
-  if (inputs.length === 0) return 0;
-  // Sum all input throughputs
-  const totalInput = inputs.reduce((sum, c) => sum + c.throughput, 0);
-  // Cap at max throughput for this kind
-  const kind = inputs[0]!.kind;
-  const max = MAX_THROUGHPUT[kind];
-  return Math.min(totalInput, max);
-}
-
-/**
- * Get the max throughput for a connection kind.
- */
-export function maxThroughput(kind: 'item' | 'fluid'): number {
-  return MAX_THROUGHPUT[kind];
-}
-

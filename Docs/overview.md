@@ -29,7 +29,8 @@ src/
   pathfinding.ts  // A* on free cells (findPath, findPathMulti, internal MinHeap)
   recipes.ts      // Connection auto-detect: matchRecipe, reconcileConnectionRecipes
   power.ts        // Power AoE: powerAoe, isPowered, machineInAoe
-  logistics.ts    // Splitter/converger throughput rules
+  logistics.ts    // Transport constants (belt 30/min, pipe 120/min), ratePerMin, crossing rules
+  flow.ts         // Static flow solver: efficiency propagation, split/merge, warnings (see core/flow.md)
   bands.ts        // Edge-band resource lookup (resourceForBand)
   ports.ts        // allPortCells, pickPortAt — enumerates every port cell on the grid
   connections.ts  // completeDraft / buildConnection — validates and creates connections
@@ -86,7 +87,7 @@ Mouse/keyboard events ──> main.ts (state, mode)
                          ├──> completeDraft (src/connections.ts) → findPathMulti (src/pathfinding.ts)
                          ├──> matchRecipe (src/recipes.ts) for connection auto-detect
                          ├──> powerAoe / isPowered (src/power.ts) for power AoE + status
-                         ├──> getSplitterThroughput / getConvergerThroughput (src/logistics.ts)
+                         ├──> solveFlow (src/flow.ts) — efficiency propagation + warnings
                          │
                          └──> Renderer.draw (src/renderer.ts)
                                  │
@@ -113,7 +114,8 @@ update the catalog. `scripts/` and `scraped/` have been removed.
 | [core/pathfinding.md](core/pathfinding.md) | A* on free cells, obstacle model, algorithm notes |
 | [core/renderer.md](core/renderer.md) | Canvas drawing conventions, colors, and DPI scaling |
 | [core/power.md](core/power.md) | Power AoE system: pylons, relays, powered status |
-| [core/logistics.md](core/logistics.md) | Splitter/converger throughput rules, one-connection-per-tile invariant |
+| [core/logistics.md](core/logistics.md) | Transport constants, crossing rules, one-direction-per-tile invariant |
+| [core/flow.md](core/flow.md) | Static flow solver: efficiency propagation, split/merge, warnings, gas rates |
 | [core/depot.md](core/depot.md) | Depot source/sink rules, resource enumeration, assignment persistence |
 | [core/recipe-info.md](core/recipe-info.md) | Recipe resolution for the selected machine |
 | [ui/interactions.md](ui/interactions.md) | `main.ts` state machine, modes, event wiring, controls |

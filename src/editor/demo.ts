@@ -95,11 +95,13 @@ export function loadLcValleyDemo(): void {
   const fittingUnit = placeDemoMachine('Fitting Unit', 8, 8);
   const packagingUnit = placeDemoMachine('Packaging Unit', 14, 8);
   const lcLoader = placeDemoMachine('Depot Loader', 21, 9);
+  const lcLoader2 = placeDemoMachine('Depot Loader', 21, 12);
   const powder1 = placeDemoMachine('Depot Unloader', 8, 16);
   const powder2 = placeDemoMachine('Depot Unloader', 16, 16);
   const pylon1 = placeDemoMachine('Electric Pylon', 10, 12);
   const pylon2 = placeDemoMachine('Electric Pylon', 13, 13);
-  if (!amethystUnloader || !fittingUnit || !packagingUnit || !lcLoader || !powder1 || !powder2 || !pylon1 || !pylon2) {
+  const batterySplitter = placeDemoMachine('Splitter', 20, 8);
+  if (!amethystUnloader || !fittingUnit || !packagingUnit || !lcLoader || !lcLoader2 || !powder1 || !powder2 || !pylon1 || !pylon2 || !batterySplitter) {
     setStatus('Demo: a machine is missing from the catalog or does not fit.', true);
     return;
   }
@@ -114,7 +116,10 @@ export function loadLcValleyDemo(): void {
     demoConnect(fittingUnit, packagingUnit, 'Amethyst Part', 'item'),
     demoConnect(powder1, packagingUnit, 'Originium Powder', 'item'),
     demoConnect(powder2, packagingUnit, 'Originium Powder', 'item'),
-    demoConnect(packagingUnit, lcLoader, 'LC Valley Battery', 'item'),
+    // Splitter case: 6/min of batteries split round-robin into 2 loaders (3/min each).
+    demoConnect(packagingUnit, batterySplitter, 'LC Valley Battery', 'item'),
+    demoConnect(batterySplitter, lcLoader, 'LC Valley Battery', 'item'),
+    demoConnect(batterySplitter, lcLoader2, 'LC Valley Battery', 'item'),
   ];
   if (results.some((c) => c === null)) {
     setStatus('Demo: one or more demo connections failed.', true);
@@ -122,6 +127,6 @@ export function loadLcValleyDemo(): void {
     return;
   }
   setSelectedMachineId(packagingUnit.id);
-  setStatus('LC Valley demo loaded — 6 LC Valley Battery / min at 100% efficiency.');
+  setStatus('LC Valley demo loaded — 6 LC Valley Battery / min at 100% efficiency, split across 2 loaders.');
   redraw();
 }

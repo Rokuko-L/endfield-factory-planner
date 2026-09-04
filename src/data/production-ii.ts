@@ -1981,7 +1981,7 @@ export const FILLING_UNIT: MachineType = {
         },
         {
           "resource": "Acridgen",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 30
         }
       ],
@@ -2004,7 +2004,7 @@ export const FILLING_UNIT: MachineType = {
         },
         {
           "resource": "Xiragen",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 30
         }
       ],
@@ -2027,7 +2027,7 @@ export const FILLING_UNIT: MachineType = {
         },
         {
           "resource": "Heavy Xiragen",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 30
         }
       ],
@@ -2050,7 +2050,7 @@ export const FILLING_UNIT: MachineType = {
         },
         {
           "resource": "Inergen",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 30
         }
       ],
@@ -2073,7 +2073,7 @@ export const FILLING_UNIT: MachineType = {
         },
         {
           "resource": "Cuprium Gas",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 30
         }
       ],
@@ -2096,7 +2096,7 @@ export const FILLING_UNIT: MachineType = {
         },
         {
           "resource": "Hetonite Gas",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 30
         }
       ],
@@ -2119,7 +2119,7 @@ export const FILLING_UNIT: MachineType = {
         },
         {
           "resource": "Pyrrolite Gas",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 30
         }
       ],
@@ -2192,7 +2192,7 @@ export const FLUID_GAS_TRANSMUTING_UNIT: MachineType = {
       "outputs": [
         {
           "resource": "Acridgen",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 30
         }
       ],
@@ -2203,7 +2203,7 @@ export const FLUID_GAS_TRANSMUTING_UNIT: MachineType = {
       "inputs": [
         {
           "resource": "Acridgen",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 30
         }
       ],
@@ -2228,7 +2228,7 @@ export const FLUID_GAS_TRANSMUTING_UNIT: MachineType = {
       "outputs": [
         {
           "resource": "Xiragen",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 30
         }
       ],
@@ -2239,7 +2239,7 @@ export const FLUID_GAS_TRANSMUTING_UNIT: MachineType = {
       "inputs": [
         {
           "resource": "Xiragen",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 30
         }
       ],
@@ -2264,7 +2264,7 @@ export const FLUID_GAS_TRANSMUTING_UNIT: MachineType = {
       "outputs": [
         {
           "resource": "Heavy Xiragen",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 30
         }
       ],
@@ -2275,7 +2275,7 @@ export const FLUID_GAS_TRANSMUTING_UNIT: MachineType = {
       "inputs": [
         {
           "resource": "Heavy Xiragen",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 30
         }
       ],
@@ -2300,7 +2300,7 @@ export const FLUID_GAS_TRANSMUTING_UNIT: MachineType = {
       "outputs": [
         {
           "resource": "Cuprium Gas",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 30
         }
       ],
@@ -2311,7 +2311,7 @@ export const FLUID_GAS_TRANSMUTING_UNIT: MachineType = {
       "inputs": [
         {
           "resource": "Cuprium Gas",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 30
         }
       ],
@@ -2329,7 +2329,7 @@ export const FLUID_GAS_TRANSMUTING_UNIT: MachineType = {
       "inputs": [
         {
           "resource": "Hetonite Gas",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 30
         }
       ],
@@ -2354,7 +2354,7 @@ export const FLUID_GAS_TRANSMUTING_UNIT: MachineType = {
       "outputs": [
         {
           "resource": "Hetonite Gas",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 30
         }
       ],
@@ -2482,9 +2482,49 @@ export const GAS_DISPERSING_UNIT: MachineType = {
   "category": "Production II",
   "width": 5,
   "height": 5,
+  "noPower": true,
   "ports": [],
-  "edgeBands": {},
-  "recipes": []
+  "edgeBands": {
+    "north": {
+      "type": "input",
+      "resourceKind": "fluid"
+    }
+  },
+  "recipes": [
+    {
+      "id": "inergen_env",
+      "inputs": [
+        {
+          "resource": "Inergen",
+          "kind": "fluid",
+          "rate": 0.1
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "id": "acrid_env",
+      "inputs": [
+        {
+          "resource": "Hetonite Gas",
+          "kind": "fluid",
+          "rate": 0.1
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "id": "xiranite_env",
+      "inputs": [
+        {
+          "resource": "Pyrrolite Gas",
+          "kind": "fluid",
+          "rate": 0.1
+        }
+      ],
+      "outputs": []
+    }
+  ]
 };
 
 /** Gas Reactor Globe */
@@ -3257,7 +3297,7 @@ export const PURIFICATION_UNIT: MachineType = {
       "inputs": [
         {
           "resource": "Xiragen",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 60
         },
         {
@@ -3269,7 +3309,7 @@ export const PURIFICATION_UNIT: MachineType = {
       "outputs": [
         {
           "resource": "Heavy Xiragen",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 30
         }
       ],
@@ -3280,7 +3320,7 @@ export const PURIFICATION_UNIT: MachineType = {
       "inputs": [
         {
           "resource": "Cuprium Gas",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 60
         },
         {
@@ -3292,7 +3332,7 @@ export const PURIFICATION_UNIT: MachineType = {
       "outputs": [
         {
           "resource": "Hetonite Gas",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 60
         }
       ],
@@ -3303,7 +3343,7 @@ export const PURIFICATION_UNIT: MachineType = {
       "inputs": [
         {
           "resource": "Xiragen",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 60
         },
         {
@@ -3315,7 +3355,7 @@ export const PURIFICATION_UNIT: MachineType = {
       "outputs": [
         {
           "resource": "Heavy Xiragen",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 30
         }
       ],
@@ -3326,7 +3366,7 @@ export const PURIFICATION_UNIT: MachineType = {
       "inputs": [
         {
           "resource": "Cuprium Gas",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 60
         },
         {
@@ -3338,7 +3378,7 @@ export const PURIFICATION_UNIT: MachineType = {
       "outputs": [
         {
           "resource": "Hetonite Gas",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 60
         }
       ],
@@ -5198,7 +5238,7 @@ export const SEPARATING_UNIT: MachineType = {
         },
         {
           "resource": "Acridgen",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 30
         }
       ],
@@ -5221,7 +5261,7 @@ export const SEPARATING_UNIT: MachineType = {
         },
         {
           "resource": "Xiragen",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 30
         }
       ],
@@ -5244,7 +5284,7 @@ export const SEPARATING_UNIT: MachineType = {
         },
         {
           "resource": "Heavy Xiragen",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 30
         }
       ],
@@ -5267,7 +5307,7 @@ export const SEPARATING_UNIT: MachineType = {
         },
         {
           "resource": "Inergen",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 30
         }
       ],
@@ -5290,7 +5330,7 @@ export const SEPARATING_UNIT: MachineType = {
         },
         {
           "resource": "Cuprium Gas",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 30
         }
       ],
@@ -5313,7 +5353,7 @@ export const SEPARATING_UNIT: MachineType = {
         },
         {
           "resource": "Hetonite Gas",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 30
         }
       ],
@@ -5336,7 +5376,7 @@ export const SEPARATING_UNIT: MachineType = {
         },
         {
           "resource": "Pyrrolite Gas",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 30
         }
       ],
@@ -5359,7 +5399,7 @@ export const SOLID_GAS_TRANSMUTING_UNIT: MachineType = {
       "inputs": [
         {
           "resource": "Xiragen",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 30
         }
       ],
@@ -5377,7 +5417,7 @@ export const SOLID_GAS_TRANSMUTING_UNIT: MachineType = {
       "inputs": [
         {
           "resource": "Heavy Xiragen",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 30
         }
       ],
@@ -5395,7 +5435,7 @@ export const SOLID_GAS_TRANSMUTING_UNIT: MachineType = {
       "inputs": [
         {
           "resource": "Cuprium Gas",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 30
         }
       ],
@@ -5413,7 +5453,7 @@ export const SOLID_GAS_TRANSMUTING_UNIT: MachineType = {
       "inputs": [
         {
           "resource": "Hetonite Gas",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 60
         }
       ],
@@ -5431,7 +5471,7 @@ export const SOLID_GAS_TRANSMUTING_UNIT: MachineType = {
       "inputs": [
         {
           "resource": "Pyrrolite Gas",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 30
         }
       ],
@@ -5456,7 +5496,7 @@ export const SOLID_GAS_TRANSMUTING_UNIT: MachineType = {
       "outputs": [
         {
           "resource": "Xiragen",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 30
         }
       ],
@@ -5474,7 +5514,7 @@ export const SOLID_GAS_TRANSMUTING_UNIT: MachineType = {
       "outputs": [
         {
           "resource": "Heavy Xiragen",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 30
         }
       ],
@@ -5492,7 +5532,7 @@ export const SOLID_GAS_TRANSMUTING_UNIT: MachineType = {
       "outputs": [
         {
           "resource": "Cuprium Gas",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 30
         }
       ],
@@ -5510,7 +5550,7 @@ export const SOLID_GAS_TRANSMUTING_UNIT: MachineType = {
       "outputs": [
         {
           "resource": "Hetonite Gas",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 60
         }
       ],
@@ -5528,7 +5568,7 @@ export const SOLID_GAS_TRANSMUTING_UNIT: MachineType = {
       "outputs": [
         {
           "resource": "Pyrrolite Gas",
-          "kind": "item",
+          "kind": "fluid",
           "rate": 30
         }
       ],

@@ -3,6 +3,8 @@ import { grid, state } from '../editor/state.ts';
 import { clearAll, clearConnections, placeMachine, removeConnectionAt, removeMachineAt, rotate, updateOrientationLabel } from '../editor/placement.ts';
 import { isPowered } from '../power.ts';
 import { selectedRecipeFor } from '../recipeInfo.ts';
+import { solveFlow } from '../flow.ts';
+import { ratePerMin } from '../logistics.ts';
 import { setMode } from '../editor/connect.ts';
 import { handleCanvasClick } from '../editor/click.ts';
 import { loadLcValleyDemo } from '../editor/demo.ts';
@@ -38,6 +40,7 @@ export interface AgentApi {
   ports(x?: number, y?: number): string;
   power(): string;
   recipe(x: number, y: number): string;
+  flow(): string;
   demo(): string;
   clearAll(): string;
   clearConnections(): string;
@@ -56,6 +59,7 @@ look:
   snapshot()             JSON of machines/connections/ports (for programmatic use)
   ports(x?, y?)          port cells of one machine (at tile x,y) or all machines
   power()                machines that are UNPOWERED (outside every pylon AoE)
+  flow()                 static flow solve: per-connection flow, per-machine efficiency, warnings
   recipe(x, y)           recipe panel of the machine at a tile: rates, supply/demand, efficiency
   types(filter?)         catalog entries (name, index, size, category, recipes)
   status()               last status message      history(n?) recent messages
@@ -217,23 +221,62 @@ function buildApi(): AgentApi {
       const id = machineIdAt(x, y);
       const machine = id ? state.machines.find((m) => m.id === id) : undefined;
       if (!machine) return `ERROR: no machine at (${x},${y})`;
-      const info = selectedRecipeFor(machine, state.connections);
+      const info = selectedRecipeFor(machine, state.connections, solveFlow(state));
       if (!info) return `ERROR: no recipe info for machine at (${x},${y})`;
       const lines = [
         `${machine.type.name} at (${x},${y}) — recipe: ${info.recipe.id} (${info.source})`,
-        ...info.inputStatus.map((s) => {
-          const unit = s.slot.kind === 'fluid' ? 's' : 'min';
-          return `  in : ${s.slot.resource} (${s.slot.kind}) needs ${s.slot.rate}/${unit} — fed ${s.delivered}/${unit} via ${s.connections} connection${s.connections === 1 ? '' : 's'}`;
-        }),
-        ...info.recipe.outputs.map((s) => {
-          const unit = s.kind === 'fluid' ? 's' : 'min';
-          return `  out: ${s.resource} (${s.kind}) ${s.rate}/${unit}`;
-        }),
+        ...info.inputStatus.map((s) =>
+          `  in : ${s.slot.resource} (${s.slot.kind}) needs ${ratePerMin(s.slot)}/min — fed ${s.delivered}/min via ${s.connections} connection${s.connections === 1 ? '' : 's'}`,
+        ),
+        ...info.recipe.outputs.map((s) => `  out: ${s.resource} (${s.kind}) ${ratePerMin(s)}/min`),
         `  supply ${info.supply} · demand ${info.demand} · efficiency ${Math.round(info.efficiency * 100)}%`,
         `  inbound connections: ${info.inbound.length} · outbound: ${info.outbound.length}`,
       ];
       if (info.inbound.length === 0 && info.recipe.inputs.length > 0) {
         lines.push('  ! no inbound connections — machine is not being fed');
+      }
+      return lines.join('\n');
+    },
+
+    flow: () => {
+      const report = solveFlow(state);
+      const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      const letter = (id: string) => {
+        const i = state.machines.findIndex((m) => m.id === id);
+        return i >= 0 ? letters[i] ?? '?' : '?';
+      };
+      const lines: string[] = ['=== flow report (per-minute) ==='];
+      lines.push('[connections]');
+      if (report.connections.length === 0) lines.push('  (none)');
+      for (const c of report.connections) {
+        const label = c.resource.trim() === '' ? 'any' : c.resource;
+        lines.push(
+          `  ${letter(c.fromMachineId)}→${letter(c.toMachineId)} ${label} (${c.kind}) flow ${c.flowPerMin}/${c.capacityPerMin}/min${c.clogged ? '  [CLOGGED]' : ''}`,
+        );
+      }
+      lines.push('[machines]');
+      for (const m of report.machines) {
+        const effPct = Math.round(m.efficiency * 100);
+        const bits = [`  ${letter(m.machineId)} ${m.name} — ${m.recipeId ?? 'passthrough'} eff ${effPct}%`];
+        for (const input of m.inputs) {
+          bits.push(`      in : ${input.resource} fed ${input.fedPerMin}/${input.demandPerMin}/min`);
+        }
+        for (const out of m.outputs) {
+          bits.push(`      out: ${out.resource} ${out.producedPerMin}/min`);
+        }
+        lines.push(...bits);
+      }
+      if (report.warnings.length > 0) {
+        lines.push('[warnings]');
+        for (const w of report.warnings) {
+          const subj = w.subjectId;
+          const target = state.machines.find((m) => m.id === subj);
+          const conn = state.connections.find((c) => c.id === subj);
+          const where = target ? letter(target.id) : conn ? `${letter(conn.fromMachineId)}→${letter(conn.toMachineId)}` : subj;
+          lines.push(`  ! ${w.kind} [${where}]: ${w.message}`);
+        }
+      } else {
+        lines.push('[warnings] (none)');
       }
       return lines.join('\n');
     },

@@ -1,6 +1,7 @@
 import { grid, renderer, selectedType, state } from './state.ts';
 import { updateMetrics } from './metrics.ts';
 import { refreshRecipeInfo } from './selection.ts';
+import { solveFlow } from '../flow.ts';
 
 export function redraw(): void {
   let preview = null;
@@ -12,6 +13,7 @@ export function redraw(): void {
     const valid = grid.canPlaceWithOrientation(type, state.hover.x, state.hover.y, state.orientation);
     preview = { ...state.hover, w: effW, h: effH, valid };
   }
+  const flow = solveFlow(state);
   renderer.draw(
     state.machines,
     state.connections,
@@ -20,6 +22,7 @@ export function redraw(): void {
     state.draftAdjacent,
     state.draftPath,
     state.powerPreviewId,
+    flow,
   );
   updateMetrics();
   refreshRecipeInfo();
