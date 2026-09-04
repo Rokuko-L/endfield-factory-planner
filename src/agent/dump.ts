@@ -248,6 +248,7 @@ export function snapshotJson(grid: Grid, state: EditorState): object {
       resource: c.resource,
       kind: c.kind,
       throughput: c.throughput,
+      path: c.path.map((t) => ({ x: t.x, y: t.y })),
       pathLength: c.path.length,
       matchedRecipeId: c.matchedRecipeId,
     })),

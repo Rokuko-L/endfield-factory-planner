@@ -88,12 +88,15 @@ export function loadLcValleyDemo(): void {
   // Layout fits the current catalog sizes (Depot Unloader 3×1, Fitting Unit
   // 3×3, Packaging Unit 6×4, Depot Loader 3×1, Electric Pylon 2×2). The two
   // pylons sit inside each other's AoE so every powered machine is covered.
+  // Powder corridors stay disjoint: powder1 approaches from the west along
+  // row 15, powder2 sits under the Packaging Unit and runs straight up
+  // column 17. With one-connection-per-tile they cannot share tiles.
   const amethystUnloader = placeDemoMachine('Depot Unloader', 4, 8);
   const fittingUnit = placeDemoMachine('Fitting Unit', 8, 8);
   const packagingUnit = placeDemoMachine('Packaging Unit', 14, 8);
   const lcLoader = placeDemoMachine('Depot Loader', 21, 9);
   const powder1 = placeDemoMachine('Depot Unloader', 8, 16);
-  const powder2 = placeDemoMachine('Depot Unloader', 12, 16);
+  const powder2 = placeDemoMachine('Depot Unloader', 16, 16);
   const pylon1 = placeDemoMachine('Electric Pylon', 10, 12);
   const pylon2 = placeDemoMachine('Electric Pylon', 13, 13);
   if (!amethystUnloader || !fittingUnit || !packagingUnit || !lcLoader || !powder1 || !powder2 || !pylon1 || !pylon2) {
@@ -106,13 +109,17 @@ export function loadLcValleyDemo(): void {
   state.depotAssignments[powder1.id] = { resource: 'Originium Powder', kind: 'item', rate: 30 };
   state.depotAssignments[powder2.id] = { resource: 'Originium Powder', kind: 'item', rate: 30 };
   saveDepotAssignments(state.depotAssignments);
-  const fiberToFitting = demoConnect(amethystUnloader, fittingUnit, 'Amethyst Fiber', 'item');
-  const fittingToPackaging = demoConnect(fittingUnit, packagingUnit, 'Amethyst Part', 'item');
-  const powder1ToPackaging = demoConnect(powder1, packagingUnit, 'Originium Powder', 'item');
-  const powder2ToPackaging = demoConnect(powder2, packagingUnit, 'Originium Powder', 'item');
-  const packagingToLoader = demoConnect(packagingUnit, lcLoader, 'LC Valley Battery', 'item');
-  if (!fiberToFitting || !fittingToPackaging || !powder1ToPackaging || !powder2ToPackaging || !packagingToLoader) {
+  const results = [
+    demoConnect(amethystUnloader, fittingUnit, 'Amethyst Fiber', 'item'),
+    demoConnect(fittingUnit, packagingUnit, 'Amethyst Part', 'item'),
+    demoConnect(powder1, packagingUnit, 'Originium Powder', 'item'),
+    demoConnect(powder2, packagingUnit, 'Originium Powder', 'item'),
+    demoConnect(packagingUnit, lcLoader, 'LC Valley Battery', 'item'),
+  ];
+  if (results.some((c) => c === null)) {
     setStatus('Demo: one or more demo connections failed.', true);
+    redraw();
+    return;
   }
   setSelectedMachineId(packagingUnit.id);
   setStatus('LC Valley demo loaded — 6 LC Valley Battery / min at 100% efficiency.');
