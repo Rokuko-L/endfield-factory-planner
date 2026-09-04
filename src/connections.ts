@@ -2,13 +2,14 @@ import { findPathMultiCrossing } from './pathfinding.ts';
 import { matchRecipe } from './recipes.ts';
 import { nextId } from './ids.ts';
 import type { Grid } from './grid.ts';
-import type { Connection } from './types.ts';
+import type { Connection, Recipe } from './types.ts';
 import type { PickedPort, PortCell } from './layout.ts';
 
 export function completeDraft(
   grid: Grid,
   source: PickedPort,
   target: PortCell,
+  existingConnections: Connection[] = [],
 ): { connection: Connection; interior: { x: number; y: number }[] } | { error: string } {
   if (source.machine.id === target.machine.id) return { error: 'Cannot connect a machine to itself.' };
   if (source.type !== 'output') {
@@ -29,22 +30,44 @@ export function completeDraft(
   const toTile = path[path.length - 1]!;
   const fromCellIndex = source.adjacentTiles.findIndex((t) => t.x === fromTile.x && t.y === fromTile.y);
   const toCellIndex = target.adjacentTiles.findIndex((t) => t.x === toTile.x && t.y === toTile.y);
-  return { connection: buildConnection(source, fromCellIndex, target, toCellIndex, path), interior: path };
+  return {
+    connection: buildConnection(source, fromCellIndex, target, toCellIndex, path, existingConnections),
+    interior: path,
+  };
 }
 
 /**
- * When both picked ports are generic ('' resource), fall back to the
- * source machine's own production: if its recipes produce exactly one
- * distinct resource, that is what flows out of it.
+ * When both picked ports are generic ('' resource), work out what the
+ * source machine actually produces, in two steps:
+ *
+ * 1. If its recipes produce exactly one distinct resource, that's it.
+ * 2. Otherwise, look at the connections already feeding this machine:
+ *    a recipe whose inputs match an incoming connection's resource is
+ *    the one running, and its outputs are what flows out (if they
+ *    resolve to exactly one distinct resource).
  */
-function inferredSourceResource(source: PickedPort): string {
-  const outputs = new Set<string>();
-  for (const recipe of source.machine.type.recipes) {
-    for (const out of recipe.outputs) {
-      if (out.resource.trim() !== '') outputs.add(out.resource);
+function inferredSourceResource(source: PickedPort, existing: Connection[]): string {
+  const collect = (recipes: Recipe[]): Set<string> => {
+    const outputs = new Set<string>();
+    for (const recipe of recipes) {
+      for (const out of recipe.outputs) {
+        if (out.resource.trim() !== '') outputs.add(out.resource);
+      }
+    }
+    return outputs;
+  };
+  const all = collect(source.machine.type.recipes);
+  if (all.size === 1) return [...all][0]!;
+  const activated: Recipe[] = [];
+  for (const c of existing) {
+    if (c.toMachineId !== source.machine.id) continue;
+    for (const recipe of source.machine.type.recipes) {
+      if (!recipe.inputs.some((i) => i.resource === c.resource && i.kind === c.kind)) continue;
+      if (!activated.includes(recipe)) activated.push(recipe);
     }
   }
-  return outputs.size === 1 ? [...outputs][0]! : '';
+  const activatedOutputs = collect(activated);
+  return activatedOutputs.size === 1 ? [...activatedOutputs][0]! : '';
 }
 
 function buildConnection(
@@ -53,6 +76,7 @@ function buildConnection(
   target: PortCell,
   toCellIndex: number,
   path: { x: number; y: number }[],
+  existingConnections: Connection[],
 ): Connection {
   const fromPortId =
     fromCellIndex >= 0 && source.portId.startsWith('band:')
@@ -63,7 +87,7 @@ function buildConnection(
       ? `band:${target.portId.slice('band:'.length)}:${toCellIndex}`
       : target.portId;
   const explicit = source.resource?.trim() || target.resource?.trim() || '';
-  const resolvedResource = explicit || inferredSourceResource(source);
+  const resolvedResource = explicit || inferredSourceResource(source, existingConnections);
   const recipe = resolvedResource.trim() ? matchRecipe(target.machine, resolvedResource.trim(), source.kind) : null;
   // Throughput: belts 30/min, pipes 2/s
   const throughput = source.kind === 'item' ? 30 : 2;

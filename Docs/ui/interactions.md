@@ -51,8 +51,11 @@ The editor runs in one of two modes:
   are generic (`''` resource), the carried resource is inferred from
   the source machine's recipe outputs (if they produce exactly one
   distinct resource) so recipe matching still works across generic
-  bands. Right-click on a belt/pipe removes the connection;
-  right-click on a machine removes the machine.
+  bands. Inference is two-step: if the source machine's recipes have a
+  single distinct output, that's the resource; otherwise the recipe
+  activated by its incoming connections decides (e.g. a Refining Unit
+  fed Ferrium Ore outputs Ferrium). Right-click on a belt/pipe removes
+  the connection; right-click on a machine removes the machine.
 
 The toolbar buttons `#mode-place` and `#mode-connect` toggle between
 the two. Switching modes drops any in-progress draft.

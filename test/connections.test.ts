@@ -121,9 +121,49 @@ describe('completeDraft direction validation', () => {
       portOf(b2, 'band:south:1'),
     );
     if ('error' in result) throw new Error(`expected success, got: ${result.error}`);
-    // "Refined" is inferred from b1's single recipe output and matches b2's recipe input? No —
-    // b2 consumes 'Raw', so the connection is a passthrough carrying 'Refined'.
+    // "Refined" is inferred from b1's single recipe output; b2 consumes 'Raw',
+    // so this connection is a passthrough carrying 'Refined'.
     expect(result.connection.resource).toBe('Refined');
     expect(result.connection.matchedRecipeId).toBe(null);
+  });
+
+  it('uses the recipe activated by an incoming connection when the source has several', () => {
+    const grid = new Grid(20, 20);
+    const multi: MachineType = {
+      ...producer,
+      name: 'Multi Recipe',
+      recipes: [
+        { id: 'r1', inputs: [{ resource: 'Raw', kind: 'item', rate: 30 }], outputs: [{ resource: 'Refined', kind: 'item', rate: 30 }] },
+        { id: 'r2', inputs: [{ resource: 'Scrap', kind: 'item', rate: 30 }], outputs: [{ resource: 'Alloy', kind: 'item', rate: 30 }] },
+      ],
+    };
+    const src = makeMachine(depot, 'src', 2, 8);
+    const mid = makeMachine(multi, 'mid', 8, 4);
+    const dst = makeMachine(producer, 'dst', 14, 4);
+    const scrapSource: MachineType = {
+      ...depot,
+      name: 'Scrap Depot',
+      ports: [{ id: 'p_out', type: 'output', side: 'north', tileIndex: 1, resource: 'Scrap', kind: 'item', rate: 30 }],
+    };
+    const scrapDepot = makeMachine(scrapSource, 'scrap', 2, 12);
+    grid.placeMachine(src);
+    grid.placeMachine(mid);
+    grid.placeMachine(dst);
+    grid.placeMachine(scrapDepot);
+    // Feed 'Scrap' into mid → activates r2 → mid's output must infer 'Alloy'.
+    const feed = completeDraft(grid, pickedOf(portOf(scrapDepot, 'port:p_out')), portOf(mid, 'band:south:1'));
+    if ('error' in feed) throw new Error(`expected success, got: ${feed.error}`);
+    grid.placeConnectionTiles(feed.connection.id, feed.connection.path);
+    const existing = [feed.connection];
+    const out = completeDraft(
+      grid,
+      pickedOf(portOf(mid, 'band:north:1')),
+      portOf(dst, 'band:south:1'),
+      existing,
+    );
+    if ('error' in out) throw new Error(`expected success, got: ${out.error}`);
+    expect(out.connection.resource).toBe('Alloy');
+    // dst consumes 'Raw', not 'Alloy' — correctly a passthrough connection.
+    expect(out.connection.matchedRecipeId).toBe(null);
   });
 });

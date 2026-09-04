@@ -68,7 +68,7 @@ export function handleConnectClick(tile: { x: number; y: number }): void {
     redraw();
     return;
   }
-  const result = completeDraft(grid, state.draftSource, picked);
+  const result = completeDraft(grid, state.draftSource, picked, state.connections);
   if ('error' in result) {
     setStatus(result.error, true);
     state.draftSource = null;
