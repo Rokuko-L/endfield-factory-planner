@@ -88,6 +88,26 @@ interface Solver {
 
 const resKey = (kind: ResourceKind, resource: string): string => `${kind}:${resource}`;
 
+/**
+ * Resolve the resource a generic ('' resource) connection carries: the
+ * source machine's single recipe output, or its depot assignment. Mirrors
+ * the inference in connections.ts so the graph matches what actually
+ * flows.
+ */
+function resolveEdgeResource(connection: Connection, solver: Solver): string {
+  if (connection.resource.trim() !== '') return connection.resource;
+  const source = solver.machineById.get(connection.fromMachineId);
+  if (!source) return '';
+  const assignment = solver.depotAssignments[source.id];
+  if (assignment && assignment.resource.trim() !== '') return assignment.resource;
+  const recipe = solver.recipeOf.get(source.id);
+  if (recipe && recipe.outputs.length > 0) {
+    const distinct = new Set(recipe.outputs.map((o) => o.resource));
+    if (distinct.size === 1) return [...distinct][0]!;
+  }
+  return '';
+}
+
 function outgoingFor(machineId: string, resource: string, connections: Connection[]): Connection[] {
   return connections.filter(
     (c) => c.fromMachineId === machineId && (c.resource === resource || c.resource === ''),
@@ -118,13 +138,13 @@ function consumerDemand(
 }
 
 /** Push flow along a connection, respecting line capacity. */
-function deliver(connection: Connection, amount: number, solver: Solver): void {
+function deliver(connection: Connection, amount: number, resource: string, solver: Solver): void {
   const capacity = Math.min(connection.throughput, maxThroughput(connection.kind));
   const flow = Math.min(amount, capacity);
   if (amount > capacity + 1e-9) solver.clogged.add(connection.id);
   const fed = solver.fed.get(connection.toMachineId);
   if (fed) {
-    const key = resKey(connection.kind, connection.resource || 'any');
+    const key = resKey(connection.kind, resource || 'any');
     fed.set(key, (fed.get(key) ?? 0) + flow);
   }
   solver.flow.set(connection.id, (solver.flow.get(connection.id) ?? 0) + flow);
@@ -139,12 +159,14 @@ function emitSupply(
   supply: { resource: string; kind: ResourceKind; perMin: number },
   solver: Solver,
   connections: Connection[],
+  resolved: Map<string, string>,
 ): void {
   if (supply.perMin <= 0) return;
   const lines = outgoingFor(machine.id, supply.resource, connections);
   if (lines.length === 0) return; // stalled — flagged in the report
   const wants = lines.map((c) => ({
     c,
+    carried: resolved.get(c.id) ?? c.resource,
     want: Math.min(
       Math.min(c.throughput, maxThroughput(c.kind)),
       consumerDemand(solver.machineById.get(c.toMachineId) ?? machine, supply.resource, solver, connections),
@@ -152,13 +174,13 @@ function emitSupply(
   }));
   const totalWant = wants.reduce((a, w) => a + w.want, 0);
   if (totalWant <= supply.perMin + 1e-9) {
-    for (const w of wants) deliver(w.c, w.want, solver);
+    for (const w of wants) deliver(w.c, w.want, w.carried, solver);
     // Everything downstream is saturated and supply remains → clogged.
     if (supply.perMin - totalWant > 1e-9 && lines.length > 0) {
       solver.clogged.add(lines[0]!.id);
     }
   } else {
-    for (const w of wants) deliver(w.c, (supply.perMin * w.want) / totalWant, solver);
+    for (const w of wants) deliver(w.c, (supply.perMin * w.want) / totalWant, w.carried, solver);
   }
 }
 
@@ -243,6 +265,24 @@ export function solveFlow(state: EditorState): FlowReport {
     solver.recipeOf.set(m.id, recipe);
   }
 
+  // Resolve generic ('' resource) edges from their source machine, then
+  // solve against the resolved graph — a generic pipe out of a Gas
+  // Extractor carries Inergen, not "any".
+  const resolvedResource = new Map<string, string>();
+  for (const c of connections) resolvedResource.set(c.id, resolveEdgeResource(c, solver));
+  const graph = connections.map((c) => {
+    const r = resolvedResource.get(c.id) ?? '';
+    return r && c.resource !== r ? { ...c, resource: r } : c;
+  });
+
+  // Re-select recipes against the resolved graph, so a machine fed via a
+  // generic edge picks the recipe its actual resource activates.
+  for (const m of state.machines) {
+    const inbound = graph.filter((c) => c.toMachineId === m.id);
+    if (m.type.recipes.length === 0 || inbound.length === 0) continue;
+    solver.recipeOf.set(m.id, selectBestRecipe(m.type, inbound) ?? m.type.recipes[0]!);
+  }
+
   // Topological order (Kahn). Cycle members are appended at the end and
   // flagged — the solve continues conservatively from outside the cycle.
   const indegree = new Map<string, number>();
@@ -274,10 +314,10 @@ export function solveFlow(state: EditorState): FlowReport {
     const machine = solver.machineById.get(id)!;
     const recipe = solver.recipeOf.get(id) ?? null;
     const solved = recipe && recipe.inputs.length > 0
-      ? inputEfficiency(id, recipe, solver, connections)
+      ? inputEfficiency(id, recipe, solver, graph)
       : { efficiency: 1, inputs: [] as FlowInput[] };
     for (const supply of outputSupplies(machine, recipe, solved.efficiency, solver)) {
-      emitSupply(machine, supply, solver, connections);
+      emitSupply(machine, supply, solver, graph, resolvedResource);
     }
   }
 
@@ -288,7 +328,7 @@ export function solveFlow(state: EditorState): FlowReport {
     const recipe = solver.recipeOf.get(id) ?? null;
     const inCycle = cyclicIds.has(id);
     const { efficiency, inputs } = recipe && recipe.inputs.length > 0
-      ? inputEfficiency(id, recipe, solver, connections)
+      ? inputEfficiency(id, recipe, solver, graph)
       : { efficiency: 1, inputs: [] };
     if (inCycle) {
       warnings.push({
@@ -318,7 +358,7 @@ export function solveFlow(state: EditorState): FlowReport {
           producedPerMin: s.perMin,
         }));
     for (const out of outputs) {
-      if (out.producedPerMin > 0 && outgoingFor(id, out.resource, connections).length === 0) {
+      if (out.producedPerMin > 0 && outgoingFor(id, out.resource, graph).length === 0) {
         warnings.push({
           kind: 'stalled',
           subjectId: id,
@@ -350,7 +390,7 @@ export function solveFlow(state: EditorState): FlowReport {
       connectionId: c.id,
       fromMachineId: c.fromMachineId,
       toMachineId: c.toMachineId,
-      resource: c.resource,
+      resource: resolvedResource.get(c.id) || c.resource,
       kind: c.kind,
       capacityPerMin: capacity,
       flowPerMin: round1(solver.flow.get(c.id) ?? 0),

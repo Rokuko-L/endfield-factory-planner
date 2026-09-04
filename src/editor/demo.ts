@@ -94,13 +94,13 @@ export function loadLcValleyDemo(): void {
   const amethystUnloader = placeDemoMachine('Depot Unloader', 4, 8);
   const fittingUnit = placeDemoMachine('Fitting Unit', 8, 8);
   const packagingUnit = placeDemoMachine('Packaging Unit', 14, 8);
-  const lcLoader = placeDemoMachine('Depot Loader', 21, 9);
+  const lcLoader = placeDemoMachine('Depot Loader', 21, 6);
   const lcLoader2 = placeDemoMachine('Depot Loader', 21, 12);
   const powder1 = placeDemoMachine('Depot Unloader', 8, 16);
   const powder2 = placeDemoMachine('Depot Unloader', 16, 16);
   const pylon1 = placeDemoMachine('Electric Pylon', 10, 12);
   const pylon2 = placeDemoMachine('Electric Pylon', 13, 13);
-  const batterySplitter = placeDemoMachine('Splitter', 20, 8);
+  const batterySplitter = placeDemoMachine('Splitter', 21, 8);
   if (!amethystUnloader || !fittingUnit || !packagingUnit || !lcLoader || !lcLoader2 || !powder1 || !powder2 || !pylon1 || !pylon2 || !batterySplitter) {
     setStatus('Demo: a machine is missing from the catalog or does not fit.', true);
     return;

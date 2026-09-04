@@ -305,6 +305,47 @@ describe('solveFlow', () => {
     expect(report2.warnings.some((w) => w.kind === 'starved')).toBe(true);
   });
 
+  it('resolves a generic gas pipe to the extractor\'s single output resource', () => {
+    const extractor: MachineType = {
+      name: 'Gas Extractor',
+      width: 1,
+      height: 1,
+      noPower: true,
+      ports: [],
+      edgeBands: { south: { type: 'output', resourceKind: 'fluid' } },
+      recipes: [
+        { id: 'extract', inputs: [], outputs: [{ resource: 'Inergen', kind: 'fluid', rate: 2 }] },
+      ],
+    };
+    const disperser: MachineType = {
+      name: 'Gas Dispersing Unit',
+      width: 1,
+      height: 1,
+      noPower: true,
+      ports: [],
+      edgeBands: { north: { type: 'input', resourceKind: 'fluid' } },
+      recipes: [
+        { id: 'inergen_env', inputs: [{ resource: 'Inergen', kind: 'fluid', rate: 0.1 }], outputs: [] },
+      ],
+    };
+    const src = machine(extractor, 'ext', 0, 0);
+    const dis = machine(disperser, 'dis', 4, 0);
+    // A generic ('' resource) pipe — the solver must infer Inergen from the
+    // extractor's single recipe output, or the disperser starves on paper.
+    const state = makeState(
+      [src, dis],
+      [conn('pipe', 'ext', 'dis', '', PIPE_RATE, 'fluid')],
+      {},
+    );
+    const report = solveFlow(state);
+    const disFlow = report.machines.find((m) => m.machineId === 'dis')!;
+    expect(disFlow.efficiency).toBe(1);
+    expect(disFlow.inputs[0]!.fedPerMin).toBe(6);
+    const pipe = report.connections.find((c) => c.connectionId === 'pipe')!;
+    expect(pipe.resource).toBe('Inergen');
+    expect(pipe.flowPerMin).toBe(6);
+  });
+
   it('flags stalled output that goes nowhere', () => {
     const rig: MachineType = {
       ...converter,
