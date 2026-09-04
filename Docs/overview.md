@@ -42,14 +42,18 @@ src/
   renderer.ts     // Canvas drawing (grid, connections, machines, ports, hover, draft)
   editor/         // Editor wiring split from main.ts (composition root)
     state.ts        // Grid, EditorState, selectedMachine, renderer
-    status.ts       // setStatus
+    status.ts       // setStatus + status history (agent-readable log)
     metrics.ts      // boundingBoxArea, updateMetrics
     canvas.ts       // eventToTile
     selection.ts    // refreshRecipeInfo
     placement.ts    // placeMachine, removeMachineAt, clearAll, populateSelector, rotate
     connect.ts      // handleDepotClick, handleConnectClick, setMode
+    click.ts        // handleCanvasClick — shared by mouse clicks and the agent API
     demo.ts         // loadLcValleyDemo
     redraw.ts       // redraw
+  agent/          // Agent playground (see reference/agent-playground.md)
+    dump.ts         // Pure text view of the layout: ASCII map, tables, JSON snapshot
+    api.ts          // installAgentApi — window.__ew text-in/text-out actions
   machineEditor/  // Define Machines modal (split from machineEditor.ts)
     index.ts        // openMachineEditor (overlay + toolbar)
     grouping.ts     // groupByCategory
@@ -68,6 +72,7 @@ src/
     geometry.test.ts
     pathfinding.test.ts
     recipes.test.ts
+    agentDump.test.ts
 ```
 
 **Data flow:**
@@ -116,6 +121,7 @@ update the catalog. `scripts/` and `scraped/` have been removed.
 | [reference/testing.md](reference/testing.md) | Vitest setup, what is covered, how to add tests |
 | [reference/extending.md](reference/extending.md) | How to add a new machine type (the canonical recipe) |
 | [reference/machine-editor.md](reference/machine-editor.md) | The machine editor modal (Import/Export, validation) |
+| [reference/agent-playground.md](reference/agent-playground.md) | `window.__ew` agent API + text dumps — how agents (vision or text-only) play/test the editor |
 
 ---
 

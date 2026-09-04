@@ -1,10 +1,11 @@
 import { reconcileConnectionRecipes } from './recipes.ts';
 import { openMachineEditor } from './machineEditor/index.ts';
-import { isDepotMachine } from './depot.ts';
 import { grid, initRenderer, renderer, setSelectedMachineId, state } from './editor/state.ts';
-import { clearAll, clearConnections, placeMachine, populateSelector, removeConnectionAt, removeMachineAt, rotate, updateOrientationLabel } from './editor/placement.ts';
-import { handleConnectClick, handleDepotClick, setMode } from './editor/connect.ts';
+import { clearAll, clearConnections, populateSelector, removeConnectionAt, removeMachineAt, rotate, updateOrientationLabel } from './editor/placement.ts';
+import { setMode } from './editor/connect.ts';
+import { handleCanvasClick } from './editor/click.ts';
 import { eventToTile } from './editor/canvas.ts';
+import { installAgentApi } from './agent/api.ts';
 import { refreshRecipeInfo } from './editor/selection.ts';
 import { loadLcValleyDemo } from './editor/demo.ts';
 import { redraw } from './editor/redraw.ts';
@@ -39,37 +40,9 @@ canvas.addEventListener('pointerleave', () => {
   redraw();
 });
 
-canvas.addEventListener('click', async (e) => {
+canvas.addEventListener('click', (e) => {
   const tile = eventToTile(e);
-  if (!tile) return;
-  if (state.mode === 'place') {
-    const occupantId = grid.getOccupancyAt(tile.x, tile.y);
-    if (occupantId) {
-      const occupant = state.machines.find((m) => m.id === occupantId);
-      if (occupant && isDepotMachine(occupant)) {
-        await handleDepotClick(occupant);
-        return;
-      }
-      if (occupant) {
-        setSelectedMachineId(occupant.id);
-        refreshRecipeInfo();
-        // Toggle power AoE preview if clicking on a power machine
-        if (occupant.type.powerRange != null) {
-          state.powerPreviewId = state.powerPreviewId === occupant.id ? null : occupant.id;
-          const aoe = state.powerPreviewId ? `${occupant.type.powerRange} tiles` : 'off';
-          setStatus(`${occupant.type.name} power AoE: ${aoe}.`);
-        } else {
-          state.powerPreviewId = null;
-        }
-        redraw();
-        return;
-      }
-    }
-    state.powerPreviewId = null;
-    placeMachine(tile.x, tile.y);
-  } else {
-    handleConnectClick(tile);
-  }
+  if (tile) void handleCanvasClick(tile);
 });
 
 canvas.addEventListener('click', (e) => {
@@ -128,3 +101,4 @@ updateOrientationLabel();
 renderer.resize();
 redraw();
 setStatus('Ready. Pick a machine and click the grid.');
+installAgentApi();

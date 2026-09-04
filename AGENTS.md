@@ -49,6 +49,19 @@ Concrete checkpoint triggers:
 
 When in doubt, push — a noisy history is better than losing work.
 
+## Agent Playground — playing/testing the app as an agent
+
+To "play" the editor directly (test existing or new features) instead of
+only reading code, load the page and use the `window.__ew` API — it
+drives the real editor code paths and returns text, so it works for both
+vision-capable and text-only agents (`__ew.help()` is self-documenting).
+
+Run `npm run dev`, open the page via browser automation, then e.g.
+`await __ew.place('Furnace', 10, 5)` / `await __ew.connect(...)` /
+`__ew.dump()` for an ASCII view of the whole board. Full reference:
+[Docs/reference/agent-playground.md](Docs/reference/agent-playground.md).
+Headless alternative: pure-logic vitest suites (`npm test`).
+
 ## Repo
 
 - Remote: `git@github.com:Rokuko-L/endminsworkshop.git`
