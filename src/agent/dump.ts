@@ -200,12 +200,18 @@ export function dumpLayoutText(
   lines.push('');
 
   lines.push('[depot assignments]');
-  const depotIds = Object.keys(state.depotAssignments);
+  const depotIds = Object.keys(state.depotAssignments).filter((id) =>
+    state.machines.some((mm) => mm.id === id),
+  );
+  const stale = Object.keys(state.depotAssignments).length - depotIds.length;
   if (depotIds.length === 0) lines.push('(none)');
   for (const id of depotIds) {
-    const m = state.machines.find((mm) => mm.id === id);
+    const m = state.machines.find((mm) => mm.id === id)!;
     const a = state.depotAssignments[id]!;
-    lines.push(`  ${letters.get(id) ?? '?'} ${m ? m.type.name : id}: ${a.resource} (${a.kind}) ${a.rate}/min`);
+    lines.push(`  ${letters.get(id) ?? '?'} ${m.type.name}: ${a.resource} (${a.kind}) ${a.rate}/min`);
+  }
+  if (stale > 0) {
+    lines.push(`  (${stale} stale assignment${stale === 1 ? '' : 's'} for removed machine${stale === 1 ? '' : 's'} hidden)`);
   }
   lines.push('');
 
