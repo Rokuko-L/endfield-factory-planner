@@ -2,7 +2,6 @@ import type { Grid } from './grid.ts';
 import type { Connection, MachineInstance, PortDef, Side } from './types.ts';
 import { rotateSide, transformPort, effectiveSize } from './geometry.ts';
 import { powerAoe, isPowered } from './power.ts';
-import { getBridgePoints } from './logistics.ts';
 
 /**
  * Color pairs for edge bands and single-tile ports. Each entry is a
@@ -89,7 +88,6 @@ export class Renderer {
 
     this.drawTiles(ctx, previewFootprint, invalidFlash);
     this.drawConnections(ctx, connections);
-    this.drawBridges(ctx, connections);
     for (const m of machines) this.drawMachine(ctx, m);
     this.drawPowerAoe(ctx, machines, powerPreviewId);
     this.drawPowerStatus(ctx, machines);
@@ -394,32 +392,6 @@ export class Renderer {
         ctx.fill();
         ctx.fillStyle = palette.fill;
         ctx.strokeStyle = palette.stroke;
-      }
-    }
-  }
-
-  /**
-   * Draw bridge indicators where two connections cross.
-   * Shows a small circle at each bridge point.
-   */
-  private drawBridges(ctx: CanvasRenderingContext2D, connections: Connection[]): void {
-    const t = this.tilePx;
-    const drawn = new Set<string>();
-    for (const c of connections) {
-      const bridges = getBridgePoints(c, connections);
-      for (const tile of bridges) {
-        const key = `${tile.x},${tile.y}`;
-        if (drawn.has(key)) continue;
-        drawn.add(key);
-        const cx = (tile.x + 0.5) * t;
-        const cy = (tile.y + 0.5) * t;
-        ctx.beginPath();
-        ctx.arc(cx, cy, t * 0.15, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(255,255,255,0.6)';
-        ctx.fill();
-        ctx.strokeStyle = 'rgba(0,0,0,0.4)';
-        ctx.lineWidth = 1;
-        ctx.stroke();
       }
     }
   }

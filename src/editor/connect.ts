@@ -3,8 +3,6 @@ import { isDepotMachine } from '../depot.ts';
 import { openDepotPicker } from '../depotPicker.ts';
 import { completeDraft } from '../connections.ts';
 import { pickPortAt } from '../ports.ts';
-import { autoPlaceBridges } from '../logistics.ts';
-import { nextId } from '../ids.ts';
 import { grid, state } from './state.ts';
 import { setStatus } from './status.ts';
 import { redraw } from './redraw.ts';
@@ -78,48 +76,20 @@ export function handleConnectClick(tile: { x: number; y: number }): void {
     return;
   }
 
-  // Auto-place bridges where path crosses existing connections
-  const bridges = autoPlaceBridges(
-    result.connection.path,
-    result.connection.kind,
-    result.connection.resource,
-    state.connections,
-    state.machineTypes,
-    nextId,
-  );
-
-  if (bridges.length > 0) {
-    // Place bridge machines and their connections
-    for (const bridge of bridges) {
-      grid.placeMachine(bridge.machine);
-      state.machines.push(bridge.machine);
-      for (const conn of bridge.connections) {
-        grid.placeConnectionTiles(conn.id, [bridge.machine]);
-        state.connections.push(conn);
-      }
-    }
-    // Place the main connection
+  try {
     grid.placeConnectionTiles(result.connection.id, result.connection.path);
-    state.connections.push(result.connection);
-    setStatus(
-      `Connected ${result.connection.resource} (${result.connection.kind}) with ${bridges.length} auto-bridge${bridges.length === 1 ? '' : 's'}.`,
-    );
-  } else {
-    try {
-      grid.placeConnectionTiles(result.connection.id, result.connection.path);
-    } catch (err) {
-      setStatus(`Could not place connection: ${(err as Error).message}`, true);
-      state.draftSource = null;
-      state.draftAdjacent = null;
-      state.draftPath = null;
-      redraw();
-      return;
-    }
-    state.connections.push(result.connection);
-    setStatus(
-      `Connected ${result.connection.resource} (${result.connection.kind}) across ${result.connection.path.length} tile${result.connection.path.length === 1 ? '' : 's'}.`,
-    );
+  } catch (err) {
+    setStatus(`Could not place connection: ${(err as Error).message}`, true);
+    state.draftSource = null;
+    state.draftAdjacent = null;
+    state.draftPath = null;
+    redraw();
+    return;
   }
+  state.connections.push(result.connection);
+  setStatus(
+    `Connected ${result.connection.resource || 'generic'} (${result.connection.kind}) across ${result.connection.path.length} tile${result.connection.path.length === 1 ? '' : 's'}.`,
+  );
 
   state.draftSource = null;
   state.draftAdjacent = null;

@@ -89,3 +89,39 @@ describe('Grid', () => {
     expect(grid.getOccupancyAt(5, 5)).toBeNull();
   });
 });
+describe('Grid connection occupancy (no stacking)', () => {
+  it('a tile carries at most one connection — a different connection cannot overlap', () => {
+    const grid = new Grid(10, 10);
+    grid.placeConnectionTiles('c1', [{ x: 2, y: 2 }]);
+    expect(grid.getConnectionAt(2, 2)).toBe('c1');
+    expect(() => grid.placeConnectionTiles('c2', [{ x: 2, y: 2 }])).toThrow(
+      'cell already has a connection',
+    );
+    // the original connection is untouched
+    expect(grid.getConnectionAt(2, 2)).toBe('c1');
+  });
+
+  it('the same connection may re-place its own tiles', () => {
+    const grid = new Grid(10, 10);
+    grid.placeConnectionTiles('c1', [{ x: 2, y: 2 }]);
+    expect(() => grid.placeConnectionTiles('c1', [{ x: 2, y: 2 }])).not.toThrow();
+    expect(grid.connectionTiles()).toEqual([{ x: 2, y: 2 }]);
+  });
+
+  it('machines cannot be placed on a connection tile and vice versa', () => {
+    const grid = new Grid(10, 10);
+    grid.placeConnectionTiles('c1', [{ x: 3, y: 3 }]);
+    expect(grid.isFree(3, 3)).toBe(false);
+    expect(() =>
+      grid.placeMachine({ id: 'm1', type: MINER, x: 3, y: 3, orientation: 0 }),
+    ).toThrow();
+  });
+
+  it('removeConnection frees the tile for another connection', () => {
+    const grid = new Grid(10, 10);
+    grid.placeConnectionTiles('c1', [{ x: 4, y: 4 }]);
+    grid.removeConnection('c1');
+    expect(grid.getConnectionAt(4, 4)).toBeNull();
+    expect(() => grid.placeConnectionTiles('c2', [{ x: 4, y: 4 }])).not.toThrow();
+  });
+});

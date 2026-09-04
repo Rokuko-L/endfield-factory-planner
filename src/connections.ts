@@ -1,4 +1,4 @@
-import { findPathMultiCrossing } from './pathfinding.ts';
+import { findPathMulti } from './pathfinding.ts';
 import { matchRecipe } from './recipes.ts';
 import { nextId } from './ids.ts';
 import type { Grid } from './grid.ts';
@@ -23,8 +23,8 @@ export function completeDraft(
   const tgtRes = target.resource?.trim() ?? '';
   const bothSpecific = srcRes !== '' && tgtRes !== '';
   if (bothSpecific && srcRes !== tgtRes) return { error: `Resource mismatch: '${srcRes}' vs '${tgtRes}'.` };
-  // Use crossing pathfinder so belts/pipes can cross (bridges auto-place)
-  const path = findPathMultiCrossing(grid, source.adjacentTiles, target.adjacentTiles);
+  // Route around machines *and* other connections — a tile carries at most one belt/pipe.
+  const path = findPathMulti(grid, source.adjacentTiles, target.adjacentTiles);
   if (!path || path.length === 0) return { error: 'No path found between the picked ports.' };
   const fromTile = path[0]!;
   const toTile = path[path.length - 1]!;

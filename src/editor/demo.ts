@@ -32,11 +32,15 @@ function demoConnect(
 ): Connection | null {
   // Pick a real output cell on `from` and a real input cell on `to`
   // (edge bands or ports — band-only machines like the Fitting Unit have
-  // no `ports` entries at all).
+  // no `ports` entries at all). Prefer cells not already used by another
+  // connection so parallel belts terminate on separate tiles.
+  const used = new Set(
+    state.connections.flatMap((c) => c.path.map((t) => `${t.x},${t.y}`)),
+  );
   const fromCells = allPortCells([from]).filter((p) => p.type === 'output' && p.kind === kind);
   const toCells = allPortCells([to]).filter((p) => p.type === 'input' && p.kind === kind);
-  const sourceCell = fromCells[0];
-  const targetCell = toCells[0];
+  const sourceCell = fromCells.find((p) => !used.has(`${p.cell.x},${p.cell.y}`)) ?? fromCells[0];
+  const targetCell = toCells.find((p) => !used.has(`${p.cell.x},${p.cell.y}`)) ?? toCells[0];
   if (!sourceCell || !targetCell) {
     setStatus(`Demo connect failed: no ${kind} ${!sourceCell ? 'output' : 'input'} port on ${!sourceCell ? from.type.name : to.type.name}.`, true);
     return null;

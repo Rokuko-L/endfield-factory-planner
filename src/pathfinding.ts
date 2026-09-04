@@ -75,53 +75,6 @@ export function findPathMulti(
 }
 
 /**
- * Multi-source / multi-target A* that allows crossing existing connections.
- * Used for belt/pipe routing where bridges can be auto-placed at crossings.
- * Connections are passable; only machines block the path.
- */
-export function findPathMultiCrossing(
-  grid: Grid,
-  starts: { x: number; y: number }[],
-  ends: { x: number; y: number }[],
-): { x: number; y: number }[] | null {
-  if (starts.length === 0 || ends.length === 0) return null;
-
-  // Same-cell cases: if any start equals any end, return a one-tile path.
-  const endSet = new Set<string>();
-  for (const e of ends) endSet.add(key(e.x, e.y));
-  for (const s of starts) {
-    if (endSet.has(key(s.x, s.y))) return [s];
-  }
-
-  let best: { path: { x: number; y: number }[]; cost: number } | null = null;
-
-  for (const s of starts) {
-    if (!grid.isConnectionFree(s.x, s.y)) continue;
-    for (const e of ends) {
-      if (!grid.isConnectionFree(e.x, e.y)) continue;
-      const lPath = lShapePathCrossing(grid, s, e);
-      if (lPath) {
-        const cost = pathCost(lPath);
-        if (best === null || cost < best.cost) {
-          best = { path: expandPath(lPath), cost };
-        }
-        continue;
-      }
-      const aPath = aStarPathCrossing(grid, s, e);
-      if (aPath) {
-        const cost = pathCost(aPath);
-        const expanded = expandPath(aPath);
-        if (best === null || cost < best.cost) {
-          best = { path: expanded, cost };
-        }
-      }
-    }
-  }
-
-  return best ? best.path : null;
-}
-
-/**
  * Try both possible L-shapes between two cells. Returns the shorter
  * one (or null if neither fits). An L-shape is "horizontal first,
  * then vertical" or "vertical first, then horizontal".
@@ -181,44 +134,6 @@ function pathMoves(path: { x: number; y: number }[]): number {
 }
 
 /**
- * Try both possible L-shapes between two cells, allowing connection crossings.
- */
-function lShapePathCrossing(
-  grid: Grid,
-  start: { x: number; y: number },
-  end: { x: number; y: number },
-): { x: number; y: number }[] | null {
-  const candidates: { x: number; y: number }[][] = [];
-
-  if (start.y === end.y && lineClearCrossing(grid, start.x, start.y, end.x, end.y, "horizontal")) {
-    candidates.push([start, end]);
-  }
-  if (start.x === end.x && lineClearCrossing(grid, start.x, start.y, end.x, end.y, "vertical")) {
-    candidates.push([start, end]);
-  }
-  if (
-    start.y !== end.y &&
-    start.x !== end.x &&
-    lineClearCrossing(grid, start.x, start.y, end.x, start.y, "horizontal") &&
-    lineClearCrossing(grid, end.x, start.y, end.x, end.y, "vertical")
-  ) {
-    candidates.push([start, { x: end.x, y: start.y }, end]);
-  }
-  if (
-    start.y !== end.y &&
-    start.x !== end.x &&
-    lineClearCrossing(grid, start.x, start.y, start.x, end.y, "vertical") &&
-    lineClearCrossing(grid, start.x, end.y, end.x, end.y, "horizontal")
-  ) {
-    candidates.push([start, { x: start.x, y: end.y }, end]);
-  }
-
-  if (candidates.length === 0) return null;
-  candidates.sort((a, b) => pathMoves(a) - pathMoves(b));
-  return candidates[0]!;
-}
-
-/**
  * Check that every cell on a horizontal or vertical line is free.
  */
 function lineClear(
@@ -241,34 +156,6 @@ function lineClear(
   const step = y1 >= y0 ? 1 : -1;
   for (let y = y0; y !== y1 + step; y += step) {
     if (!grid.isFree(x0, y)) return false;
-  }
-  return true;
-}
-
-/**
- * Check that every cell on a horizontal or vertical line is connection-free
- * (machines block, but connections can be crossed).
- */
-function lineClearCrossing(
-  grid: Grid,
-  x0: number,
-  y0: number,
-  x1: number,
-  y1: number,
-  axis: "horizontal" | "vertical",
-): boolean {
-  if (axis === "horizontal") {
-    if (y0 !== y1) return false;
-    const step = x1 >= x0 ? 1 : -1;
-    for (let x = x0; x !== x1 + step; x += step) {
-      if (!grid.isConnectionFree(x, y0)) return false;
-    }
-    return true;
-  }
-  if (x0 !== x1) return false;
-  const step = y1 >= y0 ? 1 : -1;
-  for (let y = y0; y !== y1 + step; y += step) {
-    if (!grid.isConnectionFree(x0, y)) return false;
   }
   return true;
 }
@@ -320,75 +207,6 @@ function aStarPath(
       const nx = current.x + dx;
       const ny = current.y + dy;
       if (!grid.isFree(nx, ny)) continue;
-      const nk = key(nx, ny);
-      if (closed.has(nk)) continue;
-
-      const tentativeG = current.g + 1;
-      const prior = bestG.get(nk);
-      if (prior !== undefined && tentativeG >= prior) continue;
-      bestG.set(nk, tentativeG);
-
-      const neighbor: INode = {
-        x: nx,
-        y: ny,
-        g: tentativeG,
-        f: tentativeG + manhattan({ x: nx, y: ny }, end),
-        parent: current,
-      };
-      open.push(neighbor);
-    }
-  }
-
-  return null;
-}
-
-/**
- * Single-source / single-target A* that allows crossing connections.
- * Only machines block the path.
- */
-function aStarPathCrossing(
-  grid: Grid,
-  start: { x: number; y: number },
-  end: { x: number; y: number },
-): { x: number; y: number }[] | null {
-  if (sameTile(start, end)) return [start];
-  if (!grid.isConnectionFree(start.x, start.y)) return null;
-  if (!grid.isConnectionFree(end.x, end.y)) return null;
-
-  const open = new MinHeap<INode>((a, b) => a.f - b.f);
-  const closed = new Set<string>();
-  const bestG = new Map<string, number>();
-
-  open.push({
-    x: start.x,
-    y: start.y,
-    g: 0,
-    f: manhattan(start, end),
-    parent: null,
-  });
-  bestG.set(key(start.x, start.y), 0);
-
-  const DIRS: ReadonlyArray<{ dx: number; dy: number }> = [
-    { dx: 1, dy: 0 },
-    { dx: -1, dy: 0 },
-    { dx: 0, dy: 1 },
-    { dx: 0, dy: -1 },
-  ];
-
-  while (!open.isEmpty()) {
-    const current = open.pop()!;
-    const ck = key(current.x, current.y);
-    if (closed.has(ck)) continue;
-    closed.add(ck);
-
-    if (current.x === end.x && current.y === end.y) {
-      return smoothPath(reconstruct(current), grid);
-    }
-
-    for (const { dx, dy } of DIRS) {
-      const nx = current.x + dx;
-      const ny = current.y + dy;
-      if (!grid.isConnectionFree(nx, ny)) continue;
       const nk = key(nx, ny);
       if (closed.has(nk)) continue;
 

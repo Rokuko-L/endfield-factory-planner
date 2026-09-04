@@ -1,28 +1,25 @@
 # Logistics System (`src/logistics.ts`)
 
-Handles belt/pipe interactions: bridges, splitters, and convergers.
+Handles belt/pipe throughput rules: splitters and convergers.
 
-## Connection Stacking
+## One Connection Per Tile
 
-Belts and pipes can occupy the same tile (stack). The grid tracks multiple
-connections per cell (`string[][][]`). Machines block stacking — connections
-cannot overlap with any machine.
+A grid tile carries **at most one** connection — belts and pipes never
+overlap or stack. `Grid.placeConnectionTiles` throws if the tile already
+holds a different connection id, and the router treats other connections
+as obstacles, so new belts route around existing ones (or fail with
+"No path found"). Machines block connections as always; to cross another
+line, route around it or interpose a logistics machine (e.g. a Belt
+Bridge as a normal pass-through machine).
 
 ## Throughput
 
 - **Belts** (item): 30 items/min
 - **Pipes** (fluid): 2 items/sec
 
-Each connection stores its throughput. Pipes render smaller (60% of tile)
-so belts show through when they overlap.
-
-## Bridges
-
-When two connections cross at a tile with perpendicular directions, they
-form a bridge. Both connections retain their original direction and
-throughput — bridges don't slow anything down.
-
-Bridge points are visualized as small white circles where connections cross.
+Each connection stores its throughput. Recipe efficiency consumes these
+rates (see [recipe-info.md](recipe-info.md)) — a 60/min input demand
+needs two belts feeding it.
 
 ## Splitters
 
@@ -45,9 +42,6 @@ throughput:
 
 | Function | Purpose |
 |---|---|
-| `directionAtTile(conn, tile)` | Get flow direction at a tile. |
-| `isBridgeAt(c1, c2, tile)` | Check if two connections cross at a tile. |
-| `getBridgePoints(conn, all)` | Get all bridge points for a connection. |
 | `isSplitter(machine)` | Check if machine is a splitter. |
 | `isConverger(machine)` | Check if machine is a converger. |
 | `getSplitterThroughput(conn, machine, all)` | Calculate output throughput after splitter. |

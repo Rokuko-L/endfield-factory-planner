@@ -47,7 +47,10 @@ The editor runs in one of two modes:
   must be an `output` and the destination an `input` (each port cell
   carries its type; see `src/ports.ts`) — then checks resource-kind
   and specificity mismatch, then runs A* between the two ports'
-  adjacent tiles and creates a connection on success. When both ports
+  adjacent tiles and creates a connection on success. A tile carries
+  at most one belt/pipe: other connections block the route, so new
+  belts route around existing ones or fail with "No path found".
+  When both ports
   are generic (`''` resource), the carried resource is inferred from
   the source machine's recipe outputs (if they produce exactly one
   distinct resource) so recipe matching still works across generic

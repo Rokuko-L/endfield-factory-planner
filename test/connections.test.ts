@@ -166,4 +166,24 @@ describe('completeDraft direction validation', () => {
     // dst consumes 'Raw', not 'Alloy' — correctly a passthrough connection.
     expect(out.connection.matchedRecipeId).toBe(null);
   });
+
+  it('refuses to route through an existing belt when it blocks the only corridor', () => {
+    const grid = new Grid(20, 20);
+    const a = makeMachine(depot, 'a', 2, 8);
+    const b = makeMachine(producer, 'b', 14, 8);
+    grid.placeMachine(a);
+    grid.placeMachine(b);
+    // A wall of an existing belt sealing the two machines off from each other.
+    const wall = [];
+    for (let y = 0; y < 20; y++) {
+      wall.push({ x: 8, y });
+    }
+    grid.placeConnectionTiles('wall', wall);
+    const result = completeDraft(
+      grid,
+      pickedOf(portOf(a, 'port:p_out')),
+      portOf(b, 'band:south:1'),
+    );
+    expect('error' in result && result.error).toBe('No path found between the picked ports.');
+  });
 });
