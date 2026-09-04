@@ -53,6 +53,7 @@ export function handleConnectClick(tile: { x: number; y: number }): void {
       machine: picked.machine,
       side: picked.side,
       cellIndex: picked.cellIndex,
+      type: picked.type,
       kind: picked.kind,
       resource: picked.resource,
       portId: picked.portId,

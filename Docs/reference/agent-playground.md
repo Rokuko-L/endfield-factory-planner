@@ -50,7 +50,8 @@ same coordinate system as the domain model.
 | `demo()` | Load the LC Valley demo |
 | `clearAll()` / `clearConnections()` | Wipe the board / just the connections |
 | `status()` / `history(n?)` | Last status line / recent status log (errors prefixed `!`) |
-| `ports(x?, y?)` | Every port cell (`portId`, side, kind, resource, adjacent tile) of one machine or all machines |
+| `ports(x?, y?)` | Every port cell (`portId`, side, `[input]`/`[output]`, kind, resource, adjacent tile) of one machine or all machines |
+| `power()` | Machines that are unpowered (outside every pylon AoE); `dump()` also tags them `[UNPOWERED]` |
 
 Every action returns a human-readable string — the resulting status line,
 a small report, or `ERROR: ...` on failure — so a text-only agent never

@@ -1,9 +1,11 @@
-import type { Connection, MachineInstance, Orientation, ResourceKind, Side } from './types.ts';
+import type { Connection, MachineInstance, Orientation, PortType, ResourceKind, Side } from './types.ts';
 
 export interface PickedPort {
   machine: MachineInstance;
   side: Side;
   cellIndex: number;
+  /** Whether this port feeds machines ('output') or is fed by them ('input'). */
+  type: PortType;
   kind: ResourceKind;
   resource: string;
   portId: string;
@@ -14,6 +16,8 @@ export interface PortCell {
   machine: MachineInstance;
   side: Side;
   cellIndex: number;
+  /** Whether this port feeds machines ('output') or is fed by them ('input'). */
+  type: PortType;
   kind: ResourceKind;
   resource: string;
   portId: string;

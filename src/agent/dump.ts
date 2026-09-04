@@ -1,5 +1,6 @@
 import { effectiveSize } from '../geometry.ts';
 import { allPortCells } from '../ports.ts';
+import { isPowered } from '../power.ts';
 import type { Grid } from '../grid.ts';
 import type { EditorState } from '../layout.ts';
 import type { Connection, MachineInstance, ResourceKind, Side } from '../types.ts';
@@ -111,6 +112,7 @@ export function dumpGridText(grid: Grid, machines: MachineInstance[], connection
 
 interface PortAccum {
   side: Side;
+  type: 'input' | 'output';
   kind: ResourceKind;
   resource: string;
   cells: { x: number; y: number }[];
@@ -124,9 +126,9 @@ function portSummary(machines: MachineInstance[]): Map<string, string[]> {
       list = [];
       byMachine.set(p.machine.id, list);
     }
-    let acc = list.find((a) => a.side === p.side && a.kind === p.kind && a.resource === p.resource);
+    let acc = list.find((a) => a.side === p.side && a.type === p.type && a.kind === p.kind && a.resource === p.resource);
     if (!acc) {
-      acc = { side: p.side, kind: p.kind, resource: p.resource, cells: [] };
+      acc = { side: p.side, type: p.type, kind: p.kind, resource: p.resource, cells: [] };
       list.push(acc);
     }
     acc.cells.push(p.cell);
@@ -136,7 +138,6 @@ function portSummary(machines: MachineInstance[]): Map<string, string[]> {
     out.set(
       id,
       list.map((a) => {
-        const arrow = a.kind === 'fluid' ? '~' : '=';
         const label = a.resource.trim() === '' ? 'any' : a.resource;
         const xs = a.cells.map((c) => c.x);
         const ys = a.cells.map((c) => c.y);
@@ -144,7 +145,7 @@ function portSummary(machines: MachineInstance[]): Map<string, string[]> {
           a.cells.length === 1
             ? `(${xs[0]},${ys[0]})`
             : `(${Math.min(...xs)},${Math.min(...ys)})..(${Math.max(...xs)},${Math.max(...ys)})`;
-        return `${a.side} ${arrow} "${label}" (${a.kind}) ×${a.cells.length} @ adjacent ${span}`;
+        return `${a.side} [${a.type}] "${label}" (${a.kind}) ×${a.cells.length} @ adjacent ${span}`;
       }),
     );
   }
@@ -178,8 +179,9 @@ export function dumpLayoutText(
   if (state.machines.length === 0) lines.push('(none)');
   for (const m of state.machines) {
     const { width, height } = effectiveSize(m.type, m.orientation);
+    const powerTag = isPowered(m, state.machines) ? '' : '  [UNPOWERED]';
     lines.push(
-      `  ${letters.get(m.id) ?? '?'}  ${m.type.name}  at (${m.x},${m.y}) ${width}×${height} ${m.orientation}°  id=${m.id}`,
+      `  ${letters.get(m.id) ?? '?'}  ${m.type.name}  at (${m.x},${m.y}) ${width}×${height} ${m.orientation}°  id=${m.id}${powerTag}`,
     );
     for (const p of ports.get(m.id) ?? []) lines.push(`     port ${p}`);
   }

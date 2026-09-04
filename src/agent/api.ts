@@ -1,6 +1,7 @@
 import { saveDepotAssignments } from '../depot.ts';
 import { grid, state } from '../editor/state.ts';
 import { clearAll, clearConnections, placeMachine, removeConnectionAt, removeMachineAt, rotate, updateOrientationLabel } from '../editor/placement.ts';
+import { isPowered } from '../power.ts';
 import { setMode } from '../editor/connect.ts';
 import { handleCanvasClick } from '../editor/click.ts';
 import { loadLcValleyDemo } from '../editor/demo.ts';
@@ -34,6 +35,7 @@ export interface AgentApi {
   rotate(): string;
   assignDepot(x: number, y: number, resource: string, kind?: 'item' | 'fluid', rate?: number): string;
   ports(x?: number, y?: number): string;
+  power(): string;
   demo(): string;
   clearAll(): string;
   clearConnections(): string;
@@ -51,6 +53,7 @@ look:
   map()                  just the ASCII map
   snapshot()             JSON of machines/connections/ports (for programmatic use)
   ports(x?, y?)          port cells of one machine (at tile x,y) or all machines
+  power()                machines that are UNPOWERED (outside every pylon AoE)
   types(filter?)         catalog entries (name, index, size, category, recipes)
   status()               last status message      history(n?) recent messages
 act:
@@ -194,8 +197,16 @@ function buildApi(): AgentApi {
             ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[state.machines.indexOf(p.machine)] ?? '?'
             : '?';
           const label = p.resource.trim() === '' ? 'any' : p.resource;
-          return `${letter} ${p.machine.type.name} ${p.portId} ${p.side} ${p.kind} "${label}" @ (${p.cell.x},${p.cell.y})`;
+          return `${letter} ${p.machine.type.name} ${p.portId} ${p.side} [${p.type}] ${p.kind} "${label}" @ (${p.cell.x},${p.cell.y})`;
         })
+        .join('\n');
+    },
+
+    power: () => {
+      const unpowered = state.machines.filter((m) => !isPowered(m, state.machines));
+      if (unpowered.length === 0) return `all ${state.machines.length} machine(s) powered`;
+      return unpowered
+        .map((m) => `${m.type.name} at (${m.x},${m.y}) is UNPOWERED — place a pylon/relay within range`)
         .join('\n');
     },
 

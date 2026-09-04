@@ -72,6 +72,7 @@ src/
     geometry.test.ts
     pathfinding.test.ts
     recipes.test.ts
+    connections.test.ts
     agentDump.test.ts
 ```
 

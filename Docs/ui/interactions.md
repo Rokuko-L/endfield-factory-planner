@@ -43,10 +43,16 @@ The editor runs in one of two modes:
   machine. R rotates the next placement. Right-click removes a
   machine.
 - **Connect**. Click an output port (or any cell on a band), then an
-  input port. The editor runs A* between the two ports' adjacent
-  tiles and creates a connection on success. Right-click on a
-  belt/pipe removes the connection; right-click on a machine removes
-  the machine.
+  input port. `completeDraft` validates direction — the source port
+  must be an `output` and the destination an `input` (each port cell
+  carries its type; see `src/ports.ts`) — then checks resource-kind
+  and specificity mismatch, then runs A* between the two ports'
+  adjacent tiles and creates a connection on success. When both ports
+  are generic (`''` resource), the carried resource is inferred from
+  the source machine's recipe outputs (if they produce exactly one
+  distinct resource) so recipe matching still works across generic
+  bands. Right-click on a belt/pipe removes the connection;
+  right-click on a machine removes the machine.
 
 The toolbar buttons `#mode-place` and `#mode-connect` toggle between
 the two. Switching modes drops any in-progress draft.

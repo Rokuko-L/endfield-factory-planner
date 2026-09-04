@@ -115,8 +115,8 @@ describe('dumpLayoutText', () => {
     expect(text).toContain('mode: place');
     expect(text).toContain('Test Smelter');
     expect(text).toContain('Test Miner');
-    expect(text).toContain('port south = "Ingot" (item)');
-    expect(text).toContain('port east = "Ore" (item)');
+    expect(text).toContain('port south [output] "Ingot" (item)');
+    expect(text).toContain('port east [output] "Ore" (item)');
     expect(text).toContain('band:south:0 → Bport:out');
     expect(text).toContain('! boom');
     expect(text).toContain('[depot assignments]');
